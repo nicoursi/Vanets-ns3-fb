@@ -5,3 +5,8 @@
 __pycache__/
 
 .idea/
+
+scripts/graphs/out/
+
+# symlink to the maps
+/maps
