@@ -1,0 +1,10 @@
+#!/bin/bash
+
+n=$1
+shift
+cmd="$@"
+
+for i in $(seq 1 $n); do
+  eval "$cmd"
+  echo "\n\n ---------------------------------------"
+done

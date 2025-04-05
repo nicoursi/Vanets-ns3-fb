@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Get the current branch
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+# Get the latest commit hash
+latest_commit=$(git rev-parse HEAD)
+
+# Get all local branches excluding 'master' and the current one
+branches=$(git branch --format="%(refname:short)" | grep -vE "^\s*(${current_branch}|master)$")
+
+echo "Latest commit to cherry-pick: $latest_commit"
+echo "Applying to branches (dry-run):"
+
+# Loop through branches and echo the cherry-pick command
+for branch in $branches; do
+  echo "git checkout $branch && git cherry-pick $latest_commit"
+  git checkout $branch && git cherry-pick $latest_commit
+done
