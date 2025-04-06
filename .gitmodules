@@ -1,3 +1,4 @@
 [submodule "ns-3"]
 	path = ns-3
 	url = https://github.com/nicoursi/ns-3.git
+	branch = master
