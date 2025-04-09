@@ -15,7 +15,7 @@ Or if you've already cloned the repository without the submodule, run this:
 git submodule update --init --recursive
 ```
 
-# When you pull, outside of ns-3, do it this way:
+When you pull, outside of ns-3, do it this way:
 ```sh
 git pull --recurse-submodules
 ```
