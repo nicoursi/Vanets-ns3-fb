@@ -12,29 +12,39 @@ git clone --recurse-submodules <repo-url>
 
 # Or if you've already cloned the repository without the submodule, run this:
 git submodule update --init --recursive
+
+# When you pull, do it this way:
+git pull --recurse-submodules
 ```
 
-## Libraries needed
 
-- gmp
-- libmpfr
-- libboost-thread
-- libboost-system
-- libboost-filesystem
-- libboost-serialization
-- CGAL-4.13
+## Environment setup
 
-CGAL is an old version and needs to be compliled and installed with make install. Alternatively linked in the `LINKFLAGS` in the wscript located in the obstacle module. [https://www.cgal.org/releases.html].
-The other libraries can be installed by:
+You need a whole OS setup to be able to get the expected results. So to make this easy we can use docker. Running `docker compose` without services that need to stay up, it gets a little messy, because as soon as a service is executed it leaves orphans that need to be cleaned. So I used a script to automatize it:
+
+### Commands
+
 ```sh
-sudo apt-get install libgmp-dev libmpfr-dev libboost-thread-dev libboost-system-dev libboost-filesystem-dev libboost-serialization-dev
+# Build
+./dccompose.sh build
+
+# Dirty build (without cleaning the build folder)
+./dccompose.sh dirty-build
+
+# Running a simulation with parameters
+./dccompose.sh simulation file_with_command_and_parameters
+
+# Getting a shell into the containers
+../dccompose.sh shell
 ```
 
 # Creating Maps
+
 You create mobility and poly files, that will be placed in the `maps` folder, by using the scripts in `create simple scenario`
 
 # NS-3 modifications
 
+```plaintext
 src/
 ├── vanets-utils/
 │   ├── Edge.cc
@@ -46,3 +56,4 @@ src/
     └── helper/
         ├── ns2-mobility-helper.cc
         └── ns2-mobility-helper.h
+```
