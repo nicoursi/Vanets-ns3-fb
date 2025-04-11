@@ -1,16 +1,18 @@
 x-common: &common
-  build:
-    context: .
-    dockerfile: docker/Dockerfile
+  image: my-ns3-project:latest
   volumes:
     - ./:/my-project
+    # Remove the problematic mount override for now
   working_dir: /my-project/ns-3
   environment:
-    - CXXFLAGS=-Wall -O3 # -03 is for max optimization. Simulations run 75% faster
-  # - CXXFLAGS=-Wall -frounding-math -O3
+    - CXXFLAGS=-Wall -O3
+
 services:
   build:
     <<: *common
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
     command: bash -c "./waf configure -d optimized && ./waf clean && ./waf build"
 
   dirty-build:
