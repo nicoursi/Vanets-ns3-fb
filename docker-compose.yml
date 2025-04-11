@@ -1,47 +1,31 @@
+x-common: &common
+  build:
+    context: .
+    dockerfile: docker/Dockerfile
+  volumes:
+    - ./:/my-project
+  working_dir: /my-project/ns-3
+  environment:
+    - CXXFLAGS=-Wall -O3 # -03 is for max optimization. Simulations run 75% faster
+  # - CXXFLAGS=-Wall -frounding-math -O3
 services:
   build:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-    volumes:
-      - ./:/my-project
-    working_dir: /my-project/ns-3
-    command: bash -c "./waf configure -d optimized && ./waf clean  && ./waf build"
-    environment:
-      - CXXFLAGS=-Wall -frounding-math
+    <<: *common
+    command: bash -c "./waf configure -d optimized && ./waf clean && ./waf build"
 
   dirty-build:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-    volumes:
-      - ./:/my-project
-    working_dir: /my-project/ns-3
+    <<: *common
     command: bash -c "./waf configure -d optimized && ./waf build"
-    environment:
-      - CXXFLAGS=-Wall -frounding-math
 
   shell:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-    volumes:
-      - ./:/my-project
-    working_dir: /my-project/ns-3
+    <<: *common
     command: bash
     tty: true
     stdin_open: true
-    environment:
-      - CXXFLAGS=-Wall -frounding-math
 
   simulation:
-    build:
-      context: .
-      dockerfile: docker/Dockerfile
-    volumes:
-      - ./:/my-project
-    working_dir: /my-project/ns-3
-    command: bash -c 'NS_LOG="*=error" NS_GLOBAL_VALUE="RngRun=1" ./waf --run "${SIMULATION_CMD}"'
+    <<: *common
+    command: bash -c './waf --run "${SIMULATION_CMD}"'
     environment:
-      - CXXFLAGS=-Wall -frounding-math
-      #- SIMULATION_CMD=first
+      - NS_LOG=*=error
+      - NS_GLOBAL_VALUE=RngRun=1

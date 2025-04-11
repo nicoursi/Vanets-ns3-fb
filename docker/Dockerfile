@@ -20,11 +20,3 @@ RUN apt-get update && apt-get install -y \
 
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 100 && \
     update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 100
-
-ENV CXXFLAGS="-Wall -Wno-error=format-overflow -frounding-math"
-
-WORKDIR /my-project/ns-3
-
-
-# build happens during runtime so users can recompile easily
-#CMD ["./waf"]
