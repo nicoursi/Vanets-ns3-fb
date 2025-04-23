@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     libcgal-dev \
     libsqlite3-dev \
     libgtk-3-dev \
+    libgsl-dev \
     pkg-config \
     libxml2-dev \
     git \

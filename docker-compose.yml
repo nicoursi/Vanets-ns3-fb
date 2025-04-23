@@ -2,10 +2,15 @@ x-common: &common
   image: my-ns3-project:latest
   volumes:
     - ./:/my-project
-    # Remove the problematic mount override for now
+    - /etc/localtime:/etc/localtime:ro
+    - /etc/timezone:/etc/timezone:ro
   working_dir: /my-project/ns-3
   environment:
-    - CXXFLAGS=-Wall -O3
+    #- CXXFLAGS=-Wall
+    - CXXFLAGS=-Wall -O3 -frounding-math
+    # the variable below goes into the .env file
+    #- CONFIGURE_OPTIONS=-d optimized
+# entrypoint: ["/my-project/libs/setup-libs.sh"]
 
 services:
   build:
@@ -13,15 +18,15 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile
-    command: bash -c "./waf configure -d optimized && ./waf clean && ./waf build"
+    command: bash -c "./waf configure ${CONFIGURE_OPTIONS} && ./waf clean && ./waf build"
 
   dirty-build:
     <<: *common
-    command: bash -c "./waf configure -d optimized && ./waf build"
+    command: bash -c "./waf configure ${CONFIGURE_OPTIONS} && ./waf build"
 
   shell:
     <<: *common
-    command: bash
+    command: bash -c "bash"
     tty: true
     stdin_open: true
 
@@ -30,4 +35,4 @@ services:
     command: bash -c './waf --run "${SIMULATION_CMD}"'
     environment:
       - NS_LOG=*=error
-      - NS_GLOBAL_VALUE=RngRun=1
+      #- NS_GLOBAL_VALUE=RngRun=1
