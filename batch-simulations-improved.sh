@@ -7,6 +7,9 @@ BLUE="\e[34m"
 BOLD="\e[1m"
 RESET="\e[0m"
 
+# Generate a unique instance ID for this script run
+INSTANCE_ID=$(head /dev/urandom | tr -dc a-z0-9 | head -c 6)
+
 # Check args
 if [ "$#" -lt 1 ]; then
   echo -e "${YELLOW}Usage: $0 <job_folder> [num_runs_per_job] [num_cores]${RESET}"
@@ -28,11 +31,13 @@ fi
 LOG_DIR="$JOB_FOLDER/run_logs"
 mkdir -p "$LOG_DIR"
 
+echo -e "${BLUE}Starting batch simulation with instance ID: ${INSTANCE_ID}${RESET}"
 
 cleanup() {
   echo -e "${RED}✋ Caught interrupt. Cleaning up...${RESET}"
   pkill -P $$  # kill all child processes
-  docker ps --format '{{.Names}}' | grep '_run' | xargs -r docker stop
+  # Only kill containers with this instance's tag
+  docker ps --format '{{.Names}}' | grep "i${INSTANCE_ID}_" | xargs -r docker stop
   exit 1
 }
 trap cleanup SIGINT
@@ -43,27 +48,35 @@ cat > "$TEMP_RUNNER" << 'EOL'
 job_file="$1"
 run_number="$2"
 job_name=$(basename "$job_file" .job)
-tag="${job_name}_run${run_number}"
+
+# Create a unique container name with the instance ID
+container_tag="i${INSTANCE_ID}_${job_name}_run${run_number}"
 
 # Check if the job has already been completed
-if [ -f "$LOG_DIR/completed_jobs.txt" ] && grep -q "$tag" "$LOG_DIR/completed_jobs.txt"; then
+if [ -f "$LOG_DIR/completed_jobs.txt" ] && grep -q "${job_name}_run${run_number}" "$LOG_DIR/completed_jobs.txt"; then
   exit 0  # Skip the job if it's already completed
 fi
 
-echo "\nProcessing job: $tag"
+echo -e "\nProcessing job: ${job_name}_run${run_number}"
 export SIMULATION_CMD=$(cat "$job_file")
-echo "Simulation command is: $SIMULATION_CMD" >> "$LOG_DIR/${tag}.log"
+echo "Simulation command is: $SIMULATION_CMD" >> "$LOG_DIR/${job_name}_run${run_number}.log"
+echo "Container name: $container_tag" >> "$LOG_DIR/${job_name}_run${run_number}.log"
 
 start_time=$(date +%s)
 start_readable=$(date +"%Y-%m-%d %H:%M:%S")
-echo ">>> [$tag] Started at $start_readable" >> "$LOG_DIR/${tag}.log"
+echo ">>> [${job_name}_run${run_number}] Started at $start_readable" >> "$LOG_DIR/${job_name}_run${run_number}.log"
 
-docker compose run --rm --name "$tag" "$DOCKER_SERVICE" &>> "$LOG_DIR/${tag}.log"
+# Use the unique container name for this run
+docker compose run --rm --name "$container_tag" "$DOCKER_SERVICE" &>> "$LOG_DIR/${job_name}_run${run_number}.log"
 exit_code=$?
 
 # If the job finishes successfully, mark it as completed
 if [ $exit_code -eq 0 ]; then
-  echo "$tag" >> "$LOG_DIR/completed_jobs.txt"
+  # Use flock for atomic file operations
+  (
+    flock -x 200
+    echo "${job_name}_run${run_number}" >> "$LOG_DIR/completed_jobs.txt"
+  ) 200>"$LOG_DIR/completed_jobs.txt.lock"
 
   job_counter_file="$LOG_DIR/${job_name}.counter"
 
@@ -75,15 +88,16 @@ if [ $exit_code -eq 0 ]; then
     echo "$new_count" > "$job_counter_file"
 
     if [ "$new_count" -eq "$NUM_RUNS" ]; then
-      echo ">>> [$job_name] All $NUM_RUNS runs completed. Moving to completed/" >> "$LOG_DIR/${tag}.log"
+      echo ">>> [$job_name] All $NUM_RUNS runs completed. Moving to completed/" >> "$LOG_DIR/${job_name}_run${run_number}.log"
+      mkdir -p "$JOB_FOLDER/completed/"
       mv "$job_file" "$JOB_FOLDER/completed/"
       rm -f "$job_counter_file"
     fi
   ) 200>"$job_counter_file.lock"
 
-  echo ">>> [$tag] SUCCESS" >> "$LOG_DIR/${tag}.log"
+  echo ">>> [${job_name}_run${run_number}] SUCCESS" >> "$LOG_DIR/${job_name}_run${run_number}.log"
 else
-  echo ">>> [$tag] FAILED with exit code $exit_code" >> "$LOG_DIR/${tag}.log"
+  echo ">>> [${job_name}_run${run_number}] FAILED with exit code $exit_code" >> "$LOG_DIR/${job_name}_run${run_number}.log"
   exit $exit_code
 fi
 
@@ -93,12 +107,10 @@ elapsed=$((end_time - start_time))
 mins=$((elapsed / 60))
 secs=$((elapsed % 60))
 
-echo ">>> Finished at $end_readable with duration: ${mins}m ${secs}s" >> "$LOG_DIR/${tag}.log"
-echo -e "\n>>> [$tag] ${BOLD}${BLUE}Duration:${RESET} ${mins}m ${secs}s"
-
+echo ">>> Finished at $end_readable with duration: ${mins}m ${secs}s" >> "$LOG_DIR/${job_name}_run${run_number}.log"
+echo -e "\n>>> [${job_name}_run${run_number}] ${BOLD}${BLUE}Duration:${RESET} ${mins}m ${secs}s"
 EOL
 chmod +x "$TEMP_RUNNER"
-
 
 # Generate list of job/run pairs
 JOB_LIST=$(mktemp)
@@ -114,11 +126,10 @@ export LOG_DIR
 export GREEN RED YELLOW BLUE BOLD RESET
 export NUM_RUNS
 export JOB_FOLDER
+export INSTANCE_ID
 
 # Run jobs in parallel
-#cat "$JOB_LIST" | parallel -j "$CORES" --colsep ' ' --joblog "$LOG_DIR/joblog.txt" --tag "$TEMP_RUNNER" {1} {2}
-cat "$JOB_LIST" | parallel -j "$CORES" --colsep ' ' --joblog "$LOG_DIR/joblog.txt" "$TEMP_RUNNER" {1} {2} --progress
-
+cat "$JOB_LIST" | parallel -j "$CORES" --colsep ' ' --joblog "$LOG_DIR/joblog.txt" "$TEMP_RUNNER" {1} {2}
 
 # Cleanup
 rm "$TEMP_RUNNER" "$JOB_LIST"
