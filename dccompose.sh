@@ -32,7 +32,7 @@ fi
 
 # Step 3: Run the Docker service
 echo "Running docker service '$DOCKER_SERVICE'..."
-docker compose run "$DOCKER_SERVICE"
+docker compose run --rm "$DOCKER_SERVICE"
 
 exit_code=$?
 

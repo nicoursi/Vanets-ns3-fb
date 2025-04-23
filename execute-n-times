@@ -4,7 +4,11 @@ n=$1
 shift
 cmd="$@"
 
+# Get the directory of the current script
+script_dir=$(dirname "$0")
+
 for i in $(seq 1 $n); do
-  eval "$cmd"
-  echo "\n\n ---------------------------------------"
+  # Use the correct relative path to runwithtimer.sh
+  "$script_dir/runwithtimer.sh" $cmd
+  echo -e "\n\n ---------------------------------------"
 done
