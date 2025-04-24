@@ -1,0 +1,664 @@
+Simulation command is: fb-vanet-urban --buildings=1 --actualRange=300 --mapBasePath=../maps/Grid-300/Grid-300 --cwMin=32 --cwMax=1024 --vehicleDistance=25 --startingNode=4896 --propagationLoss=1 --protocol=4 --area=2000 --smartJunctionMode=0 --errorRate=0 --nVehicles=0 --droneTest=0 --highBuildings=0 --flooding=0  --printToFile=1 --printCoords=0 --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1 --forgedCoordTest=0 --forgedCoordRate=0 --maxRun=40
+>>> [urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-500-300-_run1] Started at 2025-04-21 23:00:42
+Waf: Entering directory `/my-project/ns-3/build'
+Waf: Leaving directory `/my-project/ns-3/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (1.456s)
+Whole simulation starting at: 2025-04-21 23:00:45
+Start main urban
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+Max run: 40
+fileName=Grid-300/b1/e0/r300/j0/cw[32-1024]/STATIC-500/Grid-300-b1-e0-r300-j0-STATIC-500
+fbTest= "/my-project/simulations/scenario-urbano/Grid-300/b1/e0/r300/j0/cw[32-1024]/STATIC-500/Grid-300-b1-e0-r300-j0-STATIC-500-1745269319390.csv"
+Simulation Run 0 starting at: 2025-04-21 23:01:59
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6517/6528
+coverageOnCirc= 148/148
+m_sent=733
+hops= 16.3919
+slots= 994.547
+Simulation Run 0 ending at: 2025-04-21 23:05:01
+Simulation Run 0 Elapsed wall-clock time: 3m 2s
+-----------------------------------------------------------------------------
+Simulation Run 1 starting at: 2025-04-21 23:05:01
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=720
+hops= 14.7162
+slots= 654.169
+Simulation Run 1 ending at: 2025-04-21 23:07:31
+Simulation Run 1 Elapsed wall-clock time: 2m 30s
+-----------------------------------------------------------------------------
+Simulation Run 2 starting at: 2025-04-21 23:07:32
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6139/6528
+coverageOnCirc= 137/148
+m_sent=694
+hops= 16.0876
+slots= 968.62
+Simulation Run 2 ending at: 2025-04-21 23:10:00
+Simulation Run 2 Elapsed wall-clock time: 2m 28s
+-----------------------------------------------------------------------------
+Simulation Run 3 starting at: 2025-04-21 23:10:00
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6352/6528
+coverageOnCirc= 148/148
+m_sent=705
+hops= 16.6284
+slots= 893.926
+Simulation Run 3 ending at: 2025-04-21 23:12:42
+Simulation Run 3 Elapsed wall-clock time: 2m 41s
+-----------------------------------------------------------------------------
+Simulation Run 4 starting at: 2025-04-21 23:12:42
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6352/6528
+coverageOnCirc= 140/148
+m_sent=692
+hops= 13.2786
+slots= 649.036
+Simulation Run 4 ending at: 2025-04-21 23:15:28
+Simulation Run 4 Elapsed wall-clock time: 2m 45s
+-----------------------------------------------------------------------------
+Simulation Run 5 starting at: 2025-04-21 23:15:28
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6152/6528
+coverageOnCirc= 140/148
+m_sent=679
+hops= 16.2143
+slots= 1036.07
+Simulation Run 5 ending at: 2025-04-21 23:17:45
+Simulation Run 5 Elapsed wall-clock time: 2m 16s
+-----------------------------------------------------------------------------
+Simulation Run 6 starting at: 2025-04-21 23:17:45
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 5996/6528
+coverageOnCirc= 140/148
+m_sent=665
+hops= 16.3786
+slots= 836.714
+Simulation Run 6 ending at: 2025-04-21 23:20:12
+Simulation Run 6 Elapsed wall-clock time: 2m 27s
+-----------------------------------------------------------------------------
+Simulation Run 7 starting at: 2025-04-21 23:20:12
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=730
+hops= 14.5338
+slots= 789.628
+Simulation Run 7 ending at: 2025-04-21 23:22:37
+Simulation Run 7 Elapsed wall-clock time: 2m 24s
+-----------------------------------------------------------------------------
+Simulation Run 8 starting at: 2025-04-21 23:22:37
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=715
+hops= 15.1892
+slots= 791.649
+Simulation Run 8 ending at: 2025-04-21 23:24:54
+Simulation Run 8 Elapsed wall-clock time: 2m 17s
+-----------------------------------------------------------------------------
+Simulation Run 9 starting at: 2025-04-21 23:24:54
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6084/6528
+coverageOnCirc= 144/148
+m_sent=689
+hops= 15.8819
+slots= 1041.66
+Simulation Run 9 ending at: 2025-04-21 23:27:17
+Simulation Run 9 Elapsed wall-clock time: 2m 22s
+-----------------------------------------------------------------------------
+Simulation Run 10 starting at: 2025-04-21 23:27:17
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6440/6528
+coverageOnCirc= 143/148
+m_sent=713
+hops= 15.958
+slots= 795.175
+Simulation Run 10 ending at: 2025-04-21 23:29:48
+Simulation Run 10 Elapsed wall-clock time: 2m 30s
+-----------------------------------------------------------------------------
+Simulation Run 11 starting at: 2025-04-21 23:29:48
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6473/6528
+coverageOnCirc= 146/148
+m_sent=716
+hops= 16.9452
+slots= 747.37
+Simulation Run 11 ending at: 2025-04-21 23:32:09
+Simulation Run 11 Elapsed wall-clock time: 2m 20s
+-----------------------------------------------------------------------------
+Simulation Run 12 starting at: 2025-04-21 23:32:09
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6319/6528
+coverageOnCirc= 143/148
+m_sent=699
+hops= 14.8322
+slots= 918.301
+Simulation Run 12 ending at: 2025-04-21 23:33:58
+Simulation Run 12 Elapsed wall-clock time: 1m 49s
+-----------------------------------------------------------------------------
+Simulation Run 13 starting at: 2025-04-21 23:33:58
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=707
+hops= 17.0946
+slots= 831.635
+Simulation Run 13 ending at: 2025-04-21 23:35:44
+Simulation Run 13 Elapsed wall-clock time: 1m 45s
+-----------------------------------------------------------------------------
+Simulation Run 14 starting at: 2025-04-21 23:35:44
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=719
+hops= 14.9392
+slots= 653.689
+Simulation Run 14 ending at: 2025-04-21 23:37:29
+Simulation Run 14 Elapsed wall-clock time: 1m 45s
+-----------------------------------------------------------------------------
+Simulation Run 15 starting at: 2025-04-21 23:37:29
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6330/6528
+coverageOnCirc= 146/148
+m_sent=718
+hops= 16.6301
+slots= 784.068
+Simulation Run 15 ending at: 2025-04-21 23:39:18
+Simulation Run 15 Elapsed wall-clock time: 1m 49s
+-----------------------------------------------------------------------------
+Simulation Run 16 starting at: 2025-04-21 23:39:18
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=715
+hops= 17.0473
+slots= 872.115
+Simulation Run 16 ending at: 2025-04-21 23:41:03
+Simulation Run 16 Elapsed wall-clock time: 1m 45s
+-----------------------------------------------------------------------------
+Simulation Run 17 starting at: 2025-04-21 23:41:03
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=718
+hops= 13.5405
+slots= 735.858
+Simulation Run 17 ending at: 2025-04-21 23:42:51
+Simulation Run 17 Elapsed wall-clock time: 1m 47s
+-----------------------------------------------------------------------------
+Simulation Run 18 starting at: 2025-04-21 23:42:51
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=701
+hops= 18.9392
+slots= 929.986
+Simulation Run 18 ending at: 2025-04-21 23:44:37
+Simulation Run 18 Elapsed wall-clock time: 1m 45s
+-----------------------------------------------------------------------------
+Simulation Run 19 starting at: 2025-04-21 23:44:37
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 5996/6528
+coverageOnCirc= 134/148
+m_sent=658
+hops= 13.1418
+slots= 684.388
+Simulation Run 19 ending at: 2025-04-21 23:46:19
+Simulation Run 19 Elapsed wall-clock time: 1m 41s
+-----------------------------------------------------------------------------
+Simulation Run 20 starting at: 2025-04-21 23:46:19
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=733
+hops= 16.0203
+slots= 954.811
+Simulation Run 20 ending at: 2025-04-21 23:48:09
+Simulation Run 20 Elapsed wall-clock time: 1m 50s
+-----------------------------------------------------------------------------
+Simulation Run 21 starting at: 2025-04-21 23:48:10
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6352/6528
+coverageOnCirc= 148/148
+m_sent=709
+hops= 21.1284
+slots= 1148.89
+Simulation Run 21 ending at: 2025-04-21 23:49:59
+Simulation Run 21 Elapsed wall-clock time: 1m 49s
+-----------------------------------------------------------------------------
+Simulation Run 22 starting at: 2025-04-21 23:49:59
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6473/6528
+coverageOnCirc= 145/148
+m_sent=707
+hops= 19.8345
+slots= 1168.55
+Simulation Run 22 ending at: 2025-04-21 23:51:46
+Simulation Run 22 Elapsed wall-clock time: 1m 47s
+-----------------------------------------------------------------------------
+Simulation Run 23 starting at: 2025-04-21 23:51:46
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6352/6528
+coverageOnCirc= 146/148
+m_sent=696
+hops= 14.9178
+slots= 936.164
+Simulation Run 23 ending at: 2025-04-21 23:53:32
+Simulation Run 23 Elapsed wall-clock time: 1m 45s
+-----------------------------------------------------------------------------
+Simulation Run 24 starting at: 2025-04-21 23:53:32
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6517/6528
+coverageOnCirc= 148/148
+m_sent=725
+hops= 16.6149
+slots= 888.777
+Simulation Run 24 ending at: 2025-04-21 23:55:20
+Simulation Run 24 Elapsed wall-clock time: 1m 48s
+-----------------------------------------------------------------------------
+Simulation Run 25 starting at: 2025-04-21 23:55:20
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 5996/6528
+coverageOnCirc= 136/148
+m_sent=658
+hops= 13.8971
+slots= 664.287
+Simulation Run 25 ending at: 2025-04-21 23:57:04
+Simulation Run 25 Elapsed wall-clock time: 1m 43s
+-----------------------------------------------------------------------------
+Simulation Run 26 starting at: 2025-04-21 23:57:04
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6275/6528
+coverageOnCirc= 137/148
+m_sent=684
+hops= 15.3796
+slots= 760.109
+Simulation Run 26 ending at: 2025-04-21 23:58:52
+Simulation Run 26 Elapsed wall-clock time: 1m 48s
+-----------------------------------------------------------------------------
+Simulation Run 27 starting at: 2025-04-21 23:58:53
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=727
+hops= 21.7095
+slots= 1200.89
+Simulation Run 27 ending at: 2025-04-22 00:00:41
+Simulation Run 27 Elapsed wall-clock time: 1m 48s
+-----------------------------------------------------------------------------
+Simulation Run 28 starting at: 2025-04-22 00:00:41
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6462/6528
+coverageOnCirc= 144/148
+m_sent=732
+hops= 14.7222
+slots= 834.361
+Simulation Run 28 ending at: 2025-04-22 00:02:31
+Simulation Run 28 Elapsed wall-clock time: 1m 49s
+-----------------------------------------------------------------------------
+Simulation Run 29 starting at: 2025-04-22 00:02:31
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 54/6528
+coverageOnCirc= 0/148
+m_sent=2
+hops= -nan
+slots= -nan
+Simulation Run 29 ending at: 2025-04-22 00:03:40
+Simulation Run 29 Elapsed wall-clock time: 1m 8s
+-----------------------------------------------------------------------------
+Simulation Run 30 starting at: 2025-04-22 00:03:40
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=717
+hops= 16.7905
+slots= 851.527
+Simulation Run 30 ending at: 2025-04-22 00:05:29
+Simulation Run 30 Elapsed wall-clock time: 1m 48s
+-----------------------------------------------------------------------------
+Simulation Run 31 starting at: 2025-04-22 00:05:29
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=722
+hops= 16.2027
+slots= 909.669
+Simulation Run 31 ending at: 2025-04-22 00:07:16
+Simulation Run 31 Elapsed wall-clock time: 1m 47s
+-----------------------------------------------------------------------------
+Simulation Run 32 starting at: 2025-04-22 00:07:16
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=730
+hops= 18.3378
+slots= 912.02
+Simulation Run 32 ending at: 2025-04-22 00:09:04
+Simulation Run 32 Elapsed wall-clock time: 1m 47s
+-----------------------------------------------------------------------------
+Simulation Run 33 starting at: 2025-04-22 00:09:04
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=729
+hops= 16.9662
+slots= 930.399
+Simulation Run 33 ending at: 2025-04-22 00:10:52
+Simulation Run 33 Elapsed wall-clock time: 1m 48s
+-----------------------------------------------------------------------------
+Simulation Run 34 starting at: 2025-04-22 00:10:52
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6176/6528
+coverageOnCirc= 136/148
+m_sent=672
+hops= 14.7353
+slots= 896.566
+Simulation Run 34 ending at: 2025-04-22 00:12:37
+Simulation Run 34 Elapsed wall-clock time: 1m 45s
+-----------------------------------------------------------------------------
+Simulation Run 35 starting at: 2025-04-22 00:12:37
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=723
+hops= 16.5811
+slots= 880.878
+Simulation Run 35 ending at: 2025-04-22 00:14:23
+Simulation Run 35 Elapsed wall-clock time: 1m 46s
+-----------------------------------------------------------------------------
+Simulation Run 36 starting at: 2025-04-22 00:14:24
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6352/6528
+coverageOnCirc= 144/148
+m_sent=711
+hops= 16.2014
+slots= 1012.85
+Simulation Run 36 ending at: 2025-04-22 00:16:09
+Simulation Run 36 Elapsed wall-clock time: 1m 45s
+-----------------------------------------------------------------------------
+Simulation Run 37 starting at: 2025-04-22 00:16:09
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6352/6528
+coverageOnCirc= 142/148
+m_sent=696
+hops= 15.4507
+slots= 790.655
+Simulation Run 37 ending at: 2025-04-22 00:17:54
+Simulation Run 37 Elapsed wall-clock time: 1m 44s
+-----------------------------------------------------------------------------
+Simulation Run 38 starting at: 2025-04-22 00:17:54
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6084/6528
+coverageOnCirc= 136/148
+m_sent=686
+hops= 17
+slots= 978.419
+Simulation Run 38 ending at: 2025-04-22 00:19:38
+Simulation Run 38 Elapsed wall-clock time: 1m 44s
+-----------------------------------------------------------------------------
+Simulation Run 39 starting at: 2025-04-22 00:19:38
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6451/6528
+coverageOnCirc= 148/148
+m_sent=718
+hops= 18.2095
+slots= 1008.59
+Simulation Run 39 ending at: 2025-04-22 00:21:24
+Simulation Run 39 Elapsed wall-clock time: 1m 45s
+-----------------------------------------------------------------------------
+Whole simulation ending at: 2025-04-22 00:21:24
+Whole simulation Elapsed wall-clock time: 80m 38s
+-----------------------------------------------------------------------------
+>>> [urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-500-300-] All 1 runs completed. Moving to completed/
+>>> [urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-500-300-_run1] SUCCESS
+>>> Finished at 2025-04-22 00:21:27 with duration: 80m 45s

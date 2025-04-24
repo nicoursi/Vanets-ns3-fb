@@ -1,0 +1,813 @@
+Simulation command is: roff-test --buildings=0 --actualRange=300 --mapBasePath=../maps/Grid-300/Grid-300 --vehicleDistance=25 --startingNode=4896 --propagationLoss=1 --area=2000 --smartJunctionMode=0 --errorRate=0 --nVehicles=0 --droneTest=0 --highBuildings=0 --printToFile=1 --printCoords=0  --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1  --beaconInterval=100 --distanceRange=1 --forgedCoordTest=0 --forgedCoordRate=0 --maxRun=10
+>>> [urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b0-e0-j0-ROFF-300-_run2] Started at 2025-04-22 17:33:38
+Waf: Entering directory `/my-project/ns-3/build'
+Waf: Leaving directory `/my-project/ns-3/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (1.431s)
+Whole simulation starting at: 2025-04-22 17:33:41
+Start main urban
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Max run: 10
+Grid-300/b0/e0/r300/j0/ROFF/Grid-300-b0-e0-r300-j0-ROFF
+roffTest= "/my-project/simulations/scenario-urbano/Grid-300/b0/e0/r300/j0/ROFF/Grid-300-b0-e0-r300-j0-ROFF-1745336021776.csv"
+Simulation Run 0 starting at: 2025-04-22 17:33:41
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+
+Simulation command is: roff-test --buildings=0 --actualRange=300 --mapBasePath=../maps/Grid-300/Grid-300 --vehicleDistance=25 --startingNode=4896 --propagationLoss=1 --area=2000 --smartJunctionMode=0 --errorRate=0 --nVehicles=0 --droneTest=0 --highBuildings=0 --printToFile=1 --printCoords=0  --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1  --beaconInterval=100 --distanceRange=1 --forgedCoordTest=0 --forgedCoordRate=0 --maxRun=20
+Container name: i5chd12_urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b0-e0-j0-ROFF-300-_run2
+>>> [urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b0-e0-j0-ROFF-300-_run2] Started at 2025-04-22 23:14:31
+Waf: Entering directory `/my-project/ns-3/build'
+Waf: Leaving directory `/my-project/ns-3/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (1.790s)
+Whole simulation starting at: 2025-04-22 23:14:34
+Start main urban
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Max run: 20
+Grid-300/b0/e0/r300/j0/ROFF/Grid-300-b0-e0-r300-j0-ROFF
+roffTest= "/my-project/simulations/scenario-urbano/Grid-300/b0/e0/r300/j0/ROFF/Grid-300-b0-e0-r300-j0-ROFF-1745356474769.csv"
+Simulation Run 0 starting at: 2025-04-22 23:14:34
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+ROFFApplication::StartBroadcastPhase nbt size= 51
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=754
+hops= 10.4122
+slots= 10.7905
+Simulation Run 0 ending at: 2025-04-23 00:00:57
+Simulation Run 0 Elapsed wall-clock time: 46m 23s
+-----------------------------------------------------------------------------
+Simulation Run 1 starting at: 2025-04-23 00:00:58
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+ROFFApplication::StartBroadcastPhase nbt size= 53
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=879
+hops= 10.5203
+slots= 11.0203
+Simulation Run 1 ending at: 2025-04-23 00:47:30
+Simulation Run 1 Elapsed wall-clock time: 46m 32s
+-----------------------------------------------------------------------------
+Simulation Run 2 starting at: 2025-04-23 00:47:30
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+ROFFApplication::StartBroadcastPhase nbt size= 53
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=806
+hops= 9.62838
+slots= 9.74324
+Simulation Run 2 ending at: 2025-04-23 01:33:34
+Simulation Run 2 Elapsed wall-clock time: 46m 4s
+-----------------------------------------------------------------------------
+Simulation Run 3 starting at: 2025-04-23 01:33:35
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+ROFFApplication::StartBroadcastPhase nbt size= 53
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=734
+hops= 9.77027
+slots= 10.4324
+Simulation Run 3 ending at: 2025-04-23 02:19:33
+Simulation Run 3 Elapsed wall-clock time: 45m 58s
+-----------------------------------------------------------------------------
+Simulation Run 4 starting at: 2025-04-23 02:19:33
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+ROFFApplication::StartBroadcastPhase nbt size= 53
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=933
+hops= 9.83108
+slots= 10.1419
+Simulation Run 4 ending at: 2025-04-23 03:06:22
+Simulation Run 4 Elapsed wall-clock time: 46m 48s
+-----------------------------------------------------------------------------
+Simulation Run 5 starting at: 2025-04-23 03:06:22
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+ROFFApplication::StartBroadcastPhase nbt size= 53
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=898
+hops= 9.9527
+slots= 10.0878
+Simulation Run 5 ending at: 2025-04-23 03:53:16
+Simulation Run 5 Elapsed wall-clock time: 46m 54s
+-----------------------------------------------------------------------------
+Simulation Run 6 starting at: 2025-04-23 03:53:17
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+ROFFApplication::StartBroadcastPhase nbt size= 53
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=747
+hops= 10.1284
+slots= 10.2905
+Simulation Run 6 ending at: 2025-04-23 04:39:19
+Simulation Run 6 Elapsed wall-clock time: 46m 1s
+-----------------------------------------------------------------------------
+Simulation Run 7 starting at: 2025-04-23 04:39:19
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+ROFFApplication::StartBroadcastPhase nbt size= 53
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=896
+hops= 9.57432
+slots= 9.79054
+Simulation Run 7 ending at: 2025-04-23 05:26:05
+Simulation Run 7 Elapsed wall-clock time: 46m 46s
+-----------------------------------------------------------------------------
+Simulation Run 8 starting at: 2025-04-23 05:26:06
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+ROFFApplication::StartBroadcastPhase nbt size= 53
+totalCoverage= 6515/6528
+coverageOnCirc= 148/148
+m_sent=734
+hops= 9.87162
+slots= 10.027
+Simulation Run 8 ending at: 2025-04-23 06:11:38
+Simulation Run 8 Elapsed wall-clock time: 45m 32s
+-----------------------------------------------------------------------------
+Simulation Run 9 starting at: 2025-04-23 06:11:39
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+ROFFApplication::StartBroadcastPhase nbt size= 53
+totalCoverage= 6520/6528
+coverageOnCirc= 148/148
+m_sent=740
+hops= 9.80405
+slots= 9.89865
+Simulation Run 9 ending at: 2025-04-23 06:57:23
+Simulation Run 9 Elapsed wall-clock time: 45m 43s
+-----------------------------------------------------------------------------
+Simulation Run 10 starting at: 2025-04-23 06:57:23
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+ROFFApplication::StartBroadcastPhase nbt size= 53
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=806
+hops= 10.6284
+slots= 11.0676
+Simulation Run 10 ending at: 2025-04-23 07:43:00
+Simulation Run 10 Elapsed wall-clock time: 45m 37s
+-----------------------------------------------------------------------------
+Simulation Run 11 starting at: 2025-04-23 07:43:00
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+ROFFApplication::StartBroadcastPhase nbt size= 53
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=836
+hops= 10.4932
+slots= 10.5338
+Simulation Run 11 ending at: 2025-04-23 08:29:37
+Simulation Run 11 Elapsed wall-clock time: 46m 37s
+-----------------------------------------------------------------------------
+Simulation Run 12 starting at: 2025-04-23 08:29:38
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+ROFFApplication::StartBroadcastPhase nbt size= 53
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=824
+hops= 10.0878
+slots= 10.0811
+Simulation Run 12 ending at: 2025-04-23 09:16:28
+Simulation Run 12 Elapsed wall-clock time: 46m 49s
+-----------------------------------------------------------------------------
+Simulation Run 13 starting at: 2025-04-23 09:16:28
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+ROFFApplication::StartBroadcastPhase nbt size= 53
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=886
+hops= 10.2027
+slots= 10.6284
+Simulation Run 13 ending at: 2025-04-23 10:02:50
+Simulation Run 13 Elapsed wall-clock time: 46m 21s
+-----------------------------------------------------------------------------
+Simulation Run 14 starting at: 2025-04-23 10:02:50
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+
+Simulation command is: roff-test --buildings=0 --actualRange=300 --mapBasePath=../maps/Grid-300/Grid-300 --vehicleDistance=25 --startingNode=4896 --propagationLoss=1 --area=2000 --smartJunctionMode=0 --errorRate=0 --nVehicles=0 --droneTest=0 --highBuildings=0 --printToFile=1 --printCoords=0  --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1  --beaconInterval=100 --distanceRange=1 --forgedCoordTest=0 --forgedCoordRate=0 --maxRun=3
+Container name: ik1a4a9_urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b0-e0-j0-ROFF-300-_run2
+>>> [urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b0-e0-j0-ROFF-300-_run2] Started at 2025-04-24 14:36:49
+Waf: Entering directory `/my-project/ns-3/build'
+Waf: Leaving directory `/my-project/ns-3/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (1.915s)
+Whole simulation starting at: 2025-04-24 14:36:53
+Start main urban
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Max run: 3
+Grid-300/b0/e0/r300/j0/ROFF/Grid-300-b0-e0-r300-j0-ROFF
+roffTest= "/my-project/simulations/scenario-urbano/Grid-300/b0/e0/r300/j0/ROFF/Grid-300-b0-e0-r300-j0-ROFF-1745498213631.csv"
+Simulation Run 0 starting at: 2025-04-24 14:36:53
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+ROFFApplication::StartBroadcastPhase nbt size= 53
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=907
+hops= 10.25
+slots= 9.82432
+Simulation Run 0 ending at: 2025-04-24 15:27:50
+Simulation Run 0 Elapsed wall-clock time: 50m 57s
+-----------------------------------------------------------------------------
+Simulation Run 1 starting at: 2025-04-24 15:27:51
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+1 
+2 
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
+nodes size = 6528
+toSend= 2611
