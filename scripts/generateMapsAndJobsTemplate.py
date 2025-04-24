@@ -1,9 +1,9 @@
 #!/usr/bin/python
 
-# Invocation: 
-# 	./generateMapsAndJobsTemplate.py ../maps/testMap/osm.osm.xml 25 
+# Invocation:
+# 	./generateMapsAndJobsTemplate.py ../maps/testMap/osm.osm.xml 25
 # if you want to specify map and distance by hand, othwerise:
-# 	./generateMapsAndJobsTemplate.py 
+# 	./generateMapsAndJobsTemplate.py
 # if you want to automatically generate jobs for the scenarios and distances set in the main
 
 import sys, os
@@ -41,7 +41,8 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 	# Protocols and transmission ranges
 	highBuildings = ["0"]
 	drones = ["0"]
-	buildings = ["0"]
+	buildings = ["1"]
+	#buildings = ["0","1"]
 	#buildings = ["0"]
 	#errorRates = ["0", "10", "20", "30", "40", "50"]
 	errorRates = ["0"]
@@ -49,8 +50,8 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 	forgedCoordRates = ["0"]
 	#buildings = ["1"]
 	junctions = ["0"]
-	protocols = ["1", "2", "3", "4"]
-	#protocols = ["1", "2", "3", "4", "5"]
+	#protocols = ["1", "2", "3", "4"]
+	protocols = ["5"]
 	#txRanges = ["100"]
 	txRanges = ["100", "300", "500"]
 	protocolsMap = {
@@ -73,13 +74,13 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 	#mapsPath = os.path.join(os.path.dirname(thisScriptParentPath), "maps")
 
 	# Input parameters
-	if (scenario is None or distance is None): 
+	if (scenario is None or distance is None):
 		mapPath = sys.argv[1]
 		vehicleDistance = sys.argv[2]
 	else:
 		mapPath = "../maps/" + scenario + "/" + scenario + ".osm.xml"
 		vehicleDistance = distance
-	
+
 	# Calculates directories
 	absMapPath = os.path.abspath(mapPath)
 	absMapParentPath = os.path.dirname(absMapPath)
@@ -89,13 +90,13 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 	print(mapBaseNameWithDistance)
 	print(mapPathWithoutExtension)
 
-	
+
 
 	# Defines paths of files necessary for ns3
 	mobilityFilePath = absMapParentPath + "/" + mapBaseNameWithDistance + ".ns2mobility.xml"
 	polygonFilePath = absMapParentPath + "/" + mapBaseNameWithDistance + ".poly.xml"
 	polygonFilePath3D = absMapParentPath + "/" + mapBaseNameWithDistance + ".3D.poly.xml"
-	
+
 	# Runs generate sumo files
 	sumoFileGenerator = thisScriptParentPath + "/generate-sumo-files.sh " + " " + mapPath + " " + vehicleDistance
 	#Uncomment to generate sumoFiles again
@@ -117,9 +118,9 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 								if ("Cube" in scenario):
 									propagationLoss = "0"
 								if (protocol == "5"): #ROFF
-									command = "NS_LOG=\"*=error\" NS_GLOBAL_VALUE=\"RngRun=1\" /home/jgottard/ns-3/ns-3.26/build/scratch/roff-test/roff-test --buildings={0} --actualRange={1} --mapBasePath={2} --vehicleDistance={3} --startingNode={4} --propagationLoss={5} --area={6} --smartJunctionMode={7} --errorRate={8} --nVehicles={9} --droneTest={10} --highBuildings={11} --printToFile=1 --printCoords=0  --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1  --beaconInterval=100 --distanceRange=1 --forgedCoordTest=0 --forgedCoordRate=0".format(b, txRange, mapPathWithoutExtension, distance, startingNode, propagationLoss, area, junction, errorRate, vehiclesNumber, drone, highBuilding)
-								else: 
-									command = "NS_LOG=\"*=error\" NS_GLOBAL_VALUE=\"RngRun=1\" /home/jgottard/ns-3/ns-3.26/build/scratch/fb-vanet-urban/fb-vanet-urban --buildings={0} --actualRange={1} --mapBasePath={2} --cwMin={3} --cwMax={4} --vehicleDistance={5} --startingNode={6} --propagationLoss={7} --protocol={8} --area={9} --smartJunctionMode={10} --errorRate={11} --nVehicles={12} --droneTest={13} --highBuildings={14} --flooding=0  --printToFile=1 --printCoords=0 --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1 --forgedCoordTest=0 --forgedCoordRate=0".format(b, txRange, mapPathWithoutExtension, cwMin, cwMax, distance, startingNode, propagationLoss, protocol, area, junction, errorRate, vehiclesNumber, drone, highBuilding)
+									command = "roff-test --buildings={0} --actualRange={1} --mapBasePath={2} --vehicleDistance={3} --startingNode={4} --propagationLoss={5} --area={6} --smartJunctionMode={7} --errorRate={8} --nVehicles={9} --droneTest={10} --highBuildings={11} --printToFile=1 --printCoords=0  --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1  --beaconInterval=100 --distanceRange=1 --forgedCoordTest=0 --forgedCoordRate=0 --maxRun=1".format(b, txRange, mapPathWithoutExtension, distance, startingNode, propagationLoss, area, junction, errorRate, vehiclesNumber, drone, highBuilding)
+								else:
+									command = "fb-vanet-urban --buildings={0} --actualRange={1} --mapBasePath={2} --cwMin={3} --cwMax={4} --vehicleDistance={5} --startingNode={6} --propagationLoss={7} --protocol={8} --area={9} --smartJunctionMode={10} --errorRate={11} --nVehicles={12} --droneTest={13} --highBuildings={14} --flooding=0  --printToFile=1 --printCoords=0 --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1 --forgedCoordTest=0 --forgedCoordRate=0 --maxRun=1".format(b, txRange, mapPathWithoutExtension, cwMin, cwMax, distance, startingNode, propagationLoss, protocol, area, junction, errorRate, vehiclesNumber, drone, highBuilding)
 
 								newJobName = "urban-" + mapBaseName + "-highBuildings" + str(highBuilding) + "-drones" + str(drone) + "-d" + str(vehicleDistance) + "-cw-" +str(cwMin) + "-" + str(cwMax) + "-b" + b + "-e" + errorRate + "-j" + junction + "-" + protocolsMap[protocol] + "-" + txRange
 								createJobFile(newJobName, command, jobsPath, jobTemplatePath, tempNewJobPath)
@@ -130,20 +131,20 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 									propagationLoss = "1"
 									if (protocol == "5"): #ROFF
 										command = "NS_GLOBAL_VALUE=\"RngRun=1\" /home/jgottard/ns-3/ns-3.26/build/scratch/roff-test/roff-test --buildings={0} --actualRange={1} --mapBasePath={2} --vehicleDistance={3} --startingNode={4} --propagationLoss={5} --area={6} --smartJunctionMode={7} --errorRate=0 --printToFile=1 --printCoords=0  --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1  --beaconInterval=100 --distanceRange=1 --forgedCoordTest=1 --forgedCoordRate={8}".format(b, txRange, mapPathWithoutExtension, distance, startingNode, propagationLoss, area, junction, forgedCoordRate)
-									else: 
+									else:
 										command = "NS_GLOBAL_VALUE=\"RngRun=1\" /home/jgottard/ns-3/ns-3.26/build/scratch/fb-vanet-urban/fb-vanet-urban --buildings={0} --actualRange={1} --mapBasePath={2} --cwMin={3} --cwMax={4} --vehicleDistance={5} --startingNode={6} --propagationLoss={7} --protocol={8} --area={9} --smartJunctionMode={10} --errorRate=0 --flooding=0  --printToFile=1 --printCoords=0 --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1 --forgedCoordTest=1 --forgedCoordRate={11}".format(b, txRange, mapPathWithoutExtension, cwMin, cwMax, distance, startingNode, propagationLoss, protocol, area, junction, forgedCoordRate)
 									newJobName = "urban-" + mapBaseName + "-d" + str(vehicleDistance) + "-cw-" +str(cwMin) + "-" + str(cwMax) + "-b" + b + "-f" + forgedCoordRate + "-j" + junction + "-" + protocolsMap[protocol] + "-" + txRange
 									createJobFile(newJobName, command, jobsPath, jobTemplatePath, tempNewJobPath)
 							'''
-						
-					
+
+
 	print("\n")
 
 def main():
 	#Edit these to launch automatically 	forgedCoordRates = ["0", "10", "20", "30", "40", "50", "100"]
-	scenarios = ["LA-25"]
+	scenarios = ["Grid-300"]
 	#scenarios = ["LA-25"]
-	#scenarios = ["Padova-5", "Padova-15", "Padova-25", "Padova-35", "Padova-45"] 
+	#scenarios = ["Padova-5", "Padova-15", "Padova-25", "Padova-35", "Padova-45"]
 	#scenarios = ["Padova-15", "Padova-25", "Padova-35", "Padova-45", "LA-15", "LA-25", "LA-35", "LA-45"]
 	#contentionWindows = [{"cwMin": 32, "cwMax": 1024}, {"cwMin": 16, "cwMax": 128}]
 	contentionWindows = [{"cwMin": 32, "cwMax": 1024}]
