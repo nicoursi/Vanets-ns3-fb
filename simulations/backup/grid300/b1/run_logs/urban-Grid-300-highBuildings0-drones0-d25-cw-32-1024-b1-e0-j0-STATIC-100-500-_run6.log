@@ -1,0 +1,66 @@
+Processing job: urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-100-500-_run6
+Simulation command is: fb-vanet-urban --buildings=1 --actualRange=500 --mapBasePath=../maps/Grid-300/Grid-300 --cwMin=32 --cwMax=1024 --vehicleDistance=25 --startingNode=4896 --propagationLoss=1 --protocol=2 --area=2000 --smartJunctionMode=0 --errorRate=0 --nVehicles=0 --droneTest=0 --highBuildings=0 --flooding=0  --printToFile=1 --printCoords=0 --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1 --forgedCoordTest=0 --forgedCoordRate=0
+>>> [urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-100-500-_run6] Started at 2025-04-18 17:12:43
+Waf: Entering directory `/my-project/ns-3/build'
+Waf: Leaving directory `/my-project/ns-3/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (0.886s)
+Whole simulation starting at: 2025-04-18 17:12:44
+Start main urban
+Max run: 1
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+fileName=Grid-300/b1/e0/r500/j0/cw[32-1024]/STATIC-100/Grid-300-b1-e0-r500-j0-STATIC-100
+fbTest= "/my-project/simulations/scenario-urbano/Grid-300/b1/e0/r500/j0/cw[32-1024]/STATIC-100/Grid-300-b1-e0-r500-j0-STATIC-100-1744989231863.csv"
+Simulation Run 0 starting at: 2025-04-18 17:13:51
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+
+Processing job: urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-100-500-_run6
+Simulation command is: fb-vanet-urban --buildings=1 --actualRange=500 --mapBasePath=../maps/Grid-300/Grid-300 --cwMin=32 --cwMax=1024 --vehicleDistance=25 --startingNode=4896 --propagationLoss=1 --protocol=2 --area=2000 --smartJunctionMode=0 --errorRate=0 --nVehicles=0 --droneTest=0 --highBuildings=0 --flooding=0  --printToFile=1 --printCoords=0 --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1 --forgedCoordTest=0 --forgedCoordRate=0
+>>> [urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-100-500-_run6] Started at 2025-04-18 17:15:39
+Waf: Entering directory `/my-project/ns-3/build'
+Waf: Leaving directory `/my-project/ns-3/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (0.979s)
+Whole simulation starting at: 2025-04-18 17:15:40
+Start main urban
+Max run: 1
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+fileName=Grid-300/b1/e0/r500/j0/cw[32-1024]/STATIC-100/Grid-300-b1-e0-r500-j0-STATIC-100
+fbTest= "/my-project/simulations/scenario-urbano/Grid-300/b1/e0/r500/j0/cw[32-1024]/STATIC-100/Grid-300-b1-e0-r500-j0-STATIC-100-1744989407545.csv"
+Simulation Run 0 starting at: 2025-04-18 17:16:47
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6528/6528
+coverageOnCirc= 148/148
+m_sent=774
+hops= 12.277
+slots= 41.0946
+Simulation Run 0 ending at: 2025-04-18 17:19:44
+Simulation Run 0 Elapsed wall-clock time: 2m 56s
+Whole simulation ending at: 2025-04-18 17:19:44
+Whole simulation Elapsed wall-clock time: 4m 3s
+>>> [urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-100-500-_run6] Finished at 2025-04-18 17:19:45
+[32m>>> [urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-100-500-_run6] SUCCESS[0m

@@ -1,0 +1,33 @@
+Waf: Entering directory `/my-project/ns-3/build'
+Waf: Leaving directory `/my-project/ns-3/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (1.218s)
+Whole simulation starting at: 2025-04-18 15:06:25
+Start main urban
+Max run: 1
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+fileName=Grid-300/b1/e0/r300/j0/cw[32-1024]/STATIC-100/Grid-300-b1-e0-r300-j0-STATIC-100
+fbTest= "/my-project/simulations/scenario-urbano/Grid-300/b1/e0/r300/j0/cw[32-1024]/STATIC-100/Grid-300-b1-e0-r300-j0-STATIC-100-1744981652466.csv"
+Simulation Run 0 starting at: 2025-04-18 15:07:32
+numNodes = 6528
+numNodes = 6528
+numVeh = 6528
+startingNode = 4896
+using tracefile ../maps/Grid-300/Grid-300.ns2mobility.xml
+Loading buildings file "../maps/Grid-300/Grid-300.poly.xml
+Loading losses from file ../maps/Grid-300/Grid-300.losses
+totalCoverage= 6352/6528
+coverageOnCirc= 144/148
+m_sent=838
+hops= 13.0486
+slots= 40.7292
+Simulation Run 0 ending at: 2025-04-18 15:09:54
+Simulation Run 0 Elapsed wall-clock time: 2m 21s
+Whole simulation ending at: 2025-04-18 15:09:54
+Whole simulation Elapsed wall-clock time: 3m 28s
