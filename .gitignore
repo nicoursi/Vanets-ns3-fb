@@ -8,5 +8,7 @@ __pycache__/
 
 scripts/graphs/out/
 
-# symlink to the maps
-/maps
+# losses files
+*.losses
+# Link to original maps
+maps-old
