@@ -41,24 +41,36 @@ You need a whole OS setup to be able to get the expected results. So to make thi
 
 ### Commands
 
-To build
+To build the image the first time:
 ```sh
-./dccompose.sh build
-```
-Dirty building (without cleaning the build folder)
-```sh
-./dccompose.sh dirty-build
+COMPOSE_BAKE=true docker compose build
 ```
 
-Running a simulation with parameters
+To build the ns3 project:
 ```sh
-./dccompose.sh simulation file_with_command_and_parameters
+docker compose run --rm build
 ```
 
-Getting a shell into the containers
+To build without cleaning the build folder:
 ```sh
-../dccompose.sh shell
+docker compose run --rm dirty-build
 ```
+
+To get a shell into the docker image, just for troubleshooting:
+```sh
+docker compose run --rm shell
+```
+
+To run the simulation (and automatically build modifications to existing files). For this command you need to fill the `$SIMULATION_CMD` environment variable with the exact command and parameters. You can put this variable in the `.env` file or provide it at runtime.
+```
+SIMULATION_CMD="command  with parameters" "docker compose run --rm simulation
+```
+
+To make running simulations easier and more automated you can use the following script from within the ns-3 folder:
+```sh
+../runsimulations.sh ../jobsTemplate/script-to-run/urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b0-e0-j0-Fast-Broadcast-500-.job 14
+```
+In the example above, the simulation command and parameters will be executed 14 times
 
 # Creating Maps
 
@@ -74,8 +86,11 @@ src/
 ├── roff/
 ├── fast-broadcast/
 ├── obstacle/
-└── mobility/
-    └── helper/
-        ├── ns2-mobility-helper.cc
-        └── ns2-mobility-helper.h
+├── mobility/
+│   └── helper/
+│       ├── ns2-mobility-helper.cc
+│       └── ns2-mobility-helper.h
+scratch/
+├── fb-vanet-urban/
+└── roff-test/
 ```
