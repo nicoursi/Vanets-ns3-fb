@@ -1,25 +1,28 @@
 #!/bin/bash
 
-# Ensure two arguments are passed
+GREEN="\e[32m"
+RED="\e[31m"
+YELLOW="\e[33m"
+BLUE="\e[34m"
+BOLD="\e[1m"
+RESET="\e[0m"
+
+# Ensure at least one argument is passed
 if [ "$#" -lt 1 ]; then
-  echo "Usage: $0 <docker_service> [cmd_file]"
+  echo "Usage: $0 <docker_service> [cmd_file] [n]"
   exit 1
 fi
 
-# Get the docker service name (required)
+# Required and optional arguments
 DOCKER_SERVICE="$1"
 CMD_FILE="$2"
+N="${3:-1}"  # Default to 1 if not provided
 
-# Record the start time
-start_time=$(date +%s)
-start_time_readable=$(date +"%Y-%m-%d %H:%M:%S")
-echo -e "\n*************************** Starting at: $start_time_readable ***************************"
-
-# Step 1: Clean up orphaned/stopped containers
+# Clean up orphaned/stopped containers
 echo "Cleaning up stopped containers..."
 docker container prune -f
 
-# Step 2: If a cmd_file is provided, export SIMULATION_CMD from it
+# If a cmd_file is provided, export SIMULATION_CMD from it
 if [ -n "$CMD_FILE" ]; then
   if [ -f "$CMD_FILE" ]; then
     echo "Exporting SIMULATION_CMD from file: $CMD_FILE"
@@ -30,26 +33,30 @@ if [ -n "$CMD_FILE" ]; then
   fi
 fi
 
-# Step 3: Run the Docker service
-echo "Running docker service '$DOCKER_SERVICE'..."
-docker compose run --rm "$DOCKER_SERVICE"
+# Run the Docker service N times with individual timing
+for ((i=1; i<=N; i++)); do
+  echo -e "\n========================= Run #$i of $N ========================="
 
-exit_code=$?
+  run_start_time=$(date +%s)
+  run_start_readable=$(date +"%Y-%m-%d %H:%M:%S")
+  echo ">>> Starting at: $run_start_readable"
 
-# Record the end time
-end_time=$(date +%s)
-end_time_readable=$(date +"%Y-%m-%d %H:%M:%S")
+  docker compose run --rm "$DOCKER_SERVICE"
+  exit_code=$?
 
-# Calculate elapsed time
-elapsed=$((end_time - start_time))
+  run_end_time=$(date +%s)
+  run_end_readable=$(date +"%Y-%m-%d %H:%M:%S")
+  elapsed=$((run_end_time - run_start_time))
+  mins=$((elapsed / 60))
+  secs=$((elapsed % 60))
 
-# Format elapsed time nicely
-mins=$((elapsed / 60))
-secs=$((elapsed % 60))
+  echo ">>> Finished at: $run_end_readable"
+  echo -e "${BOLD}${BLUE}>>> Elapsed time for run #$i: ${mins}m ${secs}s${RESET}"
 
+  if [ $exit_code -ne 0 ]; then
+    echo -e "${RED}>>> ERROR: Docker service failed on run #$i with exit code $exit_code${RESET}"
+    break
+  fi
+done
 
-echo -e "\n*************************** Finished at: $end_time_readable ***************************"
-echo "*************************** Elapsed time: ${mins}m ${secs}s ****************************************"
-
-# Exit with the same code as the executed command
 exit $exit_code
