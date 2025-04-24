@@ -70,7 +70,7 @@ def printSingleGraphDistance(outFolder, graphTitle, compoundData, distances, pro
 	ax.set_xlabel("\n" + xLabel, fontsize=25, linespacing=3.2)
 	ax.set_ylabel("\n" + yLabel, fontsize=25, linespacing=3.2)
 	ax.set_zlabel("\n" + zLabel, fontsize=25, linespacing=3.2)
-	ax.set_title(graphTitle, fontsize=30)
+	ax.set_title(graphTitle, fontsize=20)
 
 	if ("cov" in metric or "Cov" in metric):
 		maxZ = maxZ * 1.05
@@ -257,21 +257,23 @@ def printSingleGraphErrorRate(outFolder, graphTitle, compoundData, errorRates, p
 
 def printSingleGraph(outFolder, graphTitle, compoundData, txRanges, protocols, cw, junction, metric, yLabel, minY, maxY, colors=["0.3", "0.5", "0.7"]):
 	n = len(protocols)
-	#ind = np.arange(n)
-	ind = [0.1, 0.9]
+	ind = np.arange(n)
+	#ind = np.linspace(0, n - 1, n)  # evenly spaced values
+	#ind = [0.1, 0.1, 0.1, 0.1]
 	ind = np.array(ind)
 	#print(ind)
 
 	#barWidth = float((float(1)/float(4)) * float(0.90))
 	barWidth = 0.18
-	fig, ax = plt.subplots()
+	#fig, ax = plt.subplots()
+	fig, ax = plt.subplots(figsize=(12, 8))  # Increased figure size
 	rects = []
 	count = 0
 	#colors = ["0.3", "0.7"]
 
 	#widthDistance = [-1, 1]
-	#widthDistance = [-1.5, -0.5, 0.5, 1.5]
-	widthDistance = [-1.025, 0, 1.025]
+	widthDistance = [-1.5, -0.5, 0.5, 1.5]
+	#widthDistance = [-1.025, 0, 1.025]
 	ax.set_axisbelow(True)
 
 	for txRange in txRanges:
@@ -289,10 +291,12 @@ def printSingleGraph(outFolder, graphTitle, compoundData, txRanges, protocols, c
 		rects.append((ax.bar(ind + widthDistance[count] * barWidth, metricMeanList, barWidth, color=colors[count], label=txRange + "m", yerr=metricConfIntList, capsize=4)))
 		count = count + 1
 
-	ax.set_xlim(-0.35, 1.35)
+	#ax.set_xlim(-0.35, 1.35)
+	# Adjust x-axis limit based on the number of protocols
+	ax.set_xlim(-0.5, len(protocols) - 0.5)  # Dynamic x-axis limits
 	ax.yaxis.grid(alpha=0.25, color="black")
 
-	ax.set_xlabel("Protocols", fontsize=35)
+	ax.set_xlabel("Protocols", fontsize=20)
 	ax.set_ylabel(yLabel, fontsize=28)
 	if ("cov" in metric or "Cov" in metric):
 		maxY = maxY * 1.07
@@ -301,7 +305,7 @@ def printSingleGraph(outFolder, graphTitle, compoundData, txRanges, protocols, c
 	ax.set_ylim(minY - 0.1, maxY)
 	#ax.set_title(graphTitle, fontsize=20)
 	ax.set_xticks(ind)
-	plt.xticks(fontsize=35)
+	plt.xticks(fontsize=20)
 	plt.yticks(fontsize=23)
 	myProtocols = protocols
 	if junction == "1":
@@ -329,7 +333,7 @@ def printSingleGraph(outFolder, graphTitle, compoundData, txRanges, protocols, c
 			if (hasattr(height, "is_integer") and height.is_integer()):
 				height = int(height)
 			ax.text(rect.get_x() + rect.get_width()*offset[xpos], height,
-					'{}'.format(height), ha=ha[xpos], va='bottom', fontsize=25)
+					'{}'.format(height), ha=ha[xpos], va='bottom', fontsize=9)
 
 	for rect in rects:
 		autolabel(rect)
@@ -342,6 +346,8 @@ def printSingleGraph(outFolder, graphTitle, compoundData, txRanges, protocols, c
 		os.makedirs(outPathDirectory)
 
 	#plt.tight_layout(pad=10.0)
+
+	plt.tight_layout()  # Added for better spacing
 	plt.savefig(outPath + ".pdf")
 	plt.clf()
 	#plt.savefig('b2.pdf', bbox_inches='tight')
@@ -392,7 +398,7 @@ def appendCompoundData(basePath, txRanges, protocols, cw, junction, errorRate, c
 def printLineComparison():
 	protocols = ["fast-broadcast", "roff"]
 	compoundData = initCompoundData(protocols)
-	basePath = "/home/nicola/tesi/ns-3-cluster/ns-3.26/out/line"
+	basePath = "../../simulations/line"
 	appendCompoundData(basePath, protocols, compoundData)
 	printSingleGraphLineComparison()
 
@@ -401,8 +407,8 @@ def printGridComparison():
 	protocols = ["fast-broadcast", "roff"]
 	compoundDatab0 = initCompoundData(protocols)
 	compoundDatab1 = initCompoundData(protocols)
-	basePathb0 = "/home/nicola/tesi/ns-3-cluster/ns-3.26/out/Grid/b0"
-	basePathb1 = "/home/nicola/tesi/ns-3-cluster/ns-3.26/out/Grid/b1"
+	basePathb0 = "../../simulations/Grid/b0"
+	basePathb1 = "../../simulations/Grid/b1"
 	appendCompoundData(basePathb0, protocols, compoundDatab0)
 	appendCompoundData(basePathb1, protocols, compoundDatab1)
 
@@ -414,19 +420,22 @@ def printProtocolComparison():
 	print("PrintProtocolComparison")
 	#plt.rcParams["figure.figsize"] = [18, 6]
 	plt.rcParams["figure.figsize"] = [18, 14]
-	initialBasePath = "/home/nicola/tesi/ns-3-cluster/ns-3.26/out/scenario-urbano"
+	initialBasePath = "../../simulations/scenario-urbano"
 	#scenarios = ["Grid-200", "Grid-300", "Grid-400", "LA-15", "LA-25", "LA-35", "LA-45", "Padova-15", "Padova-25", "Padova-35", "Padova-45"]
-	scenarios = ["LA-25"]
+	scenarios = ["Grid-300"]
 	buildings = ["0", "1"]
+	#buildings = ["0"]
 	errorRate = "e0"
 	#txRanges = ["100", "300", "500"]
 	txRanges = ["100", "300", "500"]
+	protocols = ["Fast-Broadcast", "STATIC-100", "STATIC-300", "STATIC-500"]
 	#protocols = ["Fast-Broadcast", "STATIC-100", "STATIC-300", "STATIC-500", "ROFF"]
-	protocols = ["Fast-Broadcast", "ROFF"]
+	#protocols = ["Fast-Broadcast", "ROFF"]
 	cws = ["cw[32-1024]"]
 	#cws = ["cw[16-128]", "cw[32-1024]"]
 	#junctions = ["0", "1"]
-	junctions = ["0", "1"]
+	junctions = ["0"]
+	#junctions = ["0", "1"
 	metrics = ["totCoverage", "covOnCirc", "hops", "slotsWaited", "messageSent"]
 	metricYLabels = {}
 	metricYLabels["totCoverage"] = "Total Delivery Ratio (%)"
@@ -510,7 +519,7 @@ def printProtocolComparison():
 def printDroneComparison():
 	print("PrintDroneComparison")
 	plt.rcParams["figure.figsize"] = [18, 14]
-	initialBasePath = "/home/nicola/tesi/ns-3-cluster/ns-3.26/out/scenario-droni"
+	initialBasePath = "../../simulations/scenario-droni"
 	#scenarios = ["Grid-200", "Grid-300", "Grid-400", "LA-15", "LA-25", "LA-35", "LA-45", "Padova-15", "Padova-25", "Padova-35", "Padova-45"]
 	scenarios = ["LA-25"]
 	highBuildings = ["0", "1"]
@@ -614,7 +623,7 @@ def printDroneComparison():
 def printErrorComparison():
 	print("PrintErrorComparison")
 	plt.rcParams["figure.figsize"] = [18, 10]
-	initialBasePath = "/home/nicola/tesi/ns-3-cluster/ns-3.26/out/scenario-urbano"
+	initialBasePath = "../../simulations/scenario-urbano"
 	#scenarios = ["Grid-200", "Grid-300", "Grid-400", "LA-15", "LA-25", "LA-35", "LA-45", "Padova-15", "Padova-25", "Padova-35", "Padova-45"]
 	scenarios = ["Padova-25"]
 	buildings = ["0" , "1"]
@@ -687,7 +696,7 @@ def printErrorComparison():
 def printForgedComparison():
 	print("PrintForgedComparison")
 	plt.rcParams["figure.figsize"] = [18, 10]
-	initialBasePath = "/home/nicola/tesi/ns-3-cluster/ns-3.26/out/scenario-urbano"
+	initialBasePath = "../../simulations/scenario-urbano"
 	#scenarios = ["Grid-200", "Grid-300", "Grid-400", "LA-15", "LA-25", "LA-35", "LA-45", "Padova-15", "Padova-25", "Padova-35", "Padova-45"]
 	scenarios = ["LA-25"]
 	buildings = ["0"]
@@ -767,7 +776,7 @@ def printForgedComparison():
 def printDistanceComparison():
 	print("PrintDistanceComparison")
 	plt.rcParams["figure.figsize"] = [18, 10]
-	initialBasePath = "/home/nicola/tesi/ns-3-cluster/ns-3.26/out/scenario-urbano"
+	initialBasePath = "../../simulations/scenario-urbano"
 	#scenarios = ["Grid-200", "Grid-300", "Grid-400", "LA-15", "LA-25", "LA-35", "LA-45", "Padova-15", "Padova-25", "Padova-35", "Padova-45"]
 	scenarios = ["Padova"]
 	#distances = ["15", "25", "35", "45"]
@@ -849,8 +858,8 @@ def printDistanceComparison():
 def printOldFBComparison():
 	print("PrintOldFBComparison")
 	plt.rcParams["figure.figsize"] = [18, 6]
-	initialBasePath = "/home/nicola/tesi/ns-3-cluster/ns-3.26/out/scenario-urbano"
-	alternativeInitialBasePath = "/home/nicola/tesi/ns-3-cluster/ns-3.26/out/scenario-urbano-oldFB"
+	initialBasePath = "../../simulations/scenario-urbano"
+	alternativeInitialBasePath = "../../simulations/scenario-urbano-oldFB"
 	#scenarios = ["Grid-200", "Grid-300", "Grid-400", "LA-15", "LA-25", "LA-35", "LA-45", "Padova-15", "Padova-25", "Padova-35", "Padova-45"]
 	scenarios = ["LA-25"]
 	buildings = ["1"]
@@ -946,7 +955,7 @@ if __name__ == "__main__":
 '''
 def printDistanceComparison(cw, vehicleDistances, protocols, xList, xLabels, figurePrefix, graphTitleExtension, folder, decreaseConfInts=False):
 	plt.rcParams["figure.figsize"] = [18, 10]
-	basePath = os.path.join("/home/nicola/tesi/ns-3-cluster/ns-3.26/out/scenario-urbano", cw, "Padova")
+	basePath = os.path.join("../../simulations/scenario-urbano", cw, "Padova")
 	xLabel = "Vehicle distance"
 	compoundData = initCompoundData(protocols)
 	for distance in vehicleDistances:
@@ -1018,7 +1027,7 @@ def printDistanceComparison(cw, vehicleDistances, protocols, xList, xLabels, fig
 
 def printCwComparison(cws, vehicleDistance, protocols, xList, xLabels, figurePrefix, graphTitleExtension, folder, decreaseConfInts=False):
 	plt.rcParams["figure.figsize"] = [18, 10]
-	basePath = "/home/nicola/tesi/ns-3-cluster/ns-3.26/out/scenario-urbano"
+	basePath = "../../simulations/scenario-urbano"
 	basePath2 = os.path.join("Padova", "d" + str(vehicleDistance), "b1")
 	compoundData = initCompoundData(protocols)
 	xLabel = "Contention window"
