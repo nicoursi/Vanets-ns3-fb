@@ -18,6 +18,9 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator
 import numpy as np
+import warnings
+
+warnings.filterwarnings('error', category=RuntimeWarning)
 
 def listsToList(listOfLists, protocols):
 	toReturn = []
@@ -256,102 +259,188 @@ def printSingleGraphErrorRate(outFolder, graphTitle, compoundData, errorRates, p
 
 
 def printSingleGraph(outFolder, graphTitle, compoundData, txRanges, protocols, cw, junction, metric, yLabel, minY, maxY, colors=["0.3", "0.5", "0.7"]):
-	n = len(protocols)
-	ind = np.arange(n)
-	#ind = np.linspace(0, n - 1, n)  # evenly spaced values
-	#ind = [0.1, 0.1, 0.1, 0.1]
-	ind = np.array(ind)
-	#print(ind)
 
-	#barWidth = float((float(1)/float(4)) * float(0.90))
-	barWidth = 0.18
-	#fig, ax = plt.subplots()
-	fig, ax = plt.subplots(figsize=(12, 8))  # Increased figure size
+	n_protocols = len(protocols)
+	n_ranges = len(txRanges)
+	#barWidth = 0.25
+	# This means: 3 bars per group, in total they take 70%
+	barWidth = float((float(1)/float(3)) * float(0.70))
+
+	group_centers = np.arange(n_protocols)  # evenly spaced protocol groups
+	offsets = np.linspace(-barWidth * (n_ranges - 1) / 2, barWidth * (n_ranges - 1) / 2, n_ranges)
+
 	rects = []
-	count = 0
-	#colors = ["0.3", "0.7"]
-
-	#widthDistance = [-1, 1]
-	widthDistance = [-1.5, -0.5, 0.5, 1.5]
-	#widthDistance = [-1.025, 0, 1.025]
+	fig, ax = plt.subplots()
 	ax.set_axisbelow(True)
 
-	for txRange in txRanges:
+	for i, txRange in enumerate(txRanges):
+		bar_positions = group_centers + offsets[i]
 		metricMeanList = []
 		metricConfIntList = []
+
 		for protocol in protocols:
 			metricMean = metric + "Mean"
 			metricConfInt = metric + "ConfInt"
 			metricMeanList.append(compoundData[txRange][protocol][metricMean])
 			confInt = compoundData[txRange][protocol][metricConfInt]
-			if (math.isnan(confInt)):
+			if math.isnan(confInt):
 				confInt = 0.35
 			metricConfIntList.append(confInt)
-		#print(ind + widthDistance[count] * barWidth)
-		rects.append((ax.bar(ind + widthDistance[count] * barWidth, metricMeanList, barWidth, color=colors[count], label=txRange + "m", yerr=metricConfIntList, capsize=4)))
-		count = count + 1
 
-	#ax.set_xlim(-0.35, 1.35)
-	# Adjust x-axis limit based on the number of protocols
-	ax.set_xlim(-0.5, len(protocols) - 0.5)  # Dynamic x-axis limits
+		bars = ax.bar(bar_positions, metricMeanList, barWidth, color=colors[i], label=txRange + "m", yerr=metricConfIntList, capsize=4)
+		rects.append(bars)
+
+	ax.set_xlim(-0.5, n_protocols - 0.5)
 	ax.yaxis.grid(alpha=0.25, color="black")
+	ax.set_xlabel("Protocols", fontsize=12)
+	ax.set_ylabel(yLabel, fontsize=15)
 
-	ax.set_xlabel("Protocols", fontsize=20)
-	ax.set_ylabel(yLabel, fontsize=28)
-	if ("cov" in metric or "Cov" in metric):
-		maxY = maxY * 1.07
+	if "cov" in metric or "Cov" in metric:
+		maxY *= 1.07
 	else:
-		maxY = maxY * 1.1
+		maxY *= 1.1
+
 	ax.set_ylim(minY - 0.1, maxY)
-	#ax.set_title(graphTitle, fontsize=20)
-	ax.set_xticks(ind)
-	plt.xticks(fontsize=20)
-	plt.yticks(fontsize=23)
+	ax.set_title(graphTitle, fontsize=18)
+	ax.set_xticks(group_centers)
+
 	myProtocols = protocols
 	if junction == "1":
-		myProtocols = list(map(lambda x: "SJ-" + x, protocols))
-	ax.set_xticklabels(myProtocols)
-	#ax.set_xticklabels(["15m", "25m", "35m", "45m"])
+		myProtocols = ["SJ-" + p for p in protocols]
 
-	ax.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize=17)
-	#ax.legend(loc="upper right")
+	ax.set_xticklabels(myProtocols, fontsize=15)
+	plt.yticks(fontsize=12)
+	ax.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize=12)
 
-	def autolabel(rects, xpos='center'):
-		"""
-		Attach a text label above each bar in *rects*, displaying its height.
-
-		*xpos* indicates which side to place the text w.r.t. the center of
-		the bar. It can be one of the following {'center', 'right', 'left'}.
-		"""
-
-		xpos = xpos.lower()  # normalize the case of the parameter
+	def autolabel(rects_group, xpos='center'):
 		ha = {'center': 'center', 'right': 'left', 'left': 'right'}
-		offset = {'center': 0.5, 'right': 0.57, 'left': 0.43}  # x_txt = x + w*off
-
-		for rect in rects:
+		offset = {'center': 0.5, 'right': 0.57, 'left': 0.43}
+		for rect in rects_group:
 			height = rect.get_height()
-			if (hasattr(height, "is_integer") and height.is_integer()):
+			if hasattr(height, "is_integer") and height.is_integer():
 				height = int(height)
-			ax.text(rect.get_x() + rect.get_width()*offset[xpos], height,
-					'{}'.format(height), ha=ha[xpos], va='bottom', fontsize=9)
+			ax.text(
+				rect.get_x() + rect.get_width() * offset[xpos],
+				height,
+				'{}'.format(height),
+				ha=ha[xpos],
+				va='bottom',
+				fontsize=12
+			)
 
-	for rect in rects:
-		autolabel(rect)
-	#plt.savefig('a1.png')
-	#plt.savefig('a2.png', bbox_inches='tight')
+	for group in rects:
+		autolabel(group)
 
 	outPathDirectory = os.path.join("out", outFolder + "-" + cw)
-	outPath = os.path.join(outPathDirectory , metric) #todo fix
-	if (not os.path.exists(outPathDirectory)):
+	outPath = os.path.join(outPathDirectory, metric)
+	if not os.path.exists(outPathDirectory):
 		os.makedirs(outPathDirectory)
 
-	#plt.tight_layout(pad=10.0)
-
-	plt.tight_layout()  # Added for better spacing
+	plt.tight_layout(pad=4.0)
 	plt.savefig(outPath + ".pdf")
 	plt.clf()
-	#plt.savefig('b2.pdf', bbox_inches='tight')
-	#plt.show()
+
+
+
+
+#def printSingleGraph(outFolder, graphTitle, compoundData, txRanges, protocols, cw, junction, metric, yLabel, minY, maxY, colors=["0.3", "0.5", "0.7"]):
+#	n = len(protocols)
+#	ind = np.arange(n)
+#	#ind = np.linspace(0, n - 1, n)  # evenly spaced values
+#	#ind = [0.1, 0.1, 0.1, 0.1]
+#	ind = np.array(ind)
+#	#print(ind)
+#
+#	#barWidth = float((float(1)/float(4)) * float(0.90))
+#	barWidth = 0.2
+#	fig, ax = plt.subplots()
+#	#fig, ax = plt.subplots(figsize=(10, 4))  # Increased figure size
+#	rects = []
+#	count = 0
+#	#colors = ["0.3", "0.7"]
+#
+#	#widthDistance = [-1, 1]
+#	#widthDistance = [-1.5, -0.5, 0.5, 1.5]
+#	widthDistance = [-1.5, -0.5, 0.5, 1.5]
+#	#widthDistance = [-1.025, 0, 1.025]
+#	ax.set_axisbelow(True)
+#
+#	for txRange in txRanges:
+#		metricMeanList = []
+#		metricConfIntList = []
+#		for protocol in protocols:
+#			metricMean = metric + "Mean"
+#			metricConfInt = metric + "ConfInt"
+#			metricMeanList.append(compoundData[txRange][protocol][metricMean])
+#			confInt = compoundData[txRange][protocol][metricConfInt]
+#			if (math.isnan(confInt)):
+#				confInt = 0.35
+#			metricConfIntList.append(confInt)
+#		#print(ind + widthDistance[count] * barWidth)
+#		rects.append((ax.bar(ind + widthDistance[count] * barWidth, metricMeanList, barWidth, color=colors[count], label=txRange + "m", yerr=metricConfIntList, capsize=4)))
+#		count = count + 1
+#
+#	#ax.set_xlim(-0.35, 1.35)
+#	# Adjust x-axis limit based on the number of protocols
+#	ax.set_xlim(-0.5, len(protocols) - 0.5)  # Dynamic x-axis limits
+#	ax.yaxis.grid(alpha=0.25, color="black")
+#
+#	ax.set_xlabel("Protocols", fontsize=18)
+#	ax.set_ylabel(yLabel, fontsize=18)
+#	if ("cov" in metric or "Cov" in metric):
+#		maxY = maxY * 1.07
+#	else:
+#		maxY = maxY * 1.1
+#	ax.set_ylim(minY - 0.1, maxY)
+#	ax.set_title(graphTitle, fontsize=20)
+#	ax.set_xticks(ind)
+#	plt.xticks(fontsize=18)
+#	plt.yticks(fontsize=18)
+#	myProtocols = protocols
+#	if junction == "1":
+#		myProtocols = list(map(lambda x: "SJ-" + x, protocols))
+#	ax.set_xticklabels(myProtocols)
+#	#ax.set_xticklabels(["15m", "25m", "35m", "45m"])
+#
+#	ax.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize=18)
+#	#ax.legend(loc="upper right")
+#
+#	def autolabel(rects, xpos='center'):
+#		"""
+#		Attach a text label above each bar in *rects*, displaying its height.
+#
+#		*xpos* indicates which side to place the text w.r.t. the center of
+#		the bar. It can be one of the following {'center', 'right', 'left'}.
+#		"""
+#
+#		xpos = xpos.lower()  # normalize the case of the parameter
+#		ha = {'center': 'center', 'right': 'left', 'left': 'right'}
+#		offset = {'center': 0.5, 'right': 0.57, 'left': 0.43}  # x_txt = x + w*off
+#
+#		for rect in rects:
+#			height = rect.get_height()
+#			if (hasattr(height, "is_integer") and height.is_integer()):
+#				height = int(height)
+#			ax.text(rect.get_x() + rect.get_width()*offset[xpos], height,
+#					'{}'.format(height), ha=ha[xpos], va='bottom', fontsize=14)
+#
+#	for rect in rects:
+#		autolabel(rect)
+#	#plt.savefig('a1.png')
+#	#plt.savefig('a2.png', bbox_inches='tight')
+#
+#	outPathDirectory = os.path.join("out", outFolder + "-" + cw)
+#	outPath = os.path.join(outPathDirectory , metric) #todo fix
+#	if (not os.path.exists(outPathDirectory)):
+#		os.makedirs(outPathDirectory)
+#
+#	plt.tight_layout(pad=4.0)
+#
+#	#plt.tight_layout()  # Added for better spacing
+#	plt.savefig(outPath + ".pdf")
+#	plt.clf()
+#	#plt.savefig('b2.pdf', bbox_inches='tight')
+#	#plt.show()
 
 # inits an object like this: compoundData["txRange"]["protocol"]["metric"]
 def initCompoundData(txRanges, protocols, metrics):
@@ -418,18 +507,18 @@ def printGridComparison():
 #Grid-300: contentionWindows = [{"cwMin": 16, "cwMax": 128}], buildings = ["0"], junctions = ["0"], txRanges = ["100", "300", "500"]
 def printProtocolComparison():
 	print("PrintProtocolComparison")
-	#plt.rcParams["figure.figsize"] = [18, 6]
-	plt.rcParams["figure.figsize"] = [18, 14]
+	plt.rcParams["figure.figsize"] = [14, 6]
+	#plt.rcParams["figure.figsize"] = [18, 14]
 	initialBasePath = "../../simulations/scenario-urbano"
 	#scenarios = ["Grid-200", "Grid-300", "Grid-400", "LA-15", "LA-25", "LA-35", "LA-45", "Padova-15", "Padova-25", "Padova-35", "Padova-45"]
 	scenarios = ["Grid-300"]
-	buildings = ["0", "1"]
+	buildings = ["1", "0"]
 	#buildings = ["0"]
 	errorRate = "e0"
 	#txRanges = ["100", "300", "500"]
 	txRanges = ["100", "300", "500"]
-	protocols = ["Fast-Broadcast", "STATIC-100", "STATIC-300", "STATIC-500"]
-	#protocols = ["Fast-Broadcast", "STATIC-100", "STATIC-300", "STATIC-500", "ROFF"]
+	#protocols = ["Fast-Broadcast", "STATIC-100", "STATIC-300", "STATIC-500"]
+	protocols = ["Fast-Broadcast", "STATIC-100", "STATIC-300", "STATIC-500", "ROFF"]
 	#protocols = ["Fast-Broadcast", "ROFF"]
 	cws = ["cw[32-1024]"]
 	#cws = ["cw[16-128]", "cw[32-1024]"]
@@ -510,9 +599,9 @@ def printProtocolComparison():
 					graphOutFolder = os.path.join(scenario, "b" + building, "j" + junction)
 					for metric in metrics:
 						yLabel = metricYLabels[metric]
-						additionalTitle = ""
-						#additionalTitle = additionalTitle[building][junction]
-						printSingleGraph(graphOutFolder, graphTitles[metric] + additionalTitle, compoundData, txRanges, protocols, cw, junction, metric, yLabel, 0, maxMetricValues[metric],
+						additionalTitleStr = additionalTitle[building][junction]+ " URSINO"
+						#additionalTitleStr = ""
+						printSingleGraph(graphOutFolder, graphTitles[metric] + additionalTitleStr, compoundData, txRanges, protocols, cw, junction, metric, yLabel, 0, maxMetricValues[metric],
 						colors[building][junction])
 
 
