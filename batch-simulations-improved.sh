@@ -7,14 +7,29 @@ BLUE="\e[34m"
 BOLD="\e[1m"
 RESET="\e[0m"
 
-# Generate a unique instance ID for this script run
-INSTANCE_ID=$(head /dev/urandom | tr -dc a-z0-9 | head -c 6)
-
 # Check args
 if [ "$#" -lt 1 ]; then
   echo -e "${YELLOW}Usage: $0 <job_folder> [num_runs_per_job] [num_cores]${RESET}"
   exit 1
 fi
+
+read -p "Do you want to run a dirty-build? before running the simulations? (y/n): " choice
+
+if [[ "$choice" =~ ^[Yy]$ ]]; then
+  echo "Running dirty-build..."
+  docker compose run --rm dirty-build
+  result=$?
+  if [ $result -ne 0 ]; then
+    echo "Dirty-build failed (exit code $result). Exiting."
+    exit $result
+  fi
+else
+  echo "Skipping dirty-build."
+fi
+
+
+# Generate a unique instance ID for this script run
+INSTANCE_ID=$(head /dev/urandom | tr -dc a-z0-9 | head -c 6)
 
 JOB_FOLDER="$1"
 NUM_RUNS="${2:-1}"
@@ -57,8 +72,9 @@ if [ -f "$LOG_DIR/completed_jobs.txt" ] && grep -q "${job_name}_run${run_number}
   exit 0  # Skip the job if it's already completed
 fi
 
-echo -e "\nProcessing job: ${job_name}_run${run_number}"
+#echo -e "\nProcessing job: ${job_name}_run${run_number}"
 export SIMULATION_CMD=$(cat "$job_file")
+export RngRun=NS_GLOBAL_VALUE=RngRun=$run_number
 echo "Simulation command is: $SIMULATION_CMD" >> "$LOG_DIR/${job_name}_run${run_number}.log"
 echo "Container name: $container_tag" >> "$LOG_DIR/${job_name}_run${run_number}.log"
 
@@ -77,6 +93,7 @@ if [ $exit_code -eq 0 ]; then
     flock -x 200
     echo "${job_name}_run${run_number}" >> "$LOG_DIR/completed_jobs.txt"
   ) 200>"$LOG_DIR/completed_jobs.txt.lock"
+  rm -f "$LOG_DIR/completed_jobs.txt.lock"  # Clean up the lock file
 
   job_counter_file="$LOG_DIR/${job_name}.counter"
 
@@ -94,6 +111,7 @@ if [ $exit_code -eq 0 ]; then
       rm -f "$job_counter_file"
     fi
   ) 200>"$job_counter_file.lock"
+  rm -f "$job_counter_file.lock"  # Clean up the lock file
 
   echo ">>> [${job_name}_run${run_number}] SUCCESS" >> "$LOG_DIR/${job_name}_run${run_number}.log"
 else
@@ -108,7 +126,7 @@ mins=$((elapsed / 60))
 secs=$((elapsed % 60))
 
 echo ">>> Finished at $end_readable with duration: ${mins}m ${secs}s" >> "$LOG_DIR/${job_name}_run${run_number}.log"
-echo -e "\n>>> [${job_name}_run${run_number}] ${BOLD}${BLUE}Duration:${RESET} ${mins}m ${secs}s"
+echo -e "\n>>> [${job_name}_${BOLD}${RED}run${run_number}${RESET}] ${BOLD}${BLUE}Duration:${RESET} ${mins}m ${secs}s"
 EOL
 chmod +x "$TEMP_RUNNER"
 
@@ -128,8 +146,9 @@ export NUM_RUNS
 export JOB_FOLDER
 export INSTANCE_ID
 
+
 # Run jobs in parallel
-cat "$JOB_LIST" | parallel -j "$CORES" --colsep ' ' --joblog "$LOG_DIR/joblog.txt" "$TEMP_RUNNER" {1} {2}
+cat "$JOB_LIST" | parallel -j "$CORES" --colsep ' ' "$TEMP_RUNNER" {1} {2}
 
 # Cleanup
 rm "$TEMP_RUNNER" "$JOB_LIST"

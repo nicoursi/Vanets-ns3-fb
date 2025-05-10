@@ -6,10 +6,10 @@ x-common: &common
     - /etc/timezone:/etc/timezone:ro
   working_dir: /my-project/ns-3
   environment:
-    #- CXXFLAGS=-Wall
-    - CXXFLAGS=-Wall -O3 -frounding-math
-    # the variable below goes into the .env file
-    #- CONFIGURE_OPTIONS=-d optimized
+#    - CXXFLAGS=-Wall
+    - CXXFLAGS=-Wall -O3
+#     the variable below goes into the .env file
+#    - CONFIGURE_OPTIONS=-d optimized
 # entrypoint: ["/my-project/libs/setup-libs.sh"]
 
 services:
@@ -32,7 +32,8 @@ services:
 
   simulation:
     <<: *common
-    command: bash -c './waf --run "${SIMULATION_CMD}"'
-    environment:
-      - NS_LOG=*=error
-      #- NS_GLOBAL_VALUE=RngRun=1
+    command: bash -c '${RngRun} NS_LOG="*=warn|prefix_func|prefix_time" ./waf --run "${SIMULATION_CMD}"'
+#    command: bash -c '${RngRun} NS_LOG="fb-vanet-urban=level_all|prefix_func|prefix_time:FBApplication=level_all|prefix_func|prefix_time:FBNode=level_all|prefix_func" ./waf --run "${SIMULATION_CMD}"'
+    #environment:
+      #- NS_GLOBAL_VALUE=RngRun=5
+      #- NS_LOG=*=error
