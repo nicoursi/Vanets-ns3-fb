@@ -20,6 +20,7 @@ from matplotlib.ticker import LinearLocator
 import numpy as np
 import warnings
 
+# Uncomment to treat warnings as errors
 warnings.filterwarnings('error', category=RuntimeWarning)
 
 def listsToList(listOfLists, protocols):
@@ -262,9 +263,12 @@ def printSingleGraph(outFolder, graphTitle, compoundData, txRanges, protocols, c
 
 	n_protocols = len(protocols)
 	n_ranges = len(txRanges)
+
+	autolabel_fontize = 10 if n_ranges > 3 else 12
+	barWidth_percent = 0.85 if n_ranges > 3 else 0.70
 	#barWidth = 0.25
-	# This means: 3 bars per group, in total they take 70%
-	barWidth = float((float(1)/float(3)) * float(0.70))
+	# This means: n_ranges bars per group, in total they take barWidth_percent if total space
+	barWidth = float((float(1)/float(n_ranges)) * float(barWidth_percent))
 
 	group_centers = np.arange(n_protocols)  # evenly spaced protocol groups
 	offsets = np.linspace(-barWidth * (n_ranges - 1) / 2, barWidth * (n_ranges - 1) / 2, n_ranges)
@@ -287,7 +291,10 @@ def printSingleGraph(outFolder, graphTitle, compoundData, txRanges, protocols, c
 				confInt = 0.35
 			metricConfIntList.append(confInt)
 
-		bars = ax.bar(bar_positions, metricMeanList, barWidth, color=colors[i], label=txRange + "m", yerr=metricConfIntList, capsize=4)
+#		bars = ax.bar(bar_positions, metricMeanList, barWidth, color=colors[i], label=txRange + "m", yerr=metricConfIntList, capsize=4)
+		hatch = 'oo' if i == n_ranges - 1 else None
+		bars = ax.bar(bar_positions, metricMeanList, barWidth, color=colors[i], label=txRange + "m", yerr=metricConfIntList, capsize=4, hatch=hatch)
+
 		rects.append(bars)
 
 	ax.set_xlim(-0.5, n_protocols - 0.5)
@@ -310,7 +317,7 @@ def printSingleGraph(outFolder, graphTitle, compoundData, txRanges, protocols, c
 
 	ax.set_xticklabels(myProtocols, fontsize=15)
 	plt.yticks(fontsize=12)
-	ax.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize=12)
+#	ax.legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize=12)
 
 	def autolabel(rects_group, xpos='center'):
 		ha = {'center': 'center', 'right': 'left', 'left': 'right'}
@@ -325,7 +332,7 @@ def printSingleGraph(outFolder, graphTitle, compoundData, txRanges, protocols, c
 				'{}'.format(height),
 				ha=ha[xpos],
 				va='bottom',
-				fontsize=12
+				fontsize = autolabel_fontize
 			)
 
 	for group in rects:
@@ -467,8 +474,8 @@ def appendCompoundData(basePath, txRanges, protocols, cw, junction, errorRate, c
 			if "TD" in protocol:
 				realBasePath = alternativeBasePath
 				protocolPath = protocol.replace("TD-", "")
-			if ("STATIC" in protocol and txRange not in protocol):
-				static = True
+#			if ("STATIC" in protocol and txRange not in protocol):
+#				static = True
 			if (protocol != "ROFF"):
 				path = os.path.join(realBasePath, errorRate, "r" + txRange, "j" + junction, cw, protocolPath)
 			else:
@@ -510,15 +517,17 @@ def printProtocolComparison():
 	plt.rcParams["figure.figsize"] = [14, 6]
 	#plt.rcParams["figure.figsize"] = [18, 14]
 	initialBasePath = "../../simulations/scenario-urbano"
+#	initialBasePath = "/home/nicola/tesi/ns-3-cluster/ns-3.26/out/scenario-urbano"
 	#scenarios = ["Grid-200", "Grid-300", "Grid-400", "LA-15", "LA-25", "LA-35", "LA-45", "Padova-15", "Padova-25", "Padova-35", "Padova-45"]
 	scenarios = ["Grid-300"]
-	buildings = ["1", "0"]
-	#buildings = ["0"]
+	#buildings = ["1", "0"]
+	buildings = ["0", "1"]
 	errorRate = "e0"
-	#txRanges = ["100", "300", "500"]
-	txRanges = ["100", "300", "500"]
+#	txRanges = ["100", "300", "500"]
+	txRanges = ["100", "300", "500", "700"]
 	#protocols = ["Fast-Broadcast", "STATIC-100", "STATIC-300", "STATIC-500"]
-	protocols = ["Fast-Broadcast", "STATIC-100", "STATIC-300", "STATIC-500", "ROFF"]
+	protocols = ["Fast-Broadcast", "STATIC-100", "STATIC-300", "STATIC-500", "STATIC-700", "ROFF"]
+#	protocols = ["Fast-Broadcast", "STATIC-100", "STATIC-300", "STATIC-500", "ROFF"]
 	#protocols = ["Fast-Broadcast", "ROFF"]
 	cws = ["cw[32-1024]"]
 	#cws = ["cw[16-128]", "cw[32-1024]"]
@@ -542,12 +551,14 @@ def printProtocolComparison():
 
 	additionalTitle = {}
 	additionalTitle["0"] = {} #no buildings
-	additionalTitle["0"]["0"] = " (without buildings, without junctions)"
+#	additionalTitle["0"]["0"] = " (without buildings, without junctions)"
+	additionalTitle["0"]["0"] = " (without buildings)"
 	additionalTitle["0"]["1"] = " (without buildings, with junctions)"
 
 
 	additionalTitle["1"] = {} #with buildings
-	additionalTitle["1"]["0"] = " (with buildings, without junctions)"
+#	additionalTitle["1"]["0"] = " (with buildings, without junctions)"
+	additionalTitle["1"]["0"] = " (with buildings)"
 	additionalTitle["1"]["1"] = " (with buildings, with junctions)"
 
 	maxMetricValues = {}
@@ -556,14 +567,32 @@ def printProtocolComparison():
 
 	colors = {}
 	colors["0"] = {}
-	colors["0"]["0"] = ["#B5B7FF", "#5155D5", "#00034D"] #buildings=0, junctions=0 blu
-	#colors["0"]["1"] = ["#9EDE9E", "#368B36", "#003C00"] #buildings=0, junctions=1 verde
+#	buildings=0, junctions=0 blu
+#	colors["0"]["0"] = ["#B5B7FF", "#5155D5", "#00034D"]
+#	colors["0"]["0"] = ["#D7D9FF", "#8A8EF0", "#5155D5", "#2E3BAF"]
+#	colors["0"]["0"] = ["#DCE0FF", "#92A1F0", "#2D3AA0", "#0A1133"] #IDEAL
+	colors["0"]["0"] = ["#B5B7FF", "#5155D5", "#00034D", "#DCE0FF"] # comparison for palazzi
 
-	colors["0"]["1"] = ["#D1AFD1", "#864A89", "#3C003F"] #buildings=0, junctions=1 viola
+#	buildings=0, junctions=1 verde
+#	colors["0"]["1"] = ["#9EDE9E", "#368B36", "#003C00"]
+
+#	buildings=0, junctions=1 viola
+#	colors["0"]["1"] = ["#D1AFD1", "#864A89", "#3C003F"]
+	colors["0"]["1"] = ["#EDD1ED", "#B46CB4", "#662066", "#1E001F"]
+
 
 	colors["1"] = {} # 1=buildings
-	colors["1"]["0"] = ["#FFA6A6", "#BD2525", "#510000"] #buildings=1, junctions=0 rosso
-	colors["1"]["1"] = ["#FFC497", "#c27230", "#7a3806"] #buildings=1, junctions=1 arancione
+
+#	buildings=1, junctions=0 rosso
+#	colors["1"]["0"] = ["#FFA6A6", "#BD2525", "#510000"] #buildings=1, junctions=0 rosso
+#	colors["1"]["0"] = ["#FFC2C2", "#E15A5A", "#941818", "#2C0000"] #IDEAL
+	colors["1"]["0"] = ["#FFA6A6", "#BD2525", "#510000", "#FFD8A8"] # comparison with gottardo for palazzi
+
+
+#	buildings=1, junctions=1 arancione
+#	colors["1"]["1"] = ["#FFC497", "#c27230", "#7a3806"]
+	colors["1"]["1"] = ["#FFE0BF", "#E49453", "#A5521A", "#3B1A00"]
+
 
 
 
@@ -599,8 +628,9 @@ def printProtocolComparison():
 					graphOutFolder = os.path.join(scenario, "b" + building, "j" + junction)
 					for metric in metrics:
 						yLabel = metricYLabels[metric]
-						additionalTitleStr = additionalTitle[building][junction]+ " URSINO"
-						#additionalTitleStr = ""
+						additionalTitleStr = additionalTitle[building][junction]
+#						additionalTitleStr = additionalTitle[building][junction]+ " URSINO"
+#						additionalTitleStr = ""
 						printSingleGraph(graphOutFolder, graphTitles[metric] + additionalTitleStr, compoundData, txRanges, protocols, cw, junction, metric, yLabel, 0, maxMetricValues[metric],
 						colors[building][junction])
 

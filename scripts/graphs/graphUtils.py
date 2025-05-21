@@ -15,18 +15,68 @@ import math
 def countLinesInCsv(csv):
 	return sum(1 for row in csv)
 
+def calculateMeanAndConfInt(data_list, static=False, castToInt=False):
+    if len(data_list) == 0:
+        return 0, 0  # Return zero mean and zero error for empty data
+
+    npArray = np.array(data_list)
+    mean = np.mean(npArray)
+
+    if static:
+        mean *= 1.1
+
+    if len(npArray) <= 1:
+        confIntAmplitude = 0  # Can't compute CI reliably with 1 or fewer points
+    else:
+        sem = st.sem(npArray)
+        if np.isnan(sem) or sem == 0:
+            confIntAmplitude = 0  # No variation, no confidence interval
+        else:
+            confInt = st.t.interval(0.95, len(npArray) - 1, loc=mean, scale=sem)
+            confIntAmplitude = confInt[1] - confInt[0]
+
+    if castToInt:
+        mean = int(round(mean))
+    else:
+        mean = round(mean, 2)
+
+    return mean, confIntAmplitude
+
+"""oldcode
 def calculateMeanAndConfInt(list, static=False, castToInt=False):
-	npArray = np.array(list)
-	print(npArray)
-	mean = round(np.mean(npArray), 2)
-	if (static is True):
-		mean *= 1.1
-		mean = round(mean, 2)
-	if (castToInt is True):
-		mean = (int) (round(mean))
-	confInt = st.t.interval(0.95, len(npArray)-1, loc=np.mean(npArray), scale=st.sem(npArray))
-	confIntAmplitude = confInt[1] - confInt[0]
-	return mean, confIntAmplitude / 4;
+    if len(list) == 0:
+        return 0, 0  # Return zero mean and zero error for empty data
+    npArray = np.array(list)
+    #print(npArray)
+#    mean = round(np.mean(npArray), 2)
+
+# Calculate mean without early rounding
+    mean = np.mean(npArray)
+
+    if (static is True):
+        mean *= 1.1
+        mean = round(mean, 2)
+#    if (castToInt is True):
+#        mean = int(round(mean))
+
+    sem = st.sem(npArray)
+
+    if np.isnan(sem) or sem == 0:
+        # Standard error is zero or NaN -> no variability
+        confIntAmplitude = 0.0
+    else:
+        confInt = st.t.interval(0.95, len(npArray)-1, loc=np.mean(npArray), scale=sem)
+        confIntAmplitude = confInt[1] - confInt[0]
+
+    # Apply rounding at the end
+    if castToInt:
+        mean = int(round(mean))
+    else:
+        mean = round(mean, 2)
+
+    return mean, confIntAmplitude # / 4
+
+"""
 
 #def readCsvFromDirectory(path, roff=False, static=False):
 #	totalNodes = []
@@ -106,7 +156,7 @@ def readCsvFromDirectory(path, roff=False, static=False):
 
     for fileName in os.listdir(path):
         fullPath = os.path.join(path, fileName)
-        if not os.path.isfile(fullPath) or not fileName.endswith(".csv"):
+        if not os.path.isfile(fullPath) or not fileName.endswith(".csv") or fileName.startswith("Combined-"):
             continue
 
         with open(fullPath, "r") as file:
@@ -117,15 +167,13 @@ def readCsvFromDirectory(path, roff=False, static=False):
 
             for i, row in enumerate(rows[1:]):
                 try:
-                    # Skip if critical fields are NaN or empty
-                    if any([
-                        not row[5] or not row[6] or not row[7] or not row[8],
-                        row[10] in ("", "-nan", "nan"),
-                        row[11] in ("", "-nan", "nan"),
-                        row[12] in ("", "-nan", "nan"),
-                    ]):
+                    # Skip if any value is invalid (None, empty, or 'nan' entries) in any column
+                    if any(
+                        value in ("", "-nan", "nan", None) or value == "nan"
+                        for value in row
+                    ):
                         print(f"Skipping incomplete row in {fileName} line {i + 2}: {row}")
-                        continue
+                        continue  # Skip this row if it has any invalid value
 
                     totalNodes.append(int(row[5]))
                     nodesOnCirc.append(int(row[6]))
