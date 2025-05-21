@@ -3,7 +3,7 @@
 #SBATCH --job-name={**jobName}
 
 ### Job array specification
-#SBATCH --array=6-7  # Run tasks 1-10, max 5 concurrent jobs
+#SBATCH --array=6-9  # Run tasks 1-10, max 5 concurrent jobs
                         # Modify this range as needed
 
 ### Email notification
@@ -12,7 +12,7 @@
 
 ### Create log directory and define log file paths
 # Set this to your project repository path
-PROJECT_PATH="/home/nicola/tesi/submodule-exp"  # Update this!
+PROJECT_PATH="/home/nursino/storage/Vanets-ns3-fb"  # Update this!
 LOG_DIR="${PROJECT_PATH}/jobsTemplate/logs"
 mkdir -p ${LOG_DIR}
 
