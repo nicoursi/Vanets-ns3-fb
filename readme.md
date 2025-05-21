@@ -72,6 +72,14 @@ To make running simulations easier and more automated you can use the following 
 ```
 In the example above, the simulation command and parameters will be executed 14 times
 
+# Cluster
+
+## Singularity
+```
+singularity build --fakeroot singularity-ns3-image.sif singularity-ns3.def
+```
+
+
 # Creating Maps
 
 You create mobility and poly files, that will be placed in the `maps` folder, by using the scripts in `create simple scenario`

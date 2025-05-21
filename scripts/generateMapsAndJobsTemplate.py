@@ -23,8 +23,9 @@ def findNumNodes(mobilityFilePath):
 	return maxId + 1
 
 def createJobFile(newJobName, command, jobsPath, jobTemplatePath, tempNewJobPath):
-	newJobFilename = newJobName + "-.job"
+	newJobFilename = newJobName + "-.slurm"
 	newJobPath = os.path.join(jobsPath, newJobFilename)
+	simulation = command.split()[0]
 	#print(command)
 	#print(fileName)
 	shutil.copy(jobTemplatePath, jobsPath)
@@ -32,6 +33,10 @@ def createJobFile(newJobName, command, jobsPath, jobTemplatePath, tempNewJobPath
 	s = open(newJobPath).read()
 	s = s.replace("{**jobName}", newJobName)
 	s = s.replace("{**command}", command)
+	if simulation=="fb-vanet-urban":
+		s = s.replace("{**sim_folder}", "fb-vanet-urban")
+	elif simulation=="roff-test":
+		s = s.replace("{**sim_folder}", "roff-test")
 	f = open(newJobPath, "w")
 	f.write(s)
 	f.close()
@@ -48,18 +53,19 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 	errorRates = ["0"]
 	#forgedCoordRates = ["0", "10", "20", "30", "40", "50"]
 	forgedCoordRates = ["0"]
-	#buildings = ["1"]
 	junctions = ["0"]
-	#protocols = ["1", "2", "3", "4"]
-	protocols = ["5"]
-	#txRanges = ["100"]
+	protocols = ["1", "2", "3", "4", "6"]
+#	protocols = ["6"]
+	#protocols = ["6"]
+#	txRanges = ["700"]
 	txRanges = ["100", "300", "500"]
 	protocolsMap = {
 		"1": "Fast-Broadcast",
 		"2": "STATIC-100",
 		"3": "STATIC-300",
 		"4": "STATIC-500",
-		"5": "ROFF"
+		"5": "STATIC-700",
+		"6": "ROFF"
 	}
 	cwMin = cw["cwMin"]
 	cwMax = cw["cwMax"]
@@ -69,8 +75,8 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 	thisScriptParentPath = os.path.dirname(thisScriptPath)
 	nsPath = os.path.join(os.path.dirname(thisScriptParentPath), "ns-3.26")
 	jobsPath = os.path.join(os.path.dirname(thisScriptParentPath), "jobsTemplate")
-	tempNewJobPath = os.path.join(jobsPath, "jobTemplate.job")
-	jobTemplatePath = os.path.join(thisScriptParentPath ,"jobTemplate.job")
+	tempNewJobPath = os.path.join(jobsPath, "jobTemplate.slurm")
+	jobTemplatePath = os.path.join(thisScriptParentPath ,"jobTemplate.slurm")
 	#mapsPath = os.path.join(os.path.dirname(thisScriptParentPath), "maps")
 
 	# Input parameters
@@ -117,7 +123,7 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 								propagationLoss = "1"
 								if ("Cube" in scenario):
 									propagationLoss = "0"
-								if (protocol == "5"): #ROFF
+								if (protocol == "6"): #ROFF
 									command = "roff-test --buildings={0} --actualRange={1} --mapBasePath={2} --vehicleDistance={3} --startingNode={4} --propagationLoss={5} --area={6} --smartJunctionMode={7} --errorRate={8} --nVehicles={9} --droneTest={10} --highBuildings={11} --printToFile=1 --printCoords=0  --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1  --beaconInterval=100 --distanceRange=1 --forgedCoordTest=0 --forgedCoordRate=0 --maxRun=1".format(b, txRange, mapPathWithoutExtension, distance, startingNode, propagationLoss, area, junction, errorRate, vehiclesNumber, drone, highBuilding)
 								else:
 									command = "fb-vanet-urban --buildings={0} --actualRange={1} --mapBasePath={2} --cwMin={3} --cwMax={4} --vehicleDistance={5} --startingNode={6} --propagationLoss={7} --protocol={8} --area={9} --smartJunctionMode={10} --errorRate={11} --nVehicles={12} --droneTest={13} --highBuildings={14} --flooding=0  --printToFile=1 --printCoords=0 --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1 --forgedCoordTest=0 --forgedCoordRate=0 --maxRun=1".format(b, txRange, mapPathWithoutExtension, cwMin, cwMax, distance, startingNode, propagationLoss, protocol, area, junction, errorRate, vehiclesNumber, drone, highBuilding)
