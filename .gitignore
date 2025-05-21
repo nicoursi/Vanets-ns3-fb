@@ -22,3 +22,7 @@ jobsTemplate/logs/
 
 # combined csv files for debugging
 Combined-*.csv
+
+
+# singularity images
+*.sif
