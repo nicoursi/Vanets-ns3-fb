@@ -1,1 +1,0 @@
-Job templates are generated into this folder by the script generateMapsAndJobsTemplate.py in scripts/. If you feed this folder to the batch-simulations-improved.sh, it will execute them n times with m cores

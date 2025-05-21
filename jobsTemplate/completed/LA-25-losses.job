@@ -1,1 +1,0 @@
-fb-vanet-urban --buildings=1 --actualRange=500 --vehicleDistance=25 --protocol=1 --flooding=0 --area=1000 --mapBasePath=../maps/LA-25/LA-25 --cwMin=32 --cwMax=1024 --printToFile=1 --printCoords=1 -startingNode=310 --createObstacleShadowingLossFile=1 --useObstacleShadowingLossFile=0 --propagationLoss=1 --errorRate=0
