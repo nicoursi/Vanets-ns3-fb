@@ -12,7 +12,7 @@
 
 ### Create log directory and define log file paths
 # Set this to your project repository path
-PROJECT_PATH="/home/nursino/storage/Vanets-ns3-fb"  # Update this!
+PROJECT_PATH="/home/nursino/storage/Vanets-ns3-fb"  # Update this together with "#SBATCH --error" and "SBATCH --output" !
 LOG_DIR="${PROJECT_PATH}/jobsTemplate/logs"
 mkdir -p ${LOG_DIR}
 
@@ -23,15 +23,16 @@ LOG_FILE="${LOG_DIR}/${JOB_NAME}_${SLURM_JOB_ID}_run_${SLURM_ARRAY_TASK_ID}.log"
 ENV_LOG_FILE="${LOG_DIR}/${JOB_NAME}_${SLURM_JOB_ID}_run_${SLURM_ARRAY_TASK_ID}.env"
 
 ### Standard output and error redirection
-#SBATCH --error=${LOG_DIR}/ns3_sim_%A_%a.err  # %A = job ID, %a = array index
-#SBATCH --output=${LOG_DIR}/ns3_sim_%A_%a.out
+#SBATCH --error={**jobName}_%A_run_%a.err  # %A = job ID, %a = array index
+
+#SBATCH --output={**jobName}_%A_run_%a.out
 
 ### Queue selection
 #SBATCH --partition=debug
 
 ### Resource allocation
 #SBATCH --ntasks=1
-#SBATCH --mem=4G  # Adjust based on your simulation needs
+#SBATCH --mem=7G  # Adjust based on your simulation needs
 
 ### Time limit (HH:MM:SS)
 #SBATCH --time=02:00:00
@@ -40,7 +41,6 @@ ENV_LOG_FILE="${LOG_DIR}/${JOB_NAME}_${SLURM_JOB_ID}_run_${SLURM_ARRAY_TASK_ID}.
 #SBATCH --constraint=debug02
 
 ### GPU resources (if needed)
-#SBATCH --gres=mps:10
 
 ### Print detailed job and system information
 echo "=== Job Information ===" | tee -a ${LOG_FILE}
@@ -60,7 +60,7 @@ env > ${ENV_LOG_FILE}
 echo "Environment saved to: ${ENV_LOG_FILE}" | tee -a ${LOG_FILE}
 
 ### Define paths and parameters
-REPO_PATH="${PROJECT_PATH}/ns-3"   # Path to the ns-3 submodule
+REPO_PATH="/mnt/ns-3"   # Path to the ns-3 submodule
 
 # Define the simulation command (binary name and parameters)
 SIMULATION_CMD="{**command}"  # Update this!
@@ -82,10 +82,9 @@ echo "Starting NS3 simulation at $(date) with RngRun=${SLURM_ARRAY_TASK_ID}" | t
 
 # Run the NS3 simulation using the runner script inside Singularity
 singularity exec \
-  --nv \
-  --bind $PROJECT_PATH:$PROJECT_PATH \
+  --bind $PROJECT_PATH:/mnt \
   $CONTAINER_PATH \
-  ${PROJECT_PATH}/run-simulation-slurm-helper.sh \
+  /mnt/run-simulation-slurm-helper.sh \
   "$REPO_PATH" \
   "{**sim_folder}/$SIMULATION_CMD" \
   "${SLURM_ARRAY_TASK_ID}" \
