@@ -13,13 +13,28 @@
 #SBATCH --mail-user=nicola.ursino@studenti.unipd.it
 #SBATCH --mail-type=ALL
 
+### Find the actual project root
+IMAGE_NAME="singularity-ns3-image.sif"
+CURRENT_DIR="$(pwd)"
+PROJECT_PATH=""
+while [[ "$CURRENT_DIR" != "/" ]]; do
+ if [[ -f "$CURRENT_DIR/${IMAGE_NAME}" ]] && [[ -d "$CURRENT_DIR/ns-3" ]]; then
+     PROJECT_PATH="$CURRENT_DIR"
+     break
+ fi
+ CURRENT_DIR="$(dirname "$CURRENT_DIR")"
+done
+
+if [[ -z "$PROJECT_PATH" ]]; then
+ echo "ERROR: Could not find project root (looking for $IMAGE_NAME and ns-3/)"
+ echo "Searched from: $(pwd)"
+ exit 1
+fi
+
 ### Create log directory and define log file paths
-### Set this to your project repository path
-PROJECT_PATH="/home/nursino/storage/Vanets-ns3-fb"  # Update this!
-LOG_DIR="${PROJECT_PATH}/jobsTemplate/logs"
+LOG_DIR="$(pwd)/logs"
 mkdir -p ${LOG_DIR}
 
-### Generate timestamp for log files
 JOB_NAME={**jobName}
 ENV_LOG_FILE="${LOG_DIR}/${JOB_NAME}_${SLURM_JOB_ID}_run_${SLURM_ARRAY_TASK_ID}.env"
 
@@ -35,8 +50,6 @@ ENV_LOG_FILE="${LOG_DIR}/${JOB_NAME}_${SLURM_JOB_ID}_run_${SLURM_ARRAY_TASK_ID}.
 
 ### Node constraint (if needed)
 #SBATCH --constraint=debug02
-
-### GPU resources (if needed)
 
 ### Print detailed job and system information
 echo "=== Job Information ==="
@@ -61,7 +74,7 @@ REPO_PATH="/mnt/ns-3"   # Path to the ns-3 submodule
 SIMULATION_CMD="{**command}"  # Update this!
 
 # Setup Singularity container path
-CONTAINER_PATH="$PROJECT_PATH/singularity-ns3-image.sif"
+CONTAINER_PATH="$PROJECT_PATH/${IMAGE_NAME}"
 
 echo "=== Simulation Parameters ==="
 echo "PROJECT_PATH: ${PROJECT_PATH}"
