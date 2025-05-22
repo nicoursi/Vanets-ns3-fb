@@ -1,6 +1,6 @@
 #!/bin/bash
 ### Job name - can be easily modified for each experiment
-#SBATCH --job-name=urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-500-500
+#SBATCH --job-name=urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b0-e0-j0-STATIC-300-500
 
 ### Job array specification
 #SBATCH --array=6-9  # Run tasks 1-10, max 5 concurrent jobs
@@ -18,14 +18,14 @@ mkdir -p ${LOG_DIR}
 
 # Generate timestamp for log files
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-JOB_NAME=urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-500-500
+JOB_NAME=urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b0-e0-j0-STATIC-300-500
 LOG_FILE="${LOG_DIR}/${JOB_NAME}_${SLURM_JOB_ID}_run_${SLURM_ARRAY_TASK_ID}.log"
 ENV_LOG_FILE="${LOG_DIR}/${JOB_NAME}_${SLURM_JOB_ID}_run_${SLURM_ARRAY_TASK_ID}.env"
 
 ### Standard output and error redirection
-#SBATCH --error=urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-500-500_%A_run_%a.err  # %A = job ID, %a = array index
+#SBATCH --error=urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b0-e0-j0-STATIC-300-500_%A_run_%a.err  # %A = job ID, %a = array index
 
-#SBATCH --output=urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-500-500_%A_run_%a.out
+#SBATCH --output=urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b0-e0-j0-STATIC-300-500_%A_run_%a.out
 
 ### Queue selection
 #SBATCH --partition=debug
@@ -63,7 +63,7 @@ echo "Environment saved to: ${ENV_LOG_FILE}" | tee -a ${LOG_FILE}
 REPO_PATH="/mnt/ns-3"   # Path to the ns-3 submodule
 
 # Define the simulation command (binary name and parameters)
-SIMULATION_CMD="fb-vanet-urban --buildings=1 --actualRange=500 --mapBasePath=../maps/Grid-300/Grid-300 --cwMin=32 --cwMax=1024 --vehicleDistance=25 --startingNode=4896 --propagationLoss=1 --protocol=4 --area=2000 --smartJunctionMode=0 --errorRate=0 --nVehicles=0 --droneTest=0 --highBuildings=0 --flooding=0  --printToFile=1 --printCoords=0 --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1 --forgedCoordTest=0 --forgedCoordRate=0 --maxRun=1"  # Update this!
+SIMULATION_CMD="fb-vanet-urban --buildings=0 --actualRange=500 --mapBasePath=../maps/Grid-300/Grid-300 --cwMin=32 --cwMax=1024 --vehicleDistance=25 --startingNode=4896 --propagationLoss=1 --protocol=3 --area=2000 --smartJunctionMode=0 --errorRate=0 --nVehicles=0 --droneTest=0 --highBuildings=0 --flooding=0  --printToFile=1 --printCoords=0 --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1 --forgedCoordTest=0 --forgedCoordRate=0 --maxRun=1"  # Update this!
 
 # Setup Singularity container path
 CONTAINER_PATH="$PROJECT_PATH/singularity-ns3-image.sif"
