@@ -3,8 +3,11 @@
 #SBATCH --job-name=urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-500-500
 
 ### Job array specification
-#SBATCH --array=6-9  # Run tasks 1-10, max 5 concurrent jobs
-                        # Modify this range as needed
+#SBATCH --array=6-9
+
+### Standard output and error redirection
+#SBATCH --error=./logs/%x_id_%A_run_%a.err
+#SBATCH --output=./logs/%x_id_%A_run_%a.out
 
 ### Email notification
 #SBATCH --mail-user=nicola.ursino@studenti.unipd.it
@@ -12,18 +15,13 @@
 
 ### Create log directory and define log file paths
 ### Set this to your project repository path
-PROJECT_PATH="/home/nursino/storage/Vanets-ns3-fb"  # Update this together with "#SBATCH --error" and "SBATCH --output" !
+PROJECT_PATH="/home/nursino/storage/Vanets-ns3-fb"  # Update this!
 LOG_DIR="${PROJECT_PATH}/jobsTemplate/logs"
 mkdir -p ${LOG_DIR}
 
 ### Generate timestamp for log files
 JOB_NAME=urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-500-500
 ENV_LOG_FILE="${LOG_DIR}/${JOB_NAME}_${SLURM_JOB_ID}_run_${SLURM_ARRAY_TASK_ID}.env"
-
-### Standard output and error redirection
-
-#SBATCH --error=%x_id_%A_run_%a.err
-#SBATCH --output=%x_id_%A_run_%a..out
 
 ### Queue selection
 #SBATCH --partition=debug
