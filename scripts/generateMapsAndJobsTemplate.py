@@ -22,7 +22,7 @@ def findNumNodes(mobilityFilePath):
 				maxId = id
 	return maxId + 1
 
-def createJobFile(newJobName, command, jobsPath, jobTemplatePath, tempNewJobPath):
+def createJobFile(newJobName, command, jobsPath, jobTemplatePath, tempNewJobPath, ram, neededTime):
 	newJobFilename = newJobName + "-.slurm"
 	newJobPath = os.path.join(jobsPath, newJobFilename)
 	simulation = command.split()[0]
@@ -33,6 +33,8 @@ def createJobFile(newJobName, command, jobsPath, jobTemplatePath, tempNewJobPath
 	s = open(newJobPath).read()
 	s = s.replace("{**jobName}", newJobName)
 	s = s.replace("{**command}", command)
+	s = s.replace("{**ram}", ram)
+	s = s.replace("{**neededTime}", neededTime)
 	if simulation=="fb-vanet-urban":
 		s = s.replace("{**sim_folder}", "fb-vanet-urban")
 	elif simulation=="roff-test":
@@ -46,7 +48,7 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 	# Protocols and transmission ranges
 	highBuildings = ["0"]
 	drones = ["0"]
-	buildings = ["1"]
+	buildings = ["0","1"]
 	#buildings = ["0","1"]
 	#buildings = ["0"]
 	#errorRates = ["0", "10", "20", "30", "40", "50"]
@@ -107,13 +109,21 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 	sumoFileGenerator = thisScriptParentPath + "/generate-sumo-files.sh " + " " + mapPath + " " + vehicleDistance
 	#Uncomment to generate sumoFiles again
 	#os.system(sumoFileGenerator)
-
+	ram="2G"
 	# Creates jobs templates inside jobTemplates/
 	for highBuilding in highBuildings:
 		for drone in drones:
 			for b in buildings:
+				if (b=="1"):
+					ram="7G"
 				for txRange in txRanges:
 					for protocol in protocols:
+						if protocol in {"2", "3", "4", "5"}:
+#							HH:MM:SS
+							neededTime = "00:30:00"
+						else:
+							neededTime = "02:00:00"
+
 						for junction in junctions:
 							for errorRate in errorRates:
 								protocolName = protocolsMap[protocol]
@@ -129,7 +139,7 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 									command = "fb-vanet-urban --buildings={0} --actualRange={1} --mapBasePath={2} --cwMin={3} --cwMax={4} --vehicleDistance={5} --startingNode={6} --propagationLoss={7} --protocol={8} --area={9} --smartJunctionMode={10} --errorRate={11} --nVehicles={12} --droneTest={13} --highBuildings={14} --flooding=0  --printToFile=1 --printCoords=0 --createObstacleShadowingLossFile=0 --useObstacleShadowingLossFile=1 --forgedCoordTest=0 --forgedCoordRate=0 --maxRun=1".format(b, txRange, mapPathWithoutExtension, cwMin, cwMax, distance, startingNode, propagationLoss, protocol, area, junction, errorRate, vehiclesNumber, drone, highBuilding)
 
 								newJobName = "urban-" + mapBaseName + "-highBuildings" + str(highBuilding) + "-drones" + str(drone) + "-d" + str(vehicleDistance) + "-cw-" +str(cwMin) + "-" + str(cwMax) + "-b" + b + "-e" + errorRate + "-j" + junction + "-" + protocolsMap[protocol] + "-" + txRange
-								createJobFile(newJobName, command, jobsPath, jobTemplatePath, tempNewJobPath)
+								createJobFile(newJobName, command, jobsPath, jobTemplatePath, tempNewJobPath, ram, neededTime)
 							'''
 							# FORGED COORD SCENARIO
 							if (scenario == "LA-25" and distance == "25"):

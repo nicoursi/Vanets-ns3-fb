@@ -2,16 +2,30 @@
 ### Job name - can be easily modified for each experiment
 #SBATCH --job-name={**jobName}
 
-### Job array specification
-#SBATCH --array=6-9
+### Email notification
+#SBATCH --mail-user=nicola.ursino@studenti.unipd.it
+#SBATCH --mail-type=ALL
+
+### Job array specification %5 means maximum 5 jobs cuncurrently
+#SBATCH --array=6-9%5
 
 ### Standard output and error redirection
 #SBATCH --error=./logs/%x_id_%A_run_%a.err
 #SBATCH --output=./logs/%x_id_%A_run_%a.out
 
-### Email notification
-#SBATCH --mail-user=nicola.ursino@studenti.unipd.it
-#SBATCH --mail-type=ALL
+### Queue selection
+#SBATCH --partition=debug
+
+### Resource allocation
+#SBATCH --ntasks=1
+#SBATCH --mem={**ram}
+
+### Time limit (HH:MM:SS)
+#SBATCH --time={**neededTime}
+
+### Node constraint (if needed)
+#SBATCH --constraint=debug02
+
 
 ### Find the actual project root
 IMAGE_NAME="singularity-ns3-image.sif"
@@ -37,19 +51,6 @@ mkdir -p ${LOG_DIR}
 
 JOB_NAME={**jobName}
 ENV_LOG_FILE="${LOG_DIR}/${JOB_NAME}_${SLURM_JOB_ID}_run_${SLURM_ARRAY_TASK_ID}.env"
-
-### Queue selection
-#SBATCH --partition=debug
-
-### Resource allocation
-#SBATCH --ntasks=1
-#SBATCH --mem=7G  # Adjust based on your simulation needs
-
-### Time limit (HH:MM:SS)
-#SBATCH --time=02:00:00
-
-### Node constraint (if needed)
-#SBATCH --constraint=debug02
 
 ### Print detailed job and system information
 echo "=== Job Information ==="
