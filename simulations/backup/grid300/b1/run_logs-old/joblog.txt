@@ -1,4 +1,0 @@
-Seq	Host	Starttime	JobRuntime	Send	Receive	Exitval	Signal	Command
-1	:	1744987335.265	   249.337	0	118	0	0	/tmp/tmp.wV4tQqCLAX ../jobsTemplate/urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-100-100-.job 1
-2	:	1744987335.267	   249.519	0	118	0	0	/tmp/tmp.wV4tQqCLAX ../jobsTemplate/urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-100-100-.job 2
-3	:	1744987584.611	   229.083	0	119	0	0	/tmp/tmp.wV4tQqCLAX ../jobsTemplate/urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b1-e0-j0-STATIC-100-100-.job 3
