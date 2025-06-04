@@ -1,0 +1,1 @@
+fb-vanet-urban --buildings=1 --actualRange=300 --vehicleDistance=25 --protocol=1 --flooding=0 --area=2000 --mapBasePath=../maps/Grid-300-node+-5/Grid-300-node+-5 --cwMin=32 --cwMax=1024 --printToFile=1 --printCoords=1 -startingNode=3366 --createObstacleShadowingLossFile=1 --useObstacleShadowingLossFile=0 --propagationLoss=1
