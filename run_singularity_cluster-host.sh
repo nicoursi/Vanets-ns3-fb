@@ -3,16 +3,33 @@
 # This mimics the behavior of your docker-compose.yml file commands
 
 # Path to your Singularity image
-SIF_IMAGE="../singularity-ns3-image.sif"  # Singularity image name
+SIF_IMAGE="singularity-ns3-image.sif"  # Singularity image name
 
 # Environment variables (same as in your docker-compose)
 #export CXXFLAGS="-Wall -O3"
 export CXXFLAGS="-Wall"
-#export CONFIGURE_OPTIONS="-d optimized"
-export CONFIGURE_OPTIONS=""
+export CONFIGURE_OPTIONS="-d release"
+#export CONFIGURE_OPTIONS=""
 
-# Directory containing your NS-3 installation - this is the actual directory, not a mount
-NS3_DIR="$(pwd)"  # Update this to your NS-3 directory path
+### Find the Directory containing the NS-3 installation - this is the actual directory, not a mount
+PROJECT_ROOT="$(pwd)"
+NS3_DIR=""
+while [[ "$PROJECT_ROOT" != "/" ]]; do
+ if [[ -f "$PROJECT_ROOT/${SIF_IMAGE}" ]] && [[ -d "$PROJECT_ROOT/ns-3" ]]; then
+     NS3_DIR="$PROJECT_ROOT/ns-3"
+     break
+ fi
+ PROJECT_ROOT="$(dirname "$PROJECT_ROOT")"
+done
+
+if [[ -z "$NS3_DIR" ]]; then
+ echo "ERROR: Could not find project root (looking for $SIF_IMAGE and ns-3/)"
+ echo "Searched from: $(pwd)"
+ exit 1
+fi
+
+
+
 
 # Function to display usage information
 show_usage() {
@@ -48,7 +65,7 @@ COMMAND=$1
 case $COMMAND in
     build)
         echo "=== Configuring and building NS-3 (clean build) ==="
-        singularity exec --bind $NS3_DIR:/mnt $SIF_IMAGE \
+       	singularity exec --bind $NS3_DIR:/mnt $PROJECT_ROOT/$SIF_IMAGE \
             bash -c "cd /mnt && \
                 ./waf configure ${CONFIGURE_OPTIONS} && \
                 ./waf clean && \
@@ -57,7 +74,7 @@ case $COMMAND in
 
     dirty-build)
         echo "=== Configuring and building NS-3 (dirty build) ==="
-        singularity exec --bind $NS3_DIR:/mnt $SIF_IMAGE \
+	singularity exec --bind $NS3_DIR:/mnt $PROJECT_ROOT/$SIF_IMAGE \
             bash -c "cd /mnt && \
                 ./waf configure ${CONFIGURE_OPTIONS} && \
                 ./waf build"
@@ -65,7 +82,7 @@ case $COMMAND in
 
     shell)
         echo "=== Opening shell in Singularity container ==="
-        singularity shell --bind $NS3_DIR:/mnt $SIF_IMAGE
+        singularity shell --bind $NS3_DIR:/mnt $PROJECT_ROOT/$SIF_IMAGE
         ;;
 
     run)
@@ -94,7 +111,7 @@ case $COMMAND in
         echo "=== Using $RNG_RUN ==="
 
         # Bind the actual NS-3 directory and run the simulation
-        singularity exec --bind $NS3_DIR:/mnt $SIF_IMAGE \
+        singularity exec --bind $NS3_DIR:/mnt $PROJECT_ROOT/$SIF_IMAGE \
             bash -c "cd /mnt && ./waf --run \"${SIMULATION_CMD}\""
         ;;
 

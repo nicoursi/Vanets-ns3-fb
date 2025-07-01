@@ -27,6 +27,7 @@ echo "NS3_MODULE_PATH: $NS3_MODULE_PATH"
 echo "Current directory: $(pwd)"
 echo "Container hostname: $(hostname)"
 echo "Container distribution: $(cat /etc/os-release | grep PRETTY_NAME)"
+echo "TZ is: $TZ"
 echo "========================"
 echo ""
 

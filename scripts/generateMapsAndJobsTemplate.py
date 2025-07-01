@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Invocation:
 # 	./generateMapsAndJobsTemplate.py ../maps/testMap/osm.osm.xml 25
@@ -48,7 +48,7 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 	# Protocols and transmission ranges
 	highBuildings = ["0"]
 	drones = ["0"]
-	buildings = ["0","1"]
+	buildings = ["1","0"]
 	#buildings = ["0","1"]
 	#buildings = ["0"]
 	#errorRates = ["0", "10", "20", "30", "40", "50"]
@@ -56,11 +56,11 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 	#forgedCoordRates = ["0", "10", "20", "30", "40", "50"]
 	forgedCoordRates = ["0"]
 	junctions = ["0"]
-	protocols = ["1", "2", "3", "4", "6"]
+	protocols = ["1", "2", "3", "4","5"]
+#	protocols = ["1"]
 #	protocols = ["6"]
-	#protocols = ["6"]
 #	txRanges = ["700"]
-	txRanges = ["100", "300", "500"]
+	txRanges = ["500", "700"]
 	protocolsMap = {
 		"1": "Fast-Broadcast",
 		"2": "STATIC-100",
@@ -120,9 +120,11 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 					for protocol in protocols:
 						if protocol in {"2", "3", "4", "5"}:
 #							HH:MM:SS
-							neededTime = "00:30:00"
+							neededTime = "00:45:00"
+						elif protocol in {"6"}:
+							neededTime = "06:00:00"
 						else:
-							neededTime = "02:00:00"
+							neededTime = "04:30:00"
 
 						for junction in junctions:
 							for errorRate in errorRates:
@@ -158,7 +160,7 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 
 def main():
 	#Edit these to launch automatically 	forgedCoordRates = ["0", "10", "20", "30", "40", "50", "100"]
-	scenarios = ["Grid-300"]
+	scenarios = ["Grid-300-node+-5"]
 	#scenarios = ["LA-25"]
 	#scenarios = ["Padova-5", "Padova-15", "Padova-25", "Padova-35", "Padova-45"]
 	#scenarios = ["Padova-15", "Padova-25", "Padova-35", "Padova-45", "LA-15", "LA-25", "LA-35", "LA-45"]
@@ -179,7 +181,9 @@ def main():
 		"LA-35":459,
 		"LA-45":354,
 		"Grid-200":2024,
-		"Grid-300":4896,
+		"Grid-300":3136,
+		"Grid-300+-5":4896,
+		"Grid-300-node+-5":3366,
 		"Grid-400":1248,
 		"Platoon": 0,
 		"Platoon-15km": 0,
@@ -200,6 +204,8 @@ def main():
 		"Platoon-15km":0,
 		"Grid-200":0,
 		"Grid-300":0,
+		"Grid-300+-5":0,
+		"Grid-300-node+-5":0,
 		"Grid-400":0
 	}
 

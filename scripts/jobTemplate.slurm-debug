@@ -4,17 +4,17 @@
 
 ### Email notification
 #SBATCH --mail-user=nicola.ursino@studenti.unipd.it
-#SBATCH --mail-type=FAIL
+#SBATCH --mail-type=ALL
 
 ### Job array specification %5 means maximum 5 jobs cuncurrently
-#SBATCH --array=1-50
+#SBATCH --array=6-9%5
 
 ### Standard output and error redirection
 #SBATCH --error=./logs/%x_id_%A_run_%a.err
 #SBATCH --output=./logs/%x_id_%A_run_%a.out
 
 ### Queue selection
-#SBATCH --partition=allgroups
+#SBATCH --partition=debug
 
 ### Resource allocation
 #SBATCH --ntasks=1
@@ -24,7 +24,7 @@
 #SBATCH --time={**neededTime}
 
 ### Node constraint (if needed)
-### SBATCH --constraint=debug02
+#SBATCH --constraint=debug02
 
 
 ### Find the actual project root
@@ -90,10 +90,9 @@ echo "Starting NS3 simulation at $(date) with RngRun=${SLURM_ARRAY_TASK_ID}"
 
 # Run the NS3 simulation using the runner script inside Singularity
 singularity exec \
-  --env TZ=Europe/Rome \
   --bind $PROJECT_PATH:/mnt \
-  --bind /usr/share/zoneinfo:/usr/share/zoneinfo:ro \
   --bind /etc/localtime:/etc/localtime:ro \
+  --bind /etc/timezone:/etc/timezone:ro \
   $CONTAINER_PATH \
   /mnt/run-simulation-slurm-helper.sh \
   "$REPO_PATH" \
