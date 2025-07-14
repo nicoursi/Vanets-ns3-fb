@@ -1,0 +1,120 @@
+$node_(0) set X_ 0
+$node_(0) set Y_ 100
+$node_(0) set Z_ 0
+$ns_ at 0.0 "$node_(0) setdest 0 0 0.00"
+$node_(1) set X_ 500
+$node_(1) set Y_ 100
+$node_(1) set Z_ 0
+$ns_ at 0.0 "$node_(1) setdest 0 0 0.00"
+$node_(2) set X_ 1000
+$node_(2) set Y_ 100
+$node_(2) set Z_ 0
+$ns_ at 0.0 "$node_(2) setdest 0 0 0.00"
+$node_(3) set X_ 1500
+$node_(3) set Y_ 100
+$node_(3) set Z_ 0
+$ns_ at 0.0 "$node_(3) setdest 0 0 0.00"
+$node_(4) set X_ 2000
+$node_(4) set Y_ 100
+$node_(4) set Z_ 0
+$ns_ at 0.0 "$node_(4) setdest 0 0 0.00"
+$node_(5) set X_ 2500
+$node_(5) set Y_ 100
+$node_(5) set Z_ 0
+$ns_ at 0.0 "$node_(5) setdest 0 0 0.00"
+$node_(6) set X_ 3000
+$node_(6) set Y_ 100
+$node_(6) set Z_ 0
+$ns_ at 0.0 "$node_(6) setdest 0 0 0.00"
+$node_(7) set X_ 3500
+$node_(7) set Y_ 100
+$node_(7) set Z_ 0
+$ns_ at 0.0 "$node_(7) setdest 0 0 0.00"
+$node_(8) set X_ 4000
+$node_(8) set Y_ 100
+$node_(8) set Z_ 0
+$ns_ at 0.0 "$node_(8) setdest 0 0 0.00"
+$node_(9) set X_ 4500
+$node_(9) set Y_ 100
+$node_(9) set Z_ 0
+$ns_ at 0.0 "$node_(9) setdest 0 0 0.00"
+$node_(10) set X_ 5000
+$node_(10) set Y_ 100
+$node_(10) set Z_ 0
+$ns_ at 0.0 "$node_(10) setdest 0 0 0.00"
+$node_(11) set X_ 5500
+$node_(11) set Y_ 100
+$node_(11) set Z_ 0
+$ns_ at 0.0 "$node_(11) setdest 0 0 0.00"
+$node_(12) set X_ 6000
+$node_(12) set Y_ 100
+$node_(12) set Z_ 0
+$ns_ at 0.0 "$node_(12) setdest 0 0 0.00"
+$node_(13) set X_ 6500
+$node_(13) set Y_ 100
+$node_(13) set Z_ 0
+$ns_ at 0.0 "$node_(13) setdest 0 0 0.00"
+$node_(14) set X_ 7000
+$node_(14) set Y_ 100
+$node_(14) set Z_ 0
+$ns_ at 0.0 "$node_(14) setdest 0 0 0.00"
+$node_(15) set X_ 7500
+$node_(15) set Y_ 100
+$node_(15) set Z_ 0
+$ns_ at 0.0 "$node_(15) setdest 0 0 0.00"
+$node_(16) set X_ 8000
+$node_(16) set Y_ 100
+$node_(16) set Z_ 0
+$ns_ at 0.0 "$node_(16) setdest 0 0 0.00"
+$node_(17) set X_ 8500
+$node_(17) set Y_ 100
+$node_(17) set Z_ 0
+$ns_ at 0.0 "$node_(17) setdest 0 0 0.00"
+$node_(18) set X_ 9000
+$node_(18) set Y_ 100
+$node_(18) set Z_ 0
+$ns_ at 0.0 "$node_(18) setdest 0 0 0.00"
+$node_(19) set X_ 9500
+$node_(19) set Y_ 100
+$node_(19) set Z_ 0
+$ns_ at 0.0 "$node_(19) setdest 0 0 0.00"
+$node_(20) set X_ 10000
+$node_(20) set Y_ 100
+$node_(20) set Z_ 0
+$ns_ at 0.0 "$node_(20) setdest 0 0 0.00"
+$node_(21) set X_ 10500
+$node_(21) set Y_ 100
+$node_(21) set Z_ 0
+$ns_ at 0.0 "$node_(21) setdest 0 0 0.00"
+$node_(22) set X_ 11000
+$node_(22) set Y_ 100
+$node_(22) set Z_ 0
+$ns_ at 0.0 "$node_(22) setdest 0 0 0.00"
+$node_(23) set X_ 11500
+$node_(23) set Y_ 100
+$node_(23) set Z_ 0
+$ns_ at 0.0 "$node_(23) setdest 0 0 0.00"
+$node_(24) set X_ 12000
+$node_(24) set Y_ 100
+$node_(24) set Z_ 0
+$ns_ at 0.0 "$node_(24) setdest 0 0 0.00"
+$node_(25) set X_ 12500
+$node_(25) set Y_ 100
+$node_(25) set Z_ 0
+$ns_ at 0.0 "$node_(25) setdest 0 0 0.00"
+$node_(26) set X_ 13000
+$node_(26) set Y_ 100
+$node_(26) set Z_ 0
+$ns_ at 0.0 "$node_(26) setdest 0 0 0.00"
+$node_(27) set X_ 13500
+$node_(27) set Y_ 100
+$node_(27) set Z_ 0
+$ns_ at 0.0 "$node_(27) setdest 0 0 0.00"
+$node_(28) set X_ 14000
+$node_(28) set Y_ 100
+$node_(28) set Z_ 0
+$ns_ at 0.0 "$node_(28) setdest 0 0 0.00"
+$node_(29) set X_ 14500
+$node_(29) set Y_ 100
+$node_(29) set Z_ 0
+$ns_ at 0.0 "$node_(29) setdest 0 0 0.00"
