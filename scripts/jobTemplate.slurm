@@ -7,7 +7,7 @@
 #SBATCH --mail-type=FAIL
 
 ### Job array specification %5 means maximum 5 jobs cuncurrently
-#SBATCH --array=1-50
+#SBATCH --array={**jobarray}
 
 ### Standard output and error redirection
 #SBATCH --error=./logs/%x_id_%A_run_%a.err
