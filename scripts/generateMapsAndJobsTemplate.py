@@ -48,9 +48,9 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 	# Protocols and transmission ranges
 	highBuildings = ["0"]
 	drones = ["0"]
-	buildings = ["1","0"]
+	#buildings = ["1","0"]
 	#buildings = ["0","1"]
-	#buildings = ["0"]
+	buildings = ["0"]
 	#errorRates = ["0", "10", "20", "30", "40", "50"]
 	errorRates = ["0"]
 	#forgedCoordRates = ["0", "10", "20", "30", "40", "50"]
@@ -60,7 +60,7 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 #	protocols = ["1"]
 #	protocols = ["6"]
 #	txRanges = ["700"]
-	txRanges = ["500", "700"]
+	txRanges = ["300", "500", "700"]
 	protocolsMap = {
 		"1": "Fast-Broadcast",
 		"2": "STATIC-100",
@@ -115,16 +115,16 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 		for drone in drones:
 			for b in buildings:
 				if (b=="1"):
-					ram="7G"
+					ram="8G"
 				for txRange in txRanges:
 					for protocol in protocols:
 						if protocol in {"2", "3", "4", "5"}:
 #							HH:MM:SS
-							neededTime = "00:45:00"
+							neededTime = "04:45:00"
 						elif protocol in {"6"}:
-							neededTime = "06:00:00"
+							neededTime = "48:30:00"
 						else:
-							neededTime = "04:30:00"
+							neededTime = "48:30:00"
 
 						for junction in junctions:
 							for errorRate in errorRates:
@@ -160,7 +160,8 @@ def runScenario(cw, scenario, distance, startingNode, vehiclesNumber, area=1000)
 
 def main():
 	#Edit these to launch automatically 	forgedCoordRates = ["0", "10", "20", "30", "40", "50", "100"]
-	scenarios = ["Grid-300-node+-5"]
+	#scenarios = ["Grid-300-node+-5"]
+	scenarios = ["Cube-150"]
 	#scenarios = ["LA-25"]
 	#scenarios = ["Padova-5", "Padova-15", "Padova-25", "Padova-35", "Padova-45"]
 	#scenarios = ["Padova-15", "Padova-25", "Padova-35", "Padova-45", "LA-15", "LA-25", "LA-35", "LA-45"]
@@ -187,8 +188,10 @@ def main():
 		"Grid-400":1248,
 		"Platoon": 0,
 		"Platoon-15km": 0,
-		#"Cube-75:"13965,
-		"Cube-150":4209
+		#"Cube-75":13965,
+		"Cube-150":4210, #modified, original was wrongly 4209
+		"Cube-200":2184,
+		"Cube-125":7212
 	}
 	vehiclesNumber = {
 		"LA-5":2984,
@@ -206,7 +209,11 @@ def main():
 		"Grid-300":0,
 		"Grid-300+-5":0,
 		"Grid-300-node+-5":0,
-		"Grid-400":0
+		"Grid-400":0,
+		"Cube-75":0,
+		"Cube-125":0,
+		"Cube-150":0,
+		"Cube-200":0
 	}
 
 
@@ -225,6 +232,8 @@ def main():
 					area = 14000
 				if ("Grid" in scenario):
 					area = 2000
+				if ("Cube" in scenario and scenario!="Cube-75"):
+					area = 1300
 				if ("Grid" in scenario or "Platoon" in scenario):
 					runScenario(cw, scenario, "25", startingNodeMap[scenario], vehiclesNumber[scenario], area)
 				else:
