@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
 # Invocation:
-# 	./generateMapsAndJobsTemplate.py ../maps/testMap/osm.osm.xml 25
+#     ./generateMapsAndJobsTemplate.py ../maps/testMap/osm.osm.xml 25
 # if you want to specify map and distance by hand, otherwise:
-# 	./generateMapsAndJobsTemplate.py
+#     ./generateMapsAndJobsTemplate.py
 # if you want to automatically generate jobs for the scenarios and distances set in the main
 
 import sys
@@ -25,16 +25,14 @@ def parse_arguments():
     default_contention_windows = [{"cwMin": 32, "cwMax": 1024}]
     default_high_buildings = ["0"]
     default_drones = ["0"]
-    default_buildings = ["1"]
+    default_buildings = ["0", "1"]
     default_error_rates = ["0"]
     default_forged_coord_rates = ["0"]
     default_junctions = ["0"]
     default_protocols = ["1", "2", "3", "4", "5", "6"]
     default_tx_ranges = ["100", "300", "500", "700"]
-    default_jobs_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.realpath(__file__))),
-        "jobsTemplate"
-    )
+    project_root = Path(__file__).parent.parent
+    default_jobs_path = project_root / "jobsTemplate"
     
     # Protocol mapping for help display
     protocols_map = {
@@ -161,7 +159,7 @@ Examples:
     )
     
     parser.add_argument(
-        '--jobsPath', '-jp', type=str, default=default_jobs_path,
+        '--jobsPath', '-jp', type=str, default=str(default_jobs_path),
         help=f'Custom path for job templates output directory (default: {default_jobs_path})'
     )
     
@@ -181,7 +179,9 @@ Examples:
 def find_num_nodes(mobility_file_path):
     """Find the maximum number of nodes from mobility file."""
     print(mobility_file_path)
-    with open(mobility_file_path, 'r') as file:
+    mobility_path = Path(mobility_file_path)
+    
+    with mobility_path.open('r') as file:
         max_id = -sys.maxsize - 1
         for line in file:
             split_line = line.split(" ")
@@ -197,17 +197,20 @@ def find_num_nodes(mobility_file_path):
 def create_job_file(new_job_name, command, jobs_path, job_template_path,
                    temp_new_job_path, ram, needed_time, job_array):
     """Create a SLURM job file from template with specified parameters."""
-    new_job_filename = new_job_name + "-.slurm"
-    new_job_path = os.path.join(jobs_path, new_job_filename)
+    jobs_path = Path(jobs_path)
+    job_template_path = Path(job_template_path)
+    temp_new_job_path = Path(temp_new_job_path)
+    
+    new_job_filename = f"{new_job_name}-.slurm"
+    new_job_path = jobs_path / new_job_filename
     simulation = command.split()[0]
     
     # Copy template and rename
-    shutil.copy(job_template_path, jobs_path)
-    os.rename(temp_new_job_path, new_job_path)
+    shutil.copy(str(job_template_path), str(jobs_path))
+    temp_new_job_path.rename(new_job_path)
     
     # Read template content and perform substitutions
-    with open(new_job_path, 'r') as file:
-        content = file.read()
+    content = new_job_path.read_text()
     
     content = content.replace("{**jobName}", new_job_name)
     content = content.replace("{**command}", command)
@@ -221,14 +224,13 @@ def create_job_file(new_job_name, command, jobs_path, job_template_path,
         content = content.replace("{**sim_folder}", "roff-test")
     
     # Write modified content back to file
-    with open(new_job_path, 'w') as file:
-        file.write(content)
+    new_job_path.write_text(content)
 
 
 def run_scenario(cw, scenario, distance, starting_node, vehicles_number,
                 job_array, print_coords, area, config):
     """Generate job files for a specific scenario configuration."""
-    print(scenario)
+    print(f'Processing scenario: {scenario}')
     
     # Extract configuration values
     high_buildings = config['highBuildings']
@@ -239,7 +241,7 @@ def run_scenario(cw, scenario, distance, starting_node, vehicles_number,
     junctions = config['junctions']
     protocols = config['protocols']
     tx_ranges = config['txRanges']
-    jobs_path = config['jobsPath']
+    jobs_path = Path(config['jobsPath'])
     gen_loss_file = config['genLossFile']
     
     create_obstacle_shadowing_loss_file = int(gen_loss_file)
@@ -258,40 +260,38 @@ def run_scenario(cw, scenario, distance, starting_node, vehicles_number,
     cw_max = cw["cwMax"]
 
     # Some necessary paths
-    this_script_path = os.path.realpath(__file__)
-    this_script_parent_path = os.path.dirname(this_script_path)
-    ns_path = os.path.join(os.path.dirname(this_script_parent_path), "ns-3.26")
+    this_script_path = Path(__file__).resolve()
+    this_script_parent_path = this_script_path.parent
+    ns_path = this_script_parent_path.parent / "ns-3.26"
     
-    temp_new_job_path = os.path.join(jobs_path, "jobTemplate.slurm")
-    job_template_path = os.path.join(this_script_parent_path, "jobTemplate.slurm")
-    # maps_path = os.path.join(os.path.dirname(this_script_parent_path), "maps")
+    temp_new_job_path = jobs_path / "jobTemplate.slurm"
+    job_template_path = this_script_parent_path / "jobTemplate.slurm"
 
     # Input parameters
     if scenario is None or distance is None:
-        map_path = sys.argv[1]
+        map_path = Path(sys.argv[1])
         vehicle_distance = sys.argv[2]
     else:
-        map_path = f"../maps/{scenario}/{scenario}.osm.xml"
+        map_path = Path(f"../maps/{scenario}/{scenario}.osm.xml")
         vehicle_distance = distance
 
-    # Calculate directories
-    abs_map_path = os.path.abspath(map_path)
-    abs_map_parent_path = os.path.dirname(abs_map_path)
-    map_base_name = os.path.basename(map_path).split(".")[0]
+    # Calculate directories and filenames
+    abs_map_path = map_path.resolve()
+    abs_map_parent_path = abs_map_path.parent
+    
+    map_base_name = map_path.name.split(".")[0]  
     map_base_name_with_distance = map_base_name
-    map_path_without_extension = os.path.join(
-        os.path.dirname(map_path), map_base_name_with_distance
-    )
-    print(map_base_name_with_distance)
-    print(map_path_without_extension)
+    map_path_without_extension = map_path.parent / map_base_name_with_distance
+    
+    print(f'    mapBasePath: {map_path_without_extension}')
 
     # Define paths of files necessary for ns3
-    mobility_file_path = f"{abs_map_parent_path}/{map_base_name_with_distance}.ns2mobility.xml"
-    polygon_file_path = f"{abs_map_parent_path}/{map_base_name_with_distance}.poly.xml"
-    polygon_file_path_3d = f"{abs_map_parent_path}/{map_base_name_with_distance}.3D.poly.xml"
+    mobility_file_path = abs_map_parent_path / f"{map_base_name_with_distance}.ns2mobility.xml"
+    polygon_file_path = abs_map_parent_path / f"{map_base_name_with_distance}.poly.xml"
+    polygon_file_path_3d = abs_map_parent_path / f"{map_base_name_with_distance}.3D.poly.xml"
 
     # Run generate sumo files
-    sumo_file_generator = f"{this_script_parent_path}/generate-sumo-files.sh {map_path} {vehicle_distance}"
+    sumo_file_generator = f"{this_script_parent_path / 'generate-sumo-files.sh'} {map_path} {vehicle_distance}"
     # Uncomment to generate sumoFiles again
     # os.system(sumo_file_generator)
     
@@ -418,8 +418,8 @@ def run_scenario(cw, scenario, distance, starting_node, vehicles_number,
                                 )
                                 
                                 create_job_file(
-                                    new_job_name, command, jobs_path,
-                                    job_template_path, temp_new_job_path,
+                                    new_job_name, command, str(jobs_path),
+                                    str(job_template_path), str(temp_new_job_path),
                                     ram, needed_time, job_array
                                 )
                                 
@@ -542,30 +542,22 @@ def main():
 
     area = 1000
 
-    # Remove all previous job templates in output directory
-    this_script_path = os.path.realpath(__file__)
-    this_script_parent_path = os.path.dirname(this_script_path)
-    
     # Use custom jobs_path if provided
-    if config['jobsPath']:
-        jobs_path = config['jobsPath']
-        # Create directory if it doesn't exist
-        if not os.path.exists(jobs_path):
-            os.makedirs(jobs_path)
-    else:
-        jobs_path = os.path.join(os.path.dirname(this_script_parent_path), "jobsTemplate")
-    
-    # Only clear directory if it exists and has files
-    if os.path.exists(jobs_path):
-        files_to_remove = [
-            os.path.join(jobs_path, f) for f in os.listdir(jobs_path)
-            if os.path.isfile(os.path.join(jobs_path, f))
-        ]
+    jobs_path = Path(config['jobsPath'])
+    # Create directory if it doesn't exist
+    if not jobs_path.exists():
+        jobs_path.mkdir(parents=True, exist_ok=True)
+        
+    '''
+    # Remove all previous job templates in output directory
+    if jobs_path.exists():
+        files_to_remove = [f for f in jobs_path.iterdir() if f.is_file()]
         for file_path in files_to_remove:
-            os.unlink(file_path)
-
+            file_path.unlink()
+    '''
+    
     # Check if manual mode (positional arguments provided)
-    if args.mapPath and args.vehicleDistance:
+    if args.mapPath and args.vehicleDistance:        
         run_scenario(None, None, None, None, None, job_array, print_coords, area, config)
     else:
         for cw in contention_windows:
