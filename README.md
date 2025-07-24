@@ -23,6 +23,10 @@ Simplified repository structure
 
 See the [Getting Started](docs/GETTING_STARTED.md) section for detailed setup and usage instructions.
 
+## Cluster Commands Cheat Sheet
+
+If you are running simulations on the cluster or need quick references for Slurm and related commands, check the [Cluster Cheat Sheet](docs/CLUSTER_CHEAT_SHEET.md).
+
 ## Working with simulation outputs
 See the [Simulation Outputs](docs/SIMULATIONS_OUTPUTS.md) document for details on how to generate comparison graphs, network visualization and general info on the simulation outputs.
 

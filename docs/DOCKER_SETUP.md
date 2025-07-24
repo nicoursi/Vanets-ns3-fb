@@ -47,7 +47,7 @@ Or you can use the script:
 
 This example runs the specified simulation with run 14 (executing the same run multiple times returns same results).
 
-** Automated Simulation Runs**
+**Automated Simulation Runs**
 
 For automated simulations you can use `../batch1-simulations-with-docker.sh`. Make sure you `cd ns-3` before running. Check `--help` for accurate instructions.
 
