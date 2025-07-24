@@ -20,6 +20,7 @@ def parse_arguments():
     # Define default values as variables so they reflect in help
     default_print_coords = False
     default_gen_loss_file = False
+    default_only_command = False
     default_job_array = "1-50"
     default_scenarios = ["Padova-25"]
     default_contention_windows = [{"cwMin": 32, "cwMax": 1024}]
@@ -31,6 +32,8 @@ def parse_arguments():
     default_junctions = ["0"]
     default_protocols = ["1", "2", "3", "4", "5", "6"]
     default_tx_ranges = ["100", "300", "500", "700"]
+    default_job_template = "jobTemplate.slurm"
+    default_job_template_only_command = "jobTemplate-only-command.job"
     project_root = Path(__file__).parent.parent
     default_jobs_path = project_root / "jobsTemplate"
     
@@ -59,6 +62,9 @@ Examples:
   # Use default parameters
   ./generateMapsAndJobsTemplate.py
   
+  # Use only-command template
+  ./generateMapsAndJobsTemplate.py --only-command
+  
   # Override specific scenarios and protocols
   ./generateMapsAndJobsTemplate.py --scenarios "{','.join(default_scenarios[:2] if len(default_scenarios) > 1 else default_scenarios)}" --protocols "{','.join(default_protocols[:3])}"
   
@@ -79,6 +85,9 @@ Examples:
   
   # Specify custom jobs output path
   ./generateMapsAndJobsTemplate.py --jobsPath "/path/to/custom/jobs/directory"
+  
+  # Use custom job templates
+  ./generateMapsAndJobsTemplate.py --jobTemplate "custom-template.slurm" --jobTemplateOnlyCommand "custom-only-command.job"
         '''
     )
     
@@ -90,6 +99,11 @@ Examples:
     parser.add_argument(
         '--printCoords', '-pc', action='store_true',
         help=f'Enable coordinate printing in simulations (default: {default_print_coords})'
+    )
+    
+    parser.add_argument(
+        '--only-command', '-oc', action='store_true',
+        help=f'Use only-command job template instead of standard SLURM template (default: {default_only_command})'
     )
     
     parser.add_argument(
@@ -163,6 +177,16 @@ Examples:
         help=f'Custom path for job templates output directory (default: {default_jobs_path})'
     )
     
+    parser.add_argument(
+        '--jobTemplate', '-jt', type=str, default=default_job_template,
+        help=f'Standard job template filename (default: {default_job_template})'
+    )
+    
+    parser.add_argument(
+        '--jobTemplateOnlyCommand', '-jtoc', type=str, default=default_job_template_only_command,
+        help=f'Only-command job template filename (default: {default_job_template_only_command})'
+    )
+    
     # Positional arguments (for backward compatibility)
     parser.add_argument(
         'mapPath', nargs='?', default=None,
@@ -201,7 +225,9 @@ def create_job_file(new_job_name, command, jobs_path, job_template_path,
     job_template_path = Path(job_template_path)
     temp_new_job_path = Path(temp_new_job_path)
     
-    new_job_filename = f"{new_job_name}-.slurm"
+    # Get file extension from template
+    template_extension = job_template_path.suffix
+    new_job_filename = f"{new_job_name}-{template_extension}"
     new_job_path = jobs_path / new_job_filename
     simulation = command.split()[0]
     
@@ -243,6 +269,8 @@ def run_scenario(cw, scenario, distance, starting_node, vehicles_number,
     tx_ranges = config['txRanges']
     jobs_path = Path(config['jobsPath'])
     gen_loss_file = config['genLossFile']
+    only_command = config['onlyCommand']
+    job_template_filename = config['jobTemplateOnlyCommand'] if only_command else config['jobTemplate']
     
     create_obstacle_shadowing_loss_file = int(gen_loss_file)
     use_obstacle_shadowing_loss_file = int(not gen_loss_file)
@@ -264,8 +292,8 @@ def run_scenario(cw, scenario, distance, starting_node, vehicles_number,
     this_script_parent_path = this_script_path.parent
     ns_path = this_script_parent_path.parent / "ns-3.26"
     
-    temp_new_job_path = jobs_path / "jobTemplate.slurm"
-    job_template_path = this_script_parent_path / "jobTemplate.slurm"
+    job_template_path = this_script_parent_path / job_template_filename
+    temp_new_job_path = jobs_path / job_template_filename
 
     # Input parameters
     if scenario is None or distance is None:
@@ -446,6 +474,7 @@ def main():
     # Convert string arguments to appropriate data types
     print_coords = 1 if args.printCoords or args.genLossFile else 0
     job_array = args.jobArray
+    only_command = getattr(args, 'only_command', False)
     
     # Parse scenarios
     scenarios = [s.strip() for s in args.scenarios.split(',') if s.strip()]
@@ -480,7 +509,10 @@ def main():
         'neededTime': args.neededTime,
         'ram': args.ram,
         'jobsPath': args.jobsPath,
-        'genLossFile': args.genLossFile
+        'genLossFile': args.genLossFile,
+        'onlyCommand': only_command,
+        'jobTemplate': args.jobTemplate,
+        'jobTemplateOnlyCommand': args.jobTemplateOnlyCommand
     }
     
     # Original hardcoded values for reference (commented options preserved)
