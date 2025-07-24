@@ -48,8 +48,8 @@ Or you can use the script:
 This example runs the specified simulation with run 14 (executing the same run multiple times returns same results).
 ```
 
-> **Note:** While Docker commands remain functional, Singularity is now the recommended approach for both local development and cluster deployment due to its universal compatibility.
-
 ** Automated Simulation Runs**
 
-For automated simulations you can use `../batch1-simulations-with-docker.sh` from within the `ns-3` folder. Check `--help` for accurate instructions.
+For automated simulations you can use `../batch1-simulations-with-docker.sh`. Make sure you `cd ns-3` before running. Check `--help` for accurate instructions.
+
+> **Note:** While Docker commands remain functional, Singularity is now the recommended approach for both local development and cluster deployment due to its universal compatibility.
