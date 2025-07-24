@@ -46,7 +46,6 @@ Or you can use the script:
 ```
 
 This example runs the specified simulation with run 14 (executing the same run multiple times returns same results).
-```
 
 ** Automated Simulation Runs**
 
