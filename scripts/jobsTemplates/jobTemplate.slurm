@@ -32,7 +32,7 @@ IMAGE_NAME="singularity-ns3-image.sif"
 CURRENT_DIR="$(pwd)"
 PROJECT_PATH=""
 while [[ "$CURRENT_DIR" != "/" ]]; do
- if [[ -f "$CURRENT_DIR/${IMAGE_NAME}" ]] && [[ -d "$CURRENT_DIR/ns-3" ]]; then
+ if [[ -d "$CURRENT_DIR/ns-3" ]]; then
      PROJECT_PATH="$CURRENT_DIR"
      break
  fi
@@ -75,7 +75,8 @@ REPO_PATH="/mnt/ns-3"   # Path to the ns-3 submodule
 SIMULATION_CMD="{**command}"  # Update this!
 
 # Setup Singularity container path
-CONTAINER_PATH="$PROJECT_PATH/${IMAGE_NAME}"
+ENV_FOLDER="build-env"
+CONTAINER_PATH="$PROJECT_PATH/$ENV_FOLDER/${IMAGE_NAME}"
 
 echo "=== Simulation Parameters ==="
 echo "PROJECT_PATH: ${PROJECT_PATH}"
@@ -95,7 +96,7 @@ singularity exec \
   --bind /usr/share/zoneinfo:/usr/share/zoneinfo:ro \
   --bind /etc/localtime:/etc/localtime:ro \
   $CONTAINER_PATH \
-  /mnt/run-simulation-slurm-helper.sh \
+  /mnt/$ENV_FOLDER/run-simulation-slurm-helper.sh \
   "$REPO_PATH" \
   "{**sim_folder}/$SIMULATION_CMD" \
   "${SLURM_ARRAY_TASK_ID}"

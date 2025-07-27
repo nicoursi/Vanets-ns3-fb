@@ -56,7 +56,7 @@ done
 JOB_FOLDER="$1"
 NUM_RUNS="${2:-1}"
 CORES="${3:-4}"
-
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [ ! -d "$JOB_FOLDER" ]; then
   echo -e "${RED}Error: Folder '$JOB_FOLDER' not found.${RESET}"
@@ -271,7 +271,7 @@ echo ">>> [${job_name}_run${run_number}] Started at $start_readable" >> "$LOG_DI
 fullrun_log "\n[${job_name}_run${run_number}] ${RED}Started at${RESET} $start_short"
 
 #docker compose run --rm --name "$container_tag" "$DOCKER_SERVICE" &>> "$LOG_DIR/${job_name}_run${run_number}.log"
-../run_singularity_local.sh run $SIMULATION_CMD "$run_number" &>> "$LOG_DIR/${job_name}_run${run_number}.log"
+$SCRIPT_DIR/run_singularity_local.sh run $SIMULATION_CMD "$run_number" &>> "$LOG_DIR/${job_name}_run${run_number}.log"
 exit_code=$?
 
 # Track job start/end times for statistics
@@ -498,12 +498,12 @@ if $TEST_MODE; then
   exit 0
 fi
 
-read -p "Do you want to run a dirty-build or fullbuild with cleanup before running the simulations? (d/f/n): " choice
+read -p "Do you want to run a dirty-build or fullbuild with cleanup before running the simulations? (d[irty]/f[ull]/n[o]): " choice
 
 case "$choice" in
   [Dd])
     log "Running dirty-build..."
-    ../run_singularity_local.sh dirty-build
+    $SCRIPT_DIR/run_singularity_local.sh dirty-build
     result=$?
     if [ $result -ne 0 ]; then
       log "Dirty-build failed (exit code $result). Exiting."
@@ -512,7 +512,7 @@ case "$choice" in
     ;;
   [Ff])
     log "Running full build..."
-    ../run_singularity_local.sh build
+    $SCRIPT_DIR/run_singularity_local.sh build
     result=$?
     if [ $result -ne 0 ]; then
       log "Full build failed (exit code $result). Exiting."
@@ -523,7 +523,7 @@ case "$choice" in
     log "Skipping build."
     ;;
 esac
-
+echo "Scriptdir: $SCRIPT_DIR"
 export LOG_DIR
 export GREEN RED YELLOW BLUE BOLD RESET
 export NUM_RUNS
@@ -532,6 +532,7 @@ export INSTANCE_ID
 export FIRST_JOB_START_FILE
 export LAST_JOB_END_FILE
 export LOG_FILE
+export SCRIPT_DIR
 
 # Concurrent execution - run B0 and B1 jobs simultaneously
 if $CONCURRENT; then
