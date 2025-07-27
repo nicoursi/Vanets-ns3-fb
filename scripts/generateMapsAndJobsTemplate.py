@@ -13,6 +13,7 @@ import shutil
 import argparse
 import json
 from pathlib import Path
+from jobsUtils import find_project_root
 
 
 def parse_arguments():
@@ -34,8 +35,9 @@ def parse_arguments():
     default_tx_ranges = ["100", "300", "500", "700"]
     default_job_template = "jobTemplate.slurm"
     default_job_template_only_command = "jobTemplate-only-command.job"
-    project_root = Path(__file__).parent.parent
-    default_jobs_path = project_root / "jobsTemplate"
+    project_root = find_project_root()
+    # default_jobs_path = Path(project_root) / "scheduledJobs"
+    default_jobs_path = Path(".")
     
     # Protocol mapping for help display
     protocols_map = {
@@ -290,9 +292,10 @@ def run_scenario(cw, scenario, distance, starting_node, vehicles_number,
     # Some necessary paths
     this_script_path = Path(__file__).resolve()
     this_script_parent_path = this_script_path.parent
-    ns_path = this_script_parent_path.parent / "ns-3.26"
+    root_project_path = Path(find_project_root())
+    ns_path = root_project_path / "ns-3.26"
     
-    job_template_path = this_script_parent_path / job_template_filename
+    job_template_path = this_script_parent_path / "jobsTemplates" / job_template_filename
     temp_new_job_path = jobs_path / job_template_filename
 
     # Input parameters
