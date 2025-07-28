@@ -163,7 +163,7 @@ def printSingleGraphDistance(outFolder, graphTitle, compoundData, distances, pro
 		os.makedirs(outPathDirectory)
 
 	plt.savefig(outPath + ".pdf")
-	plt.clf()
+	plt.close()  # This releases the memory
 	#plt.savefig('b2.pdf', bbox_inches='tight')
 	#plt.show()
 	'''
@@ -254,7 +254,7 @@ def printSingleGraphErrorRate(outFolder, graphTitle, compoundData, errorRates, p
 		os.makedirs(outPathDirectory)
 
 	plt.savefig(outPath + ".pdf", bbox_inches='tight')
-	plt.clf()
+	plt.close()  # This releases the memory
 	#plt.savefig('b2.pdf', bbox_inches='tight')
 	#plt.show()
 
@@ -338,14 +338,18 @@ def printSingleGraph(outFolder, graphTitle, compoundData, txRanges, protocols, c
 	for group in rects:
 		autolabel(group)
 
+	scenario_name = outFolder.split(os.sep)[0]
+	metric = scenario_name + "_" + metric
 	outPathDirectory = os.path.join("out", outFolder + "-" + cw)
+#	outPathDirectory = os.path.join("out-gottardo", outFolder + "-" + cw)
 	outPath = os.path.join(outPathDirectory, metric)
 	if not os.path.exists(outPathDirectory):
 		os.makedirs(outPathDirectory)
 
 	plt.tight_layout(pad=4.0)
+	print(f"Saving file in {outPath}.pdf")
 	plt.savefig(outPath + ".pdf")
-	plt.clf()
+	plt.close()  # This releases the memory
 
 
 
@@ -445,7 +449,7 @@ def printSingleGraph(outFolder, graphTitle, compoundData, txRanges, protocols, c
 #
 #	#plt.tight_layout()  # Added for better spacing
 #	plt.savefig(outPath + ".pdf")
-#	plt.clf()
+#	plt.close()  # This releases the memory
 #	#plt.savefig('b2.pdf', bbox_inches='tight')
 #	#plt.show()
 
@@ -519,21 +523,28 @@ def printProtocolComparison():
 	initialBasePath = "../../simulations/scenario-urbano"
 #	initialBasePath = "/home/nicola/tesi/ns-3-cluster/ns-3.26/out/scenario-urbano"
 	#scenarios = ["Grid-200", "Grid-300", "Grid-400", "LA-15", "LA-25", "LA-35", "LA-45", "Padova-15", "Padova-25", "Padova-35", "Padova-45"]
-	scenarios = ["Grid-300"]
-	#buildings = ["1", "0"]
-	buildings = ["0", "1"]
+#	scenarios = ["Grid-300+-5-11.6_gain", "Grid-300+-5-normal-txpw", "Grid-300-11.6_gain-noROFF", "Grid-300-normal-txpw"]
+	scenarios = ["LA-25"]
+#	scenarios = ["Padova-25", "LA-25"]
+#	scenarios = ["Cube-75"]
+	buildings = ["1","0"]
+#	buildings = ["0"]
 	errorRate = "e0"
-#	txRanges = ["100", "300", "500"]
+#	txRanges = ["300", "500", "700"]
 	txRanges = ["100", "300", "500", "700"]
-	#protocols = ["Fast-Broadcast", "STATIC-100", "STATIC-300", "STATIC-500"]
+#	txRanges = ["100", "300", "500"]
+#	txRanges = ["500", "700", "500-11.6Gain", "700-11.6Gain"]
+#	protocols = ["Fast-Broadcast"]
 	protocols = ["Fast-Broadcast", "STATIC-100", "STATIC-300", "STATIC-500", "STATIC-700", "ROFF"]
+#	protocols = ["Fast-Broadcast", "STATIC-100", "STATIC-300", "STATIC-500", "STATIC-700"]
+#	protocols = ["Fast-Broadcast", "STATIC-300", "STATIC-500", "STATIC-700"]
 #	protocols = ["Fast-Broadcast", "STATIC-100", "STATIC-300", "STATIC-500", "ROFF"]
 	#protocols = ["Fast-Broadcast", "ROFF"]
 	cws = ["cw[32-1024]"]
 	#cws = ["cw[16-128]", "cw[32-1024]"]
 	#junctions = ["0", "1"]
 	junctions = ["0"]
-	#junctions = ["0", "1"
+	#junctions = ["0", "1"]
 	metrics = ["totCoverage", "covOnCirc", "hops", "slotsWaited", "messageSent"]
 	metricYLabels = {}
 	metricYLabels["totCoverage"] = "Total Delivery Ratio (%)"
@@ -592,9 +603,6 @@ def printProtocolComparison():
 #	buildings=1, junctions=1 arancione
 #	colors["1"]["1"] = ["#FFC497", "#c27230", "#7a3806"]
 	colors["1"]["1"] = ["#FFE0BF", "#E49453", "#A5521A", "#3B1A00"]
-
-
-
 
 	for scenario in scenarios:
 		if ("Platoon" in scenario):
@@ -1348,7 +1356,7 @@ def printSingleGraphRomanelliComparison(cw, folder, graphTitle, xList, xLabels, 
 
 	box = ax.get_position()
 	ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
-	ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+	ax.d(loc='center left', bbox_to_anchor=(1, 0.5))
 
 	#ax.legend(loc="upper center")
 
@@ -1380,7 +1388,7 @@ def printSingleGraphRomanelliComparison(cw, folder, graphTitle, xList, xLabels, 
 		os.makedirs(outPathDirectory)
 
 	plt.savefig(outPath + ".pdf")
-	plt.clf()
+	plt.close()  # This releases the memory
 	#plt.savefig('b2.pdf', bbox_inches='tight')
 	#plt.show()
 
