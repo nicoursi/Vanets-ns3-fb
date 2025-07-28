@@ -1,6 +1,7 @@
 #!/bin/bash
-# Script to run NS-3 simulations inside a Singularity container
-# Save this in your PROJECT_PATH
+# This script runs an NS-3 simulation from within a Singularity container.
+# It uses the precompiled simulation binary directly (not waf), 
+# which is needed for cluster execution.
 
 NS3_DIR="$1"
 SIMULATION_CMD="$2"
