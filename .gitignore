@@ -10,19 +10,9 @@ __pycache__/
 .pydevproject
 .settings/
 .vscode/
-scripts/graphs/out/
-
-# losses files
-*.losses
-# Link to original maps
-maps-old
 
 #libreoffice lock files
 .~lock.*
-
-#logs produced locally and on the cluster
-scheduledJobs/local/
-scheduledJobs/logs/
 
 # combined csv files for debugging
 Combined-*.csv
@@ -30,3 +20,20 @@ Combined-*.csv
 
 # singularity images
 *.sif
+
+# graphs outputs
+scripts/graphs/out/
+
+# losses files
+*.losses
+
+# Link to original maps
+maps-old
+
+# folders kept handy for reference and debugging
+**/old-to-ignore/
+scripts/graphs/out-gottardo/
+
+# scheduled jobs and logs
+scheduledJobs/*
+!scheduledJobs/*.sh
