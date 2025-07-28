@@ -5,7 +5,11 @@
 __pycache__/
 
 .idea/
-
+.project
+.eclipse/
+.pydevproject
+.settings/
+.vscode/
 scripts/graphs/out/
 
 # losses files
@@ -17,8 +21,8 @@ maps-old
 .~lock.*
 
 #logs produced locally and on the cluster
-jobsTemplate/local/
-jobsTemplate/logs/
+scheduledJobs/local/
+scheduledJobs/logs/
 
 # combined csv files for debugging
 Combined-*.csv
