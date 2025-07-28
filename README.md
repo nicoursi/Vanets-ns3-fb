@@ -9,13 +9,14 @@ Simplified repository structure
 ├── maps/               # Mobility and poly files neede to run simulations
 ├── simulations/        # simulation outputs in csv format
 ├── scripts/
-├───── graphs/          # Scripts for generating comparison graphs
-├───── drawCoords/      # Scripts for generating Network visualization graphs
-├───── createSimpleScenarios/	# Scripts for generating mobility and polygon files for simple scenarios
-├── jobsTemplate/	    # Default folder for slurm jobs to be executed
-├── run_singularity_local.sh	# Script for running simulations through the singularity container locally
-├── run_singularity_cluster-host.sh
-├── singularity-ns3.def # Singularity container definition
+├──── graphs/           # Scripts for generating comparison graphs
+├──── drawCoords/       # Scripts for generating Network visualization graphs
+├──── createSimpleScenarios/	# Scripts for generating mobility and polygon files for simple scenarios
+├── scheduledJobs/	    # Advised folder for slurm jobs to be executed
+├── build-env
+├──── run_singularity_local.sh	# Script for running and building simulations through the singularity container locally
+├──── run_singularity_cluster-host.sh
+├──── singularity-ns3.def # Singularity container definition
 ├── docs                # Documentation folder
 └── README.md           # This file
 ```
@@ -38,7 +39,7 @@ Generate mobility and polygon files for simulations. Generated files are placed 
 
 ## NS-3 Modifications
 
-To see the modifications applied the to NS-3 code refer to th dedicated NS-3 [README](ns-3/README) file.
+To see the modifications applied the to NS-3 code refer to th dedicated NS-3 [README](https://github.com/nicoursi/ns-3) file from the NS-3 submodule.
 
 ## Key Features
 
