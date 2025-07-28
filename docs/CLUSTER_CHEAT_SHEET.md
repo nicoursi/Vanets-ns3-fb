@@ -106,3 +106,15 @@ Command for building the ns3 project. You can use the `run_singularity_cluster-h
 ```
 singularity exec --bind /home/nursino/storage/Vanets-ns3-fb/ns-3:/home/nursino/storage/Vanets-ns3-fb/ns-3 $SIF_IMAGE bash -c "cd $NS3_DIR &&  ./waf configure && ./waf build
 ```
+
+Move a folder from the cluster. add -n for dry run (just test no transfer)
+
+```
+rsync -avz --progress --partial --append-verify --remove-source-files cluster:/storage/nursino/Vanets-ns3-fb/scripts/drawCoords/out/ /media/Dati-2/tesi/network-visual/from-cluster/
+```
+
+Then, after you’ve confirmed files transferred and source files were removed, clean up empty directories with:
+
+```
+ssh cluster 'find /storage/nursino/Vanets-ns3-fb/scripts/drawCoords/out -type d -empty -delete'
+```

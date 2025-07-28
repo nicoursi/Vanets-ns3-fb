@@ -1,10 +1,9 @@
 # Docker container and related scripts (Legacy Support)
 This project initially used Docker for local development and testing, but was later ported to Singularity for deployment on HPC clusters.
 
-Docker remains available but it is no longer mantained.
+Docker remains available but it is no longer mantained. All  docker scripts have been moved to the `build-env` folder without testing as they are deprecated. In case you need them, please test or move them back to the project's root folder. There is high chance they still work.
 
 ## Docker Commands 
-The Docker setup is maintained for backwards compatibility and for users who prefer Docker workflows.
 
 **Initial setup** (build the Docker image):
 
@@ -42,7 +41,7 @@ Or you can use the script:
 
 ```bash
 # From within the ns-3 directory
-../singlerun-docker.sh ../jobsTemplate/urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b0-e0-j0-Fast-Broadcast-500-.job 14
+../singlerun-docker.sh ../scheduledJobs/urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b0-e0-j0-Fast-Broadcast-500-.job 14
 ```
 
 This example runs the specified simulation with run 14 (executing the same run multiple times returns same results).

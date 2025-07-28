@@ -4,19 +4,20 @@ This repository contains my thesis project, which continues the work previously 
 ## Repository Structure
 Simplified repository structure
 
-```plaintext
-├── ns-3/						# NS-3 submodule (official repo + modifications)
-├── maps/						# Mobility and poly files neede to run simulations
-├── simulations/					# simulation outputs in csv format
+```
+├── ns-3/               # NS-3 submodule (official repo + modifications)
+├── maps/               # Mobility and poly files neede to run simulations
+├── simulations/        # simulation outputs in csv format
 ├── scripts/
-├───── graphs/					# Scripts for generating comparison graphs
-├───── drawCoords/				# Scripts for generating Network visualization graphs
-├───── createSimpleScenarios/		# Scripts for generating mobility and polygon files for simple scenarios
-├── jobsTemplate/					# Default folder for slurm jobs to be executed
-├── run_singularity_local.sh		# Script for running simulations through the singularity container locally
+├───── graphs/          # Scripts for generating comparison graphs
+├───── drawCoords/      # Scripts for generating Network visualization graphs
+├───── createSimpleScenarios/	# Scripts for generating mobility and polygon files for simple scenarios
+├── jobsTemplate/	    # Default folder for slurm jobs to be executed
+├── run_singularity_local.sh	# Script for running simulations through the singularity container locally
 ├── run_singularity_cluster-host.sh
-├── singularity-ns3.def			# Singularity container definition
-└── README.md                   # This file
+├── singularity-ns3.def # Singularity container definition
+├── docs                # Documentation folder
+└── README.md           # This file
 ```
 
 ## Getting Started
@@ -28,7 +29,7 @@ See the [Getting Started](docs/GETTING_STARTED.md) section for detailed setup an
 If you are running simulations on the cluster or need quick references for Slurm and related commands, check the [Cluster Cheat Sheet](docs/CLUSTER_CHEAT_SHEET.md).
 
 ## Working with simulation outputs
-See the [Simulation Outputs](docs/SIMULATIONS_OUTPUTS.md) document for details on how to generate comparison graphs, network visualization and general info on the simulation outputs.
+See the [Simulation Outputs](docs/SIMULATIONS_OUTPUTS.md) document for details on how to generate comparison graphs, network visualizations and general info on the simulation outputs.
 
 ## Creating Maps
 
@@ -37,33 +38,7 @@ Generate mobility and polygon files for simulations. Generated files are placed 
 
 ## NS-3 Modifications
 
-Two VANET protocols have been added: Fast-Broadcast (FB) and ROFF (for comparison purposes).
-In addition, an obstacle shadowing model module has been integrated.
-The mobility helper has been updated to support 3D coordinates.
-The vanets-utils module provides utility classes shared among different VANET components.
-Finally, the scratch folder contains test code for the ROFF and FB protocols under different scenarios.
-
-```plaintext
-src/
-├── vanets-utils/
-│   ├── command-logger.cc
-│   ├── command-logger.h
-│   ├── csv-manager.cc
-│   ├── csv-manager.h
-│   ├── Edge.cc
-│   └── Edge.h
-├── roff/
-├── fast-broadcast/
-├── obstacle/
-├── mobility/
-│   └── helper/
-│       ├── ns2-mobility-helper.cc
-│       └── ns2-mobility-helper.h
-scratch/
-├── fb-vanet-urban/
-└── roff-test/
-```
-
+To see the modifications applied the to NS-3 code refer to th dedicated NS-3 [README](ns-3/README) file.
 
 ## Key Features
 
