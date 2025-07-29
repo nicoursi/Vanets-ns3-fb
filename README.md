@@ -27,6 +27,9 @@ Simplified repository structure
 
 See the [Getting Started](docs/GETTING_STARTED.md) section for detailed setup and usage instructions.
 
+## Cluster Access Setup
+See the [Cluster Access Setup](docs/CLUSTER_ACCESS_SETUP.md) section for detailed instructions.
+
 ## Cluster Commands Cheat Sheet
 
 If you are running simulations on the cluster or need quick references for Slurm and related commands, check the [Cluster Cheat Sheet](docs/CLUSTER_CHEAT_SHEET.md).

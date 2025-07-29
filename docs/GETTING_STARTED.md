@@ -104,7 +104,10 @@ Example:
 cd scheduledJobs
 ../scripts/createJobsAndMaps/generateMapsAndJobsTemplate.py -s "LA-25" --buildings "1" --jobArray "1-3" --protocols "1,6"
 ```
-This will create .job files for the scenario "LA-25" with buildings, for the protocols Fast-Broadcast and Roff, with all supported transmission ranges and it will save them in the folder `jobstemplate` in the root folder. You can use a different folder using the `--jobsPath` parameter. `--jobArray "1-3"` means that for each simulation there will be executed run 1,2,3. The run rumber is important as it garantees reproducibility. Each run, with same parameters, should always return same results. 
+This will create `.job` files for the scenario "LA-25" with buildings, using the protocols *Fast-Broadcast* and *Roff*, across all supported transmission ranges. The files will be saved in the current folder.
+It is recommended to run this in the `scheduledJobs` directory or one of its subdirectories. You can specify a different target folder using the `--jobsPath` parameter.
+The `--jobArray "1-3"` option means that each simulation will be executed with run numbers 1, 2, and 3. The run number is important because it ensures reproducibility — each run with the same parameters should always produce the same results.
+
 
 **Submitting slurm jobs**
 
@@ -140,14 +143,14 @@ As the `run_singularity_local` script takes as input a `.job` file instead of a 
 **Example:**
 
 ```
+cd scheduledJobs
 scripts/createJobsAndMaps/generateMapsAndJobsTemplate.py -s "Grid-300" --buildings "0" --protocols "2" --txRanges "300" --jobArray "1-1" --only-command
 
 # Run the simulation
-cd ../scheduledJobs
 ../build-env/run_singularity_local.sh run urban-Grid-300-highBuildings0-drones0-d25-cw-32-1024-b0-e0-j0-STATIC-100-300-.job
 ```
 
-Locally you can also run  multiple simulations cuncurrently by processing all .jobs files from inside a folder:
+Locally you can also run  multiple simulations cuncurrently by processing all `.jobs` files from inside a folder:
 
 ```
 build-env/batch2-simulations-with--singularity.sh --help
