@@ -2,8 +2,9 @@
 ### job name
 #SBATCH --job-name={**jobName}
 
-###
-#SBATCH --mail-user=nursino@studenti.unipd.it
+### Email notification
+###SBATCH --mail-user=youremailaddress@youremail.com
+###SBATCH --mail-type=FAIL
 
 #SBATCH --array=1-1
 

@@ -3,8 +3,8 @@
 #SBATCH --job-name={**jobName}
 
 ### Email notification
-#SBATCH --mail-user=nicola.ursino@studenti.unipd.it
-#SBATCH --mail-type=FAIL
+###SBATCH --mail-user=youremailaddress@email.com
+###SBATCH --mail-type=FAIL
 
 ### Job array specification %5 means maximum 5 jobs cuncurrently
 #SBATCH --array={**jobarray}
