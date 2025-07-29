@@ -10,7 +10,7 @@ In order to use the network visualization script you need to run simulations wit
 Example:
 
 ```
-../scripts/generateMapsAndJobsTemplate.py -s "LA-25" --buildings "1" --jobArray "1-3" --printCoords --protocols "1,6"
+../scripts/createJobsAndMaps/generateMapsAndJobsTemplate.py -s "LA-25" --buildings "1" --jobArray "1-3" --printCoords --protocols "1,6"
 ```
 
 After having produced the csv files with coordinates, you can generate different visualizations:
@@ -38,27 +38,31 @@ scripts/
 Example:
 
 ```
+cd scripts/drawCoords
 ./drawAlertPaths.py -b ../../simulations/scenario-urbano-con-coord/LA-25/ --mapfolder ../../maps
 ```
 
-The command above will generate an Alert Path graph showing all the forwarders of an alert message for all  simulation configurations found for the LA-25 scenario. Maximum 3 simulations per configuration, unless specifically specified by the `--maxfiles` parameters. 
+The command above will generate in the `.out` folder, unless specified otherwise, an Alert Path graph showing all the forwarders of an alert message for all  simulation configurations found for the LA-25 scenario. Maximum 3 simulations per configuration, unless specifically specified by the `--maxfiles` parameters. 
 
 # Cluster Execution
 
 If you need to process many CSV files, you can generate and submit jobs on the cluster. Here's how to do it:
 
 1. **Set up the Conda environment** (Python) on the cluster if you haven’t already:  
-   Use the setup script:  
+   Use the setup script:
+
    ```bash
    ../build-env/setup_conda_on_cluster.sh
    ```
 
-2. **Generate job scripts** for the CSV files:  
+2. **Generate job scripts** for the CSV files: 
+
    ```bash
-   ../scripts/generateDrawCoordsJobs.py
+   ../scripts/createJobsAndMaps/generateDrawCoordsJobs.py
    ```
 
-3. **Submit all jobs** using the following script:  
+3. **Submit all jobs** using the following script: 
+
    ```bash
    ../scheduledJobs/submitall.sh
    ```
@@ -72,5 +76,5 @@ You can use `rsync` for the transfer:
 rsync -avz --progress --partial --append-verify --remove-source-files cluster:/storage/username/Vanets-ns3-fb/scripts/drawCoords/out/ /path/to/your/local/disk
 ```
 
-> 🧠 Note: `cluster` is just a proxy jump (SSH alias) defined in your SSH config.  
+> **Note**: `cluster` is just a proxy jump (SSH alias) defined in your SSH config.  
 See [CLUSTER_ACCESS_SETUP.md](CLUSTER_ACCESS_SETUP.md) for details.
