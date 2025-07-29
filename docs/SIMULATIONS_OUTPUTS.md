@@ -77,4 +77,4 @@ rsync -avz --progress --partial --append-verify --remove-source-files cluster:/s
 ```
 
 > **Note**: `cluster` is just a proxy jump (SSH alias) defined in your SSH config.  
-See [CLUSTER_ACCESS_SETUP.md](CLUSTER_ACCESS_SETUP.md) for details.
+See the [Cluster Access Setup](CLUSTER_ACCESS_SETUP.md) guide for details.

@@ -101,6 +101,7 @@ scripts/createJobsAndMaps/generateMapsAndJobsTemplate.py --help
 Example: 
 
 ```
+cd scheduledJobs
 ../scripts/createJobsAndMaps/generateMapsAndJobsTemplate.py -s "LA-25" --buildings "1" --jobArray "1-3" --protocols "1,6"
 ```
 This will create .job files for the scenario "LA-25" with buildings, for the protocols Fast-Broadcast and Roff, with all supported transmission ranges and it will save them in the folder `jobstemplate` in the root folder. You can use a different folder using the `--jobsPath` parameter. `--jobArray "1-3"` means that for each simulation there will be executed run 1,2,3. The run rumber is important as it garantees reproducibility. Each run, with same parameters, should always return same results. 
@@ -117,6 +118,7 @@ To generate a job that will create a `losses` file you can use the `--genLossFil
 Example:
 
 ```
+cd scheduledJobs
 ../scripts/createJobsAndMaps/generateMapsAndJobsTemplate.py -s "Grid-300" -p "1"  --txRanges "300" --genLossFile --jobArray "1-1"
 ```
 ## 5. Working Locally

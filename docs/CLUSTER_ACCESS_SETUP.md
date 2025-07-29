@@ -96,41 +96,20 @@ fusermount -u ~/cluster_mount
 
 ---
 
-## 4. Usage examples
+## 4. Create aliases locally
+It can be useful to create aliases for commands you need often by editing the `~/.bash_aliases` file on your system.
 
-### SFTP through ProxyJump
-
-```bash
-sftp clusterlabta
-sftp> cd /path/on/remote
-sftp> get myfile.txt
-sftp> put localfile.txt
-sftp> bye
-```
-
-### Access in Nemo / File Manager
-
-Once mounted with SSHFS, just open `~/cluster_mount` in Nemo. Drag and drop as usual.
-
-### Open in VSCodium
-
-Open folder:
+Example:
 
 ```
-File → Open Folder → ~/cluster_mount
+alias mount-cluster='sshfs -o loglevel=debug clusterlabta://storage/username ~/cluster_mount'
+alias umount-cluster='fusermount -u ~/cluster_mount'
 ```
 
----
+## 5. Sourcing aliases on the cluster submit hosts:
+I maintain a cluster-specific `.bashrc` file containing useful aliases for this project.
+To ensure it gets sourced automatically, run the following script on one of the cluster submit hosts:
 
-## 5. Quick Commands
-
-| Action           | Command                                     |
-| ---------------- | ------------------------------------------- |
-| SSH to remote    | `ssh clusterlabta`                          |
-| SFTP to remote   | `sftp clusterlabta`                         |
-| Mount with sshfs | `sshfs clusterlabta:/ ~/cluster_mount` |
-| Unmount sshfs    | `fusermount -u ~/cluster_mount`        |
-
----
-
-**Keep this as a handy reference whenever you need to reach your remote cluster through a jump host!**
+```
+build-env/source_aliases_on_cluster.sh
+```
