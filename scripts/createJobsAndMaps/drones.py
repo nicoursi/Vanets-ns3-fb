@@ -12,29 +12,29 @@ from __future__ import print_function
 from __future__ import absolute_import
 import os
 import sys
-sys.path.insert(0, './drawCoords')
+sys.path.insert(0, './draw_coords')
 import random
-import coordUtils
+import coord_utils
 
 import sumolib
 
 def generateDrone(nodeCoords, id, z):
 	line = ""
 	line += "$node_(" + str(id) + ") set X_ " + str(nodeCoords.x) + "\n"
-	line += "$node_(" + str(id) + ") set Y_ " + str(nodeCoords.y) + "\n"	
-	line += "$node_(" + str(id) + ") set Z_ " + str(z) + "\n"		
+	line += "$node_(" + str(id) + ") set Y_ " + str(nodeCoords.y) + "\n"
+	line += "$node_(" + str(id) + ") set Z_ " + str(z) + "\n"
 	line += '$ns_ at 0.0 "$node_(' + str(id) + ') setdest 0.00 0.00 0.00"\n'
 	return line
 
 def main():
 	ns2MobilityFilePath = sys.argv[1]
-	nodeList = coordUtils.parseNodeList(ns2MobilityFilePath)
+	nodeList = coord_utils.parseNodeList(ns2MobilityFilePath)
 	#outFilePath = os.path.join(os.path.dirname(ns2MobilityFilePath), os.path.splitext(os.path.splitext(os.path.basename(ns2MobilityFilePath))[0])[0] + ".drones")
 	line = ""
 	maxId = int(max(nodeList, key=int)) + 1
 	print(maxId)
-	
-	with open(ns2MobilityFilePath, "a+") as f: 
+
+	with open(ns2MobilityFilePath, "a+") as f:
 		for nodeId in nodeList:
 			nodeCoords = nodeList[nodeId]
 			rand = random.randint(0, 99)
@@ -46,6 +46,6 @@ def main():
 				line += generateDrone(nodeCoords, maxId, 60)
 				maxId += 1
 		f.writelines(line)
-	
+
 if __name__ == "__main__":
 	main()

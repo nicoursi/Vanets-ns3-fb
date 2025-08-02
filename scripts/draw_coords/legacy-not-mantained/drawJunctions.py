@@ -9,13 +9,13 @@
 import os
 import sys
 import getopt
-import numpy as np  
+import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-import coordUtils
+import coord_utils
 import xml.etree.ElementTree as ET
 
-startingNodeId = "310" 
+startingNodeId = "310"
 
 def main():
     polyFilePath = None
@@ -28,15 +28,15 @@ def main():
     color1 = "#840000"
     color2 = "#677a04"
     color3 = "#000000"
-    
-    coordUtils.plotBuildings(polyFilePath)
-    coordUtils.plotJunctions(netFilePath)
-    coordUtils.plotNodeList(ns2MobilityFile)
-    coordUtils.plotStartingNode(startingNodeId, ns2MobilityFile)
+
+    coord_utils.plotBuildings(polyFilePath)
+    coord_utils.plotJunctions(netFilePath)
+    coord_utils.plotNodeList(ns2MobilityFile)
+    coord_utils.plotStartingNode(startingNodeId, ns2MobilityFile)
     plt.legend(loc='best')
     plt.show()
-   
-        
+
+
 
 
 if __name__ == "__main__":

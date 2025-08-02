@@ -63,9 +63,9 @@ source /conf/shared-software/anaconda/etc/profile.d/conda.sh
 conda activate generate_graphs
 which python3
 python3 --version
-python3 $PROJECT_PATH/scripts/drawCoords/{**script}.py \
+python3 $PROJECT_PATH/scripts/draw_coords/{**script}.py \
     -b $PROJECT_PATH/simulations/scenario-urbano-con-coord/{**scenario} \
     --mapfolder $PROJECT_PATH/maps \
     --maxfiles 100 \
-    -o $PROJECT_PATH/scripts/drawCoords/out \
+    -o $PROJECT_PATH/scripts/draw_coords/out \
     {**Additional_args}

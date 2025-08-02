@@ -2,7 +2,7 @@
 
 #Invocation:
 #   ./drawVehicles.py graphTitle ns2mobilityFilePath [polyFilePath] [netFilePath]
-#example /drawVehicles.py graphTitle ../../maps/Padova/Padova-25.ns2mobility.xml  [../../maps/Padova/Padova-25.poly.xml] [../../maps/Padova/Padova-25.net.xml] 
+#example /drawVehicles.py graphTitle ../../maps/Padova/Padova-25.ns2mobility.xml  [../../maps/Padova/Padova-25.poly.xml] [../../maps/Padova/Padova-25.net.xml]
 
 
 
@@ -10,10 +10,10 @@
 import os
 import sys
 import getopt
-import numpy as np  
+import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-import coordUtils
+import coord_utils
 
 
 def main():
@@ -36,7 +36,7 @@ def main():
     color1 = "#840000"
     color2 = "#677a04"
     color3 = "#000000"
-    
+
     thisScriptPath = os.path.dirname(os.path.realpath(__file__))
     ns2MobilityPath = os.path.join(thisScriptPath, ns2MobilityRelativePath)
     print("ns2mobility = " + ns2MobilityPath)
@@ -70,12 +70,12 @@ def main():
 
     if (polyFilePath is not None):
         print("DrawVehicles plot buildings")
-        coordUtils.plotBuildings(polyFilePath)
+        coord_utils.plotBuildings(polyFilePath)
 
     plt.xlabel("x")
     plt.ylabel("y")
     plt.title(graphTitle)
-    
+
     plt.plot(xPos, yPos, ".")
     plt.plot(starterCoordX, starterCoordY, "ro")
 
@@ -83,17 +83,17 @@ def main():
     #plotTxRange(maxTxRange, starterCoordX, starterCoordY, vehicleDistance, color2, False)
     #plotTxRange(1000, starterCoordX, starterCoordY, vehicleDistance, color3, True)
     plt.legend(loc = "upper left")
-   
+
 
     #Plot junctions
     if (netFilePath is not None):
         print("Draw vehicles plot junctions")
-        coordUtils.plotJunctions(netFilePath)
+        coord_utils.plotJunctions(netFilePath)
     plt.show()
     print("dopo plot")
-    
-    
-        
+
+
+
 def plotTxRange(txRange, starterCoordX, starterCoordY, vehicleDistance, color, plotInterval):
     x = np.linspace(-500, 3500, 100)
     y = np.linspace(-500, 3500, 100)
@@ -102,17 +102,17 @@ def plotTxRange(txRange, starterCoordX, starterCoordY, vehicleDistance, color, p
     CS = plt.contour(X, Y, realTxRange, [0], colors = color)
 
     if (plotInterval):
-        outerTxRange = (X - starterCoordX) ** 2 + (Y - starterCoordY) ** 2 - (txRange + vehicleDistance) ** 2 
+        outerTxRange = (X - starterCoordX) ** 2 + (Y - starterCoordY) ** 2 - (txRange + vehicleDistance) ** 2
         innerTxRange = (X - starterCoordX) ** 2 + (Y - starterCoordY) ** 2 - (txRange - vehicleDistance) ** 2
         plt.contour(X, Y, outerTxRange, [0], colors = color, linestyles = "dashed")
         plt.contour(X, Y, innerTxRange, [0], colors = color, linestyles = "dashed")
     # F = X**2 + Y**2 - 90000
-    
-    
+
+
     # if (color == "#840000"):
     plt.clabel(CS, inline=1, fontsize=10)
     CS.collections[0].set_label(str(txRange) + " m")
-        
+
 
 
 if __name__ == "__main__":

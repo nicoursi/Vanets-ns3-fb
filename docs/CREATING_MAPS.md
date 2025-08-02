@@ -22,8 +22,8 @@ Various bash and python scripts, mainly for OSM data manipulation using SUMO uti
 
 * _fixedPositions.py_: use it to generate a trace file where vehicle are placed at a fixed distance
 * _generate-sumo-files.sh_: generate a polygon file and a ns2mobility file from a OSM data file.
-* _polyconvertEnch.py_: generate a polygon data file with heights
-*_ generateMapsAndJobsTemplate.py_*: Other that creating NS3 simulation jobs to be submitted on the cluster, it generates sumo files by executing the generate-sumo-files.sh`. 
+* _polyconvertEnch.py_: generate a polygon data file with heights.
+* _generateMapsAndJobsTemplate.py_*: Other than creating NS3 simulation jobs to be submitted on the cluster, it generates sumo files by executing the generate-sumo-files.sh`. 
 
 ### Usage
 #### _fixedPositions.py_

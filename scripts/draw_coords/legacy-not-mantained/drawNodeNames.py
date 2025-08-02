@@ -14,7 +14,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import csv
 import xml.etree.ElementTree as ET
-import coordUtils as coordUtils
+import coord_utils as coord_utils
 
 
 ns2MobilityFile = "../../maps/LA-5/LA-5.ns2mobility.xml"
@@ -40,12 +40,12 @@ def plotCoverage(relativeFileName, outFilePath):
     transmissionVector = []
     nodeIds = []
 
-    txRange, startingX, startingY, startingVehicle, vehicleDistance, xReceivedCoords, yReceivedCoords, xNodeCoords, yNodeCoords, transmissionMap, receivedCoordsOnCirc, receivedOnCircIds, transmissionVector, nodeIds = coordUtils.parseFile(relativeFileName, ns2MobilityFile) 
+    txRange, startingX, startingY, startingVehicle, vehicleDistance, xReceivedCoords, yReceivedCoords, xNodeCoords, yNodeCoords, transmissionMap, receivedCoordsOnCirc, receivedOnCircIds, transmissionVector, nodeIds = coord_utils.parseFile(relativeFileName, ns2MobilityFile)
 
     fig, ax = plt.subplots()
 
     for nodeId in nodeIds:
-        coord = coordUtils.findCoordsFromFile(nodeId, ns2MobilityFile)
+        coord = coord_utils.findCoordsFromFile(nodeId, ns2MobilityFile)
         ax.annotate(str(nodeId), xy=(coord.x, coord.y), size=8)
 
     plt.plot(xNodeCoords, yNodeCoords, ".",markersize=5, color="red")
@@ -53,9 +53,9 @@ def plotCoverage(relativeFileName, outFilePath):
     plt.plot(startingX, startingY, "ro", color="blue", markersize=5)
 
     color1 = "#840000"
-    coordUtils.plotTxRange(circRadius, startingX, startingY, vehicleDistance, color1, True)
-    coordUtils.plotBuildings(polyFilePath, False, ax)
-    
+    coord_utils.plotTxRange(circRadius, startingX, startingY, vehicleDistance, color1, True)
+    coord_utils.plotBuildings(polyFilePath, False, ax)
+
     #Save file
     if not os.path.exists(os.path.dirname(outFilePath)):
         try:
@@ -82,12 +82,12 @@ def main():
                         count = 0
                         for csvFilename in os.listdir(protocolPath):
                             relativeFileName = os.path.join(protocolPath, csvFilename)
-                            if (count > 2 or not coordUtils.isFileComplete(relativeFileName)):
+                            if (count > 2 or not coord_utils.isFileComplete(relativeFileName)):
                                 continue
                             count += 1
                             outFilePath = os.path.join("./out/coverages", buildingFolder, protocolFolder, os.path.splitext(csvFilename)[0] + ".pdf")
                             plotCoverage(relativeFileName, "./outCoverage.pdf")
-    
+
 
 if __name__ == "__main__":
     main()

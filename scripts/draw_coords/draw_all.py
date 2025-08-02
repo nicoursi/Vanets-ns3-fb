@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 
 """
-Enhanced drawAll.py script that supports all parameters from the individual drawing scripts
+Enhanced draw_all.py script that supports all parameters from the individual drawing scripts
 and passes them to all four scripts running in parallel.
 
 Usage examples:
-    ./drawAll.py -f data.csv -m mobility.xml -p poly.xml -r 500 -o ./output --dpi 150 -v
-    ./drawAll.py -b /path/to/data --mapfolder /path/to/maps -r 1000 --maxfiles 5
+    ./draw_all.py -f data.csv -m mobility.xml -p poly.xml -r 500 -o ./output --dpi 150 -v
+    ./draw_all.py -b /path/to/data --mapfolder /path/to/maps -r 1000 --maxfiles 5
 """
 
 import os
@@ -17,7 +17,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import csv
 import xml.etree.ElementTree as ET
-import coordUtils as coordUtils
+import coord_utils as coord_utils
 from multiprocessing import Pool
 
 def run_process(process):
@@ -117,9 +117,9 @@ def main():
     # Add epilog with examples
     parser.epilog = """
 Examples:
-  ./drawAll.py -f data.csv -m mobility.xml -p poly.xml
-  ./drawAll.py -b /data/folder --mapfolder /maps -r 500 -v
-  ./drawAll.py -f data.csv -m mobility.xml -o ./results --dpi 150
+  ./draw_all.py -f data.csv -m mobility.xml -p poly.xml
+  ./draw_all.py -b /data/folder --mapfolder /maps -r 500 -v
+  ./draw_all.py -f data.csv -m mobility.xml -o ./results --dpi 150
         """
 
     # Parse arguments
@@ -134,10 +134,10 @@ Examples:
 
     # Define the four drawing scripts with arguments
     processes = [
-        f"./drawCoverage.py {script_args}",
-        f"./drawAlertPaths.py {script_args}",
-        f"./drawSingleHops.py {script_args}",
-        f"./drawMultipleTransmissions.py {script_args}",
+        f"./draw_coverage.py {script_args}",
+        f"./draw_alert_paths.py {script_args}",
+        f"./draw_single_hops.py {script_args}",
+        f"./draw_multiple_transmissions.py {script_args}",
     ]
 
     if args.verbose:

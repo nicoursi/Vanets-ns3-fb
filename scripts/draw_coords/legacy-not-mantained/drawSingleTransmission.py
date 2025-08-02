@@ -14,7 +14,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import csv
 import xml.etree.ElementTree as ET
-import coordUtils as coordUtils
+import coord_utils as coord_utils
 
 
 plt.rcParams["figure.figsize"] = [10, 10]
@@ -39,7 +39,7 @@ def plotSingleTransmission(relativeFileName, outFileBasePath, numTransmissionToP
     transmissionVector = []
     nodeIds = []
 
-    txRange, startingX, startingY, startingVehicle, vehicleDistance, xReceivedCoords, yReceivedCoords, xNodeCoords, yNodeCoords, transmissionMap, receivedCoordsOnCirc, receivedOnCircIds, transmissionVector, nodeIds = coordUtils.parseFile(relativeFileName, ns2MobilityFile)
+    txRange, startingX, startingY, startingVehicle, vehicleDistance, xReceivedCoords, yReceivedCoords, xNodeCoords, yNodeCoords, transmissionMap, receivedCoordsOnCirc, receivedOnCircIds, transmissionVector, nodeIds = coord_utils.parseFile(relativeFileName, ns2MobilityFile)
 
     nodeCoordsMap = {}
     color1 = "#840000"
@@ -49,7 +49,7 @@ def plotSingleTransmission(relativeFileName, outFileBasePath, numTransmissionToP
 
     for i in range(1, numTransmissionToPlot + 1):
         plt.plot(xNodeCoords, yNodeCoords, ".", markersize=5, color="red")
-        coordUtils.plotTxRange(circRadius, startingX, startingY, vehicleDistance, color1, True)
+        coord_utils.plotTxRange(circRadius, startingX, startingY, vehicleDistance, color1, True)
         count = 0
         print(i)
         for edge in transmissionVector:
@@ -62,25 +62,25 @@ def plotSingleTransmission(relativeFileName, outFileBasePath, numTransmissionToP
             source = edge.source
             destination = edge.destination
             if (not source in nodeCoordsMap):
-                nodeCoordsMap[source] = coordUtils.findCoordsFromFile(edge.source, ns2MobilityFile)
+                nodeCoordsMap[source] = coord_utils.findCoordsFromFile(edge.source, ns2MobilityFile)
             if (not destination in nodeCoordsMap):
-                nodeCoordsMap[destination] = coordUtils.findCoordsFromFile(edge.destination, ns2MobilityFile)
+                nodeCoordsMap[destination] = coord_utils.findCoordsFromFile(edge.destination, ns2MobilityFile)
             sourceCoord = nodeCoordsMap[source]
             destCoord = nodeCoordsMap[destination]
-            
+
             c1 = np.array((sourceCoord.x, sourceCoord.y, sourceCoord.z))
             c2 = np.array((destCoord.x, destCoord.y, destCoord.z))
             plt.plot(sourceCoord.x, sourceCoord.y, "ro", color="#af41f4", markersize=5)
             plt.plot([sourceCoord.x, destCoord.x], [sourceCoord.y, destCoord.y], color=lineColor, linewidth=0.3, alpha=0.7)
-            plt.plot(destCoord.x, destCoord.y, ".", color="green", markersize=5)   
+            plt.plot(destCoord.x, destCoord.y, ".", color="green", markersize=5)
             plt.plot(startingX, startingY, "ro", color="blue", markersize=5)
 
-            coordUtils.plotTxRange(circRadius, startingX, startingY, vehicleDistance, color1, True)
+            coord_utils.plotTxRange(circRadius, startingX, startingY, vehicleDistance, color1, True)
 
-            #coordUtils.plotBuildings(polyFilePath)
+            #coord_utils.plotBuildings(polyFilePath)
 
-            #Save file 
-            
+            #Save file
+
         if not os.path.exists(os.path.dirname(outFileBasePath)):
             try:
                 os.makedirs(os.path.dirname(outFileBasePath))
@@ -94,7 +94,7 @@ def plotSingleTransmission(relativeFileName, outFileBasePath, numTransmissionToP
             newI = "0" + newI
         plt.savefig(outFileBasePath + "-transmission" + newI + ".pdf")
         plt.clf()
-        
+
 
 def main():
     print("Draw single transmissions")

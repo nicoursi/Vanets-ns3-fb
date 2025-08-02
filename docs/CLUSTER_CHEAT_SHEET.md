@@ -110,11 +110,11 @@ singularity exec --bind /home/nursino/storage/Vanets-ns3-fb/ns-3:/home/nursino/s
 Move a folder from the cluster. add -n for dry run (just test no transfer)
 
 ```
-rsync -avz --progress --partial --append-verify --remove-source-files cluster:/storage/nursino/Vanets-ns3-fb/scripts/drawCoords/out/ /media/Dati-2/tesi/network-visual/from-cluster/
+rsync -avz --progress --partial --append-verify --remove-source-files cluster:/storage/nursino/Vanets-ns3-fb/scripts/draw_coords/out/ /media/Dati-2/tesi/network-visual/from-cluster/
 ```
 
 Then, after you’ve confirmed files transferred and source files were removed, clean up empty directories with:
 
 ```
-ssh cluster 'find /storage/nursino/Vanets-ns3-fb/scripts/drawCoords/out -type d -empty -delete'
+ssh cluster 'find /storage/nursino/Vanets-ns3-fb/scripts/draw_coords/out -type d -empty -delete'
 ```

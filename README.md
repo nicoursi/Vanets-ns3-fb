@@ -6,8 +6,8 @@ Simplified repository structure
 
 ```
 ├── build-env               # Scripts for running and building NS-3 simulations
-│   ├── run_singularity_cluster-host.sh 
-│   ├── run_singularity_local.sh         
+│   ├── run_singularity_cluster-host.sh
+│   ├── run_singularity_local.sh
 │   └── singularity-ns3.def # Singularity container definition
 ├── docs                    # Documentation folder
 ├── maps/                   # Mobility and poly files needed to run simulations
@@ -15,7 +15,7 @@ Simplified repository structure
 ├── scheduledJobs/          # Advised folder for slurm jobs to be executed
 ├── scripts/
 │   ├── createJobsAndMaps/
-│   ├── drawCoords/         # Scripts for generating Network visualization graphs
+│   ├── draw_coords/        # Scripts for generating Network visualization graphs
 │   ├── graphs/             # Scripts for generating comparison graphs
 │   └── mapsCreation/       # Scripts for generating mobility and polygon files
 ├── simulations/            # Simulation outputs in csv format
@@ -27,10 +27,10 @@ Simplified repository structure
 
 See the [Getting Started](docs/GETTING_STARTED.md) section for detailed setup and usage instructions.
 
-## Cluster Access Setup
+### Cluster Access Setup
 See the [Cluster Access Setup](docs/CLUSTER_ACCESS_SETUP.md) section for detailed instructions.
 
-## Cluster Commands Cheat Sheet
+### Cluster Commands Cheat Sheet
 
 If you are running simulations on the cluster or need quick references for Slurm and related commands, check the [Cluster Cheat Sheet](docs/CLUSTER_CHEAT_SHEET.md).
 
@@ -40,7 +40,7 @@ See the [Simulation Outputs](docs/SIMULATIONS_OUTPUTS.md) document for details o
 ## Creating Maps
 
 Generate mobility and polygon files for simulations. Generated files are placed in the `maps` folder. For detailed instructions see [Maps](docs/MAPS.md)
-
+****
 
 ## NS-3 Modifications
 
