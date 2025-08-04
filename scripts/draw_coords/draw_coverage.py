@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-# coding=utf-8
-"""
-Draw Coverage Visualization Tool
+"""Draw Coverage Visualization Tool
 
 This script generates coverage visualization plots from simulation data.
 
@@ -30,15 +28,16 @@ Examples:
 
     # Batch process folder
     ./draw_coverage.py -b /path/to/basefolder --mapfolder /path/to/maps -r 1500
+
 """
 
 import os
+
 import matplotlib
 
 matplotlib.use("Agg")  # Use non-interactive backend
-import matplotlib.pyplot as plt
 import coord_utils
-
+import matplotlib.pyplot as plt
 
 # Set high DPI for better quality figures
 plt.rcParams["figure.figsize"] = [10, 10]
@@ -50,14 +49,14 @@ plt.rcParams["savefig.bbox"] = "tight"
 DEFAULT_BASE_MAP_FOLDER = "../../../maps"  # If you execute the script in its folder
 
 
-def plot_coverage(csv_file_path, output_file_path, config):
-    """
-    Plot coverage visualization from simulation data.
+def plot_coverage(csv_file_path, output_file_path, config) -> bool:
+    """Plot coverage visualization from simulation data.
 
     Args:
         csv_file_path (str): Path to CSV file containing simulation results
         output_file_path (str): Path where to save the output plot
         config (SimulationConfig): Configuration object with mobility and poly files
+
     """
     print(f"Plotting coverage for: {csv_file_path}")
 
@@ -90,7 +89,7 @@ def plot_coverage(csv_file_path, output_file_path, config):
 
     # Calculate coordinate bounds for proper scaling
     coord_bounds = coord_utils.calculate_coord_bounds(
-        x_node_coords, y_node_coords, starting_x, starting_y, config.circ_radius
+        x_node_coords, y_node_coords, starting_x, starting_y, config.circ_radius,
     )
 
     # Create the plot
@@ -178,7 +177,6 @@ def plot_coverage(csv_file_path, output_file_path, config):
 
 def main():
     """Main function to handle command line arguments and execute appropriate actions."""
-
     # Script-specific configuration
     script_config = {
         "description": "Draw Coverage Visualization Tool",

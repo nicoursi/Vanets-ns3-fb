@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-# coding=utf-8
-"""
-Draw Buildings Visualization Tool
+"""Draw Buildings Visualization Tool.
 
 This script generates building visualization plots from polygon/building files.
 
@@ -18,20 +16,21 @@ Examples:
 
     # Plot buildings with custom output
     ./draw_buildings.py buildings.xml my_buildings.png
+
 """
 
 import os
 import sys
+
 import matplotlib
 
 matplotlib.use("Agg")  # Use non-interactive backend
-import matplotlib.pyplot as plt
 import coord_utils
+import matplotlib.pyplot as plt
 
 
 def plot_buildings(poly_file_path, output_file_path):
-    """
-    Plot buildings visualization from polygon/building file.
+    """Plot buildings visualization from polygon/building file.
 
     Args:
         poly_file_path (str): Path to polygon/building file
@@ -39,6 +38,7 @@ def plot_buildings(poly_file_path, output_file_path):
 
     Returns:
         bool: True if successful, False otherwise
+
     """
     print(f"Plotting buildings from: {poly_file_path}")
 
@@ -93,7 +93,6 @@ def plot_buildings(poly_file_path, output_file_path):
 
 def main():
     """Main function to handle command line arguments."""
-
     # Check command line arguments
     if len(sys.argv) < 2:
         print("Usage: draw_buildings.py <polygon_file> [output_file]")

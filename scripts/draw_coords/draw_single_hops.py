@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-# coding=utf-8
-"""
-Draw Single Hops Visualization Tool
+"""Draw Single Hops Visualization Tool
 
 This script generates hop-by-hop visualization plots from simulation data.
 
@@ -30,15 +28,16 @@ Examples:
 
     # Batch process folder
     ./draw_single_hops.py -b /path/to/basefolder --mapfolder /path/to/maps -r 1500
+
 """
 
 import os
+
 import matplotlib
 
 matplotlib.use("Agg")  # Use non-interactive backend
+import coord_utils
 import matplotlib.pyplot as plt
-import coord_utils as coord_utils
-
 
 # Set high DPI for better quality figures
 plt.rcParams["figure.figsize"] = [10, 10]
@@ -56,13 +55,13 @@ def find_max_hop(transmission_vector):
 
 
 def plot_single_hops(csv_file_path, output_file_path, config):
-    """
-    Plot hop-by-hop visualization from simulation data.
+    """Plot hop-by-hop visualization from simulation data.
 
     Args:
         csv_file_path (str): Path to CSV file containing simulation results
         output_file_path (str): Base path where to save the output plots (hop number will be appended)
         config (SimulationConfig): Configuration object with mobility and poly files
+
     """
     print(f"Plotting hops for: {csv_file_path}")
 
@@ -98,7 +97,7 @@ def plot_single_hops(csv_file_path, output_file_path, config):
 
     # Calculate coordinate bounds for proper scaling
     coord_bounds = coord_utils.calculate_coord_bounds(
-        x_node_coords, y_node_coords, starting_x, starting_y, config.circ_radius
+        x_node_coords, y_node_coords, starting_x, starting_y, config.circ_radius,
     )
 
     # Find maximum hop count
@@ -107,7 +106,7 @@ def plot_single_hops(csv_file_path, output_file_path, config):
     success = True
 
     # Generate a plot for each hop
-    for hop in range(0, max_hop + 1):
+    for hop in range(max_hop + 1):
         if config.verbose:
             print(f"Processing hop {hop + 1}")
 
@@ -151,11 +150,11 @@ def plot_single_hops(csv_file_path, output_file_path, config):
             # Get coordinates with caching
             if source not in node_coords_map:
                 node_coords_map[source] = coord_utils.find_coords_from_file(
-                    edge.source, config.mobility_file
+                    edge.source, config.mobility_file,
                 )
             if destination not in node_coords_map:
                 node_coords_map[destination] = coord_utils.find_coords_from_file(
-                    edge.destination, config.mobility_file
+                    edge.destination, config.mobility_file,
                 )
 
             source_coord = node_coords_map[source]
@@ -278,7 +277,6 @@ def plot_single_hops(csv_file_path, output_file_path, config):
 
 def main():
     """Main function to handle command line arguments and execute appropriate actions."""
-
     # Script-specific configuration
     script_config = {
         "description": "Draw Single Hops Visualization Tool",

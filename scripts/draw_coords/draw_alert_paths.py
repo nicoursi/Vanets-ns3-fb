@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
-# coding=utf-8
-"""
-Modified Draw Alert Paths Visualization Tool
+"""Modified Draw Alert Paths Visualization Tool.
+
 - Now shows arrows from sender to sender for every hop in transmission_map (not just circumference paths)
 - Nodes that only receive but never forward are not considered forwarders
 - All receivers from the same sender share the same arrow color
-- The last sender(s) that lead to circumference nodes still connect with rays as before
+- The last sender(s) that lead to circumference nodes still connect with rays as before.
 """
 
 import os
-import numpy as np
+
 import matplotlib
+import numpy as np
 
 matplotlib.use("Agg")
+import coord_utils
 import matplotlib.pyplot as plt
-import coord_utils as coord_utils
 
 plt.rcParams["figure.figsize"] = [10, 10]
 plt.rcParams["figure.dpi"] = 300
@@ -25,8 +25,7 @@ DEFAULT_BASE_MAP_FOLDER = "../../../maps"
 
 
 def find_circumference_candidates(x_coords, y_coords, starting_x, starting_y, node_spacing, config):
-    """
-    Find nodes within a specified distance band from the starting position.
+    """Find nodes within a specified distance band from the starting position.
 
     Args:
         x_coords (list or array): X coordinates of nodes
@@ -39,6 +38,7 @@ def find_circumference_candidates(x_coords, y_coords, starting_x, starting_y, no
 
     Returns:
         list of tuples: Coordinates of nodes within the distance band
+
     """
     min_distance = config.circ_radius - node_spacing
     max_distance = config.circ_radius + node_spacing
@@ -84,7 +84,7 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
 
     # Calculate coordinate bounds
     node_bounds = coord_utils.calculate_coord_bounds(
-        x_node_coords, y_node_coords, starting_x, starting_y, config.circ_radius
+        x_node_coords, y_node_coords, starting_x, starting_y, config.circ_radius,
     )
     node_x_min, node_x_max, node_y_min, node_y_max = node_bounds
     margin = max(config.circ_radius * 0.05, 100)
@@ -114,7 +114,7 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
     if hasattr(config, "show_nodes") and config.show_nodes:
         #        plt.plot(x_node_coords, y_node_coords, ".", markersize=5, color="red", alpha=0.3, label="All nodes")
         plt.plot(
-            x_node_coords, y_node_coords, ".", color="red", alpha=0.6, label="Not receiving nodes"
+            x_node_coords, y_node_coords, ".", color="red", alpha=0.6, label="Not receiving nodes",
         )
         plt.plot(
             x_received_coords,
@@ -184,7 +184,7 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
             recv_coord = coord_utils.find_coords_from_file(recv, config.mobility_file)
             if recv_coord is None:
                 continue
-            if recv in transmission_map and transmission_map[recv]:
+            if transmission_map.get(recv):
                 plt.annotate(
                     "",
                     xy=(recv_coord.x, recv_coord.y),
@@ -208,28 +208,28 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
     if hasattr(config, "debug") and config.debug:
         # BUG DETECTION: Check if circumference data is invalid
         circumference_candidates = find_circumference_candidates(
-            x_received_coords, y_received_coords, starting_x, starting_y, node_spacing, config
+            x_received_coords, y_received_coords, starting_x, starting_y, node_spacing, config,
         )
         received_on_circ_ids_fallback = coord_utils.find_node_ids_from_coords(
-            circumference_candidates, config.mobility_file
+            circumference_candidates, config.mobility_file,
         )
         if sorted(received_on_circ_ids_fallback) == sorted(received_on_circ_ids):
             print(
-                "✅ The receivers on circumference from the NS-3 simulation and the fallback correspond"
+                "✅ The receivers on circumference from the NS-3 simulation and the fallback correspond",
             )
         else:
             print("⚠️ Received_on_circ_ids DO NOT correspond with the fallback ones!")
 
     # Check if ns3-simulation script has a bug not reporting conference nodes
-    if not received_on_circ_ids or received_on_circ_ids == ["0"] or received_on_circ_ids == [0]:
+    if not received_on_circ_ids or received_on_circ_ids in (["0"], [0]):
         simulation_bug_detected = True
         bug_warning = "⚠️  SIMULATION BUG: 'Nodes on circ' field is empty/zero! Used fallback"
         print(f"WARNING: {bug_warning}")
         print(
-            "\nThis indicates the NS-3 simulation isn't properly calculating circumference nodes."
+            "\nThis indicates the NS-3 simulation isn't properly calculating circumference nodes.",
         )
         print(
-            f"Node spacing used to calculate the circumference: {node_spacing}. Change if different!\n"
+            f"Node spacing used to calculate the circumference: {node_spacing}. Change if different!\n",
         )
 
         # Fallback: Calculate circumference nodes from received nodes
@@ -242,11 +242,11 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
             received_on_circ_ids = received_on_circ_ids_fallback
         else:
             circumference_candidates = find_circumference_candidates(
-                x_received_coords, y_received_coords, starting_x, starting_y, node_spacing, config
+                x_received_coords, y_received_coords, starting_x, starting_y, node_spacing, config,
             )
 
             received_on_circ_ids = coord_utils.find_node_ids_from_coords(
-                circumference_candidates, config.mobility_file
+                circumference_candidates, config.mobility_file,
             )
 
         print(f"Found {len(received_on_circ_ids)} circumference nodes using fallback method")
@@ -256,7 +256,7 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
         for sender, receivers in transmission_map.items():
             if circ_id in receivers:
                 last_forwarder_coord = coord_utils.find_coords_from_file(
-                    sender, config.mobility_file
+                    sender, config.mobility_file,
                 )
                 circ_coord = coord_utils.find_coords_from_file(circ_id, config.mobility_file)
                 if last_forwarder_coord is not None and circ_coord is not None:
@@ -329,7 +329,7 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
             color="red",
             weight="bold",
             verticalalignment="bottom",  # align text above this point
-            bbox=dict(boxstyle="round", facecolor="yellow", alpha=0.7),
+            bbox={"boxstyle": "round", "facecolor": "yellow", "alpha": 0.7},
         )
     else:
         plt.title(base_title, fontsize=13)

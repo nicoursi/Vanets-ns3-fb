@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-# coding=utf-8
-"""
-Draw Multiple Transmissions Visualization Tool
+"""Draw Multiple Transmissions Visualization Tool
 
 This script generates multiple transmission phase plots from simulation data,
 showing how alert messages propagate through the network in sequential phases.
@@ -31,15 +29,16 @@ Examples:
 
     # Batch process folder
     ./draw_multiple_transmissions.py -b /path/to/basefolder --mapfolder /path/to/maps -r 1500
+
 """
 
 import os
+
 import matplotlib
 
 matplotlib.use("Agg")  # Use non-interactive backend
+import coord_utils
 import matplotlib.pyplot as plt
-import coord_utils as coord_utils
-
 
 # Set high DPI for better quality figures
 plt.rcParams["figure.figsize"] = [10, 10]
@@ -62,13 +61,13 @@ def create_ordered_sources_list(transmission_vector):
 
 
 def plot_multiple_transmissions(csv_file_path, output_file_path, config):
-    """
-    Plot multiple transmission phases for a single simulation.
+    """Plot multiple transmission phases for a single simulation.
 
     Args:
         csv_file_path (str): Path to CSV file containing simulation results
         output_file_path (str): Base path where to save the output plots (will append phase numbers)
         config (SimulationConfig): Configuration object with mobility and poly files
+
     """
     print(f"Plotting multiple transmissions for: {csv_file_path}")
 
@@ -101,7 +100,7 @@ def plot_multiple_transmissions(csv_file_path, output_file_path, config):
 
     # Calculate coordinate bounds
     coord_bounds = coord_utils.calculate_coord_bounds(
-        x_node_coords, y_node_coords, starting_x, starting_y, config.circ_radius
+        x_node_coords, y_node_coords, starting_x, starting_y, config.circ_radius,
     )
 
     node_coords_map = {}
@@ -136,7 +135,7 @@ def plot_multiple_transmissions(csv_file_path, output_file_path, config):
 
         # Plot transmission range circle
         coord_utils.plot_tx_range(
-            config.circ_radius, starting_x, starting_y, vehicle_distance, color1, True, coord_bounds
+            config.circ_radius, starting_x, starting_y, vehicle_distance, color1, True, coord_bounds,
         )
 
         # Plot transmission edges
@@ -159,11 +158,11 @@ def plot_multiple_transmissions(csv_file_path, output_file_path, config):
             # Cache coordinate lookups
             if source not in node_coords_map:
                 node_coords_map[source] = coord_utils.find_coords_from_file(
-                    source, config.mobility_file
+                    source, config.mobility_file,
                 )
             if destination not in node_coords_map:
                 node_coords_map[destination] = coord_utils.find_coords_from_file(
-                    destination, config.mobility_file
+                    destination, config.mobility_file,
                 )
 
             source_coord = node_coords_map[source]
@@ -212,7 +211,7 @@ def plot_multiple_transmissions(csv_file_path, output_file_path, config):
 
         # Plot transmission range again (to ensure it's on top)
         coord_utils.plot_tx_range(
-            config.circ_radius, starting_x, starting_y, vehicle_distance, color1, True, coord_bounds
+            config.circ_radius, starting_x, starting_y, vehicle_distance, color1, True, coord_bounds,
         )
 
         # Plot buildings if provided
@@ -258,7 +257,6 @@ def plot_multiple_transmissions(csv_file_path, output_file_path, config):
 
 def main():
     """Main function to handle command line arguments and execute appropriate actions."""
-
     # Script-specific configuration
     script_config = {
         "description": "Draw Multiple Transmissions Visualization Tool",

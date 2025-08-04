@@ -123,8 +123,7 @@ def is_file_complete(file_path):
         bool: True if file has more than one line, False otherwise
     """
     with open(file_path) as f:
-        i = -1
-        for i, l in enumerate(f):
+        for i, line in enumerate(f):  # noqa: B007
             pass
     return i == 1
 
@@ -173,34 +172,32 @@ def plot_tx_range(
 
     x = np.linspace(x_min, x_max, 100)
     y = np.linspace(y_min, y_max, 100)
-    X, Y = np.meshgrid(x, y)
-    real_tx_range = (
-        (X - starter_coord_x) ** 2 + (Y - starter_coord_y) ** 2 - tx_range**2
-    )
-    plt.contour(X, Y, real_tx_range, [0], colors=color)
+    x_grid, y_grid = np.meshgrid(x, y)
+    real_tx_range = (x_grid - starter_coord_x) ** 2 + (y_grid - starter_coord_y) ** 2 - tx_range**2
+    plt.contour(x_grid, y_grid, real_tx_range, [0], colors=color)
 
     if plot_interval:
         outer_tx_range = (
-            (X - starter_coord_x) ** 2
-            + (Y - starter_coord_y) ** 2
+            (x_grid - starter_coord_x) ** 2
+            + (y_grid - starter_coord_y) ** 2
             - (tx_range + vehicle_distance) ** 2
         )
         inner_tx_range = (
-            (X - starter_coord_x) ** 2
-            + (Y - starter_coord_y) ** 2
+            (x_grid - starter_coord_x) ** 2
+            + (y_grid - starter_coord_y) ** 2
             - (tx_range - vehicle_distance) ** 2
         )
         plt.contour(
-            X,
-            Y,
+            x_grid,
+            y_grid,
             outer_tx_range,
             [0],
             colors=color,
             linestyles="dashed",
         )
         plt.contour(
-            X,
-            Y,
+            x_grid,
+            y_grid,
             inner_tx_range,
             [0],
             colors=color,
@@ -330,12 +327,11 @@ def build_vector_from_coords(coords):
         Vector: Vector object with parsed coordinates
     """
     split_coords = coords.split(":")
-    vector = Vector(
+    return Vector(
         split_coords[0],
         split_coords[1],
         split_coords[2],
     )
-    return vector
 
 
 def parse_transmission_map(raw_transmission_map):
@@ -430,9 +426,7 @@ def parse_file(file_path, ns2_mobility_file):
         received_ids = line[18]
         raw_node_ids = line[19]
         node_ids = [x for x in raw_node_ids.split("_") if x]  # Python 3 compatible
-        x_received_coords, y_received_coords = retrieve_coords(
-            received_ids, ns2_mobility_file
-        )
+        x_received_coords, y_received_coords = retrieve_coords(received_ids, ns2_mobility_file)
         x_node_coords, y_node_coords = retrieve_coords(raw_node_ids, ns2_mobility_file)
         raw_transmission_map = line[20]
         received_on_circ_ids = line[21]
@@ -568,7 +562,7 @@ def plot_buildings(
     for poly in poly_list:
         poly_id = poly.get("id")
         poly_type = poly.get("type")
-        if poly_type != "building" and poly_type != "unknown":
+        if poly_type not in {"building", "unknown"}:
             continue
         count = count + 1
         coords = poly.get("shape")
@@ -712,8 +706,8 @@ def calculate_coord_bounds(
         tuple: Coordinate bounds (x_min, x_max, y_min, y_max)
     """
     # Get bounds from all node coordinates
-    all_x = list(x_node_coords) + [starting_x]
-    all_y = list(y_node_coords) + [starting_y]
+    all_x = [*list(x_node_coords), starting_x]
+    all_y = [*list(y_node_coords), starting_y]
 
     x_min, x_max = min(all_x), max(all_x)
     y_min, y_max = min(all_y), max(all_y)
@@ -836,10 +830,7 @@ class SimulationConfig:
         if building_mode == "b0":
             should_disable_buildings = True
             if verbose:
-                print(
-                    f"Building mode 'b0' detected from folder structure - "
-                    f"buildings disabled"
-                )
+                print(f"Building mode 'b0' detected from folder structure - buildings disabled")
 
         # Additional check in filename if provided
         if filename and "b0" in filename.lower():
@@ -1112,11 +1103,7 @@ def find_csv_files_in_folder(folder_path, max_files):
 
     # Get all files directly in the folder (non-recursive)
     try:
-        files = [
-            f
-            for f in os.listdir(folder_path)
-            if os.path.isfile(os.path.join(folder_path, f))
-        ]
+        files = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
     except OSError as e:
         print(f"Error reading folder {folder_path}: {e}")
         return csv_files
@@ -1761,26 +1748,25 @@ def generic_process_single_file(
 
     if output_file:
         output_path = output_file
-    else:
-        # Try to parse path structure for organized output
-        if path_info:
-            output_path = generate_output_path(
-                path_info,
-                os.path.join(
-                    config.output_base,
-                    output_subfolder,
-                ),
-                show_nodes,
-            )
-        else:
-            # Fallback to simple output
-            csv_filename = os.path.basename(csv_file)
-            output_filename = os.path.splitext(csv_filename)[0] + show_nodes + ".png"
-            output_path = os.path.join(
+    # Try to parse path structure for organized output
+    elif path_info:
+        output_path = generate_output_path(
+            path_info,
+            os.path.join(
                 config.output_base,
-                single_output_subfolder,
-                output_filename,
-            )
+                output_subfolder,
+            ),
+            show_nodes,
+        )
+    else:
+        # Fallback to simple output
+        csv_filename = os.path.basename(csv_file)
+        output_filename = os.path.splitext(csv_filename)[0] + show_nodes + ".png"
+        output_path = os.path.join(
+            config.output_base,
+            single_output_subfolder,
+            output_filename,
+        )
 
     # Call the plotting function
     return plot_function(csv_file, output_path, config)
@@ -1841,9 +1827,7 @@ def generic_process_folder(
     for file_info in csv_files:
         processed_count += 1
 
-        print(
-            f"\nProcessing file {processed_count}/{len(csv_files)}: {file_info['csv_filename']}"
-        )
+        print(f"\nProcessing file {processed_count}/{len(csv_files)}: {file_info['csv_filename']}")
 
         # Configure buildings for this specific file
         if file_info["building"] != "unknown":
@@ -1855,9 +1839,7 @@ def generic_process_folder(
 
             if verbose_mode:
                 print(f"  Building mode: {config.building_mode}")
-                print(
-                    f"  Buildings enabled: {'No' if config.poly_file is None else 'Yes'}"
-                )
+                print(f"  Buildings enabled: {'No' if config.poly_file is None else 'Yes'}")
                 print(f"  Force buildings: {config.force_buildings}")
 
         if verbose_mode:
@@ -1992,9 +1974,7 @@ def generic_process_batch(
     for file_info in csv_files:
         processed_count += 1
 
-        print(
-            f"\nProcessing file {processed_count}/{len(csv_files)}: {file_info['csv_filename']}"
-        )
+        print(f"\nProcessing file {processed_count}/{len(csv_files)}: {file_info['csv_filename']}")
 
         # Set up paths for this scenario if we have map folder
         if config.base_map_folder:
@@ -2014,9 +1994,7 @@ def generic_process_batch(
 
             if verbose_mode:
                 print(f"  Building mode: {temp_config.building_mode}")
-                print(
-                    f"  Buildings enabled: {'No' if temp_config.poly_file is None else 'Yes'}"
-                )
+                print(f"  Buildings enabled: {'No' if temp_config.poly_file is None else 'Yes'}")
                 print(f"  Force buildings: {temp_config.force_buildings}")
                 print(f"  Base map folder: {temp_config.base_map_folder}")
                 print(f"  Mobility file: {temp_config.mobility_file}")
