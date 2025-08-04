@@ -35,5 +35,5 @@ maps-old
 scripts/graphs/out-gottardo/
 
 # scheduled jobs and logs
-scheduledJobs/*
-!scheduledJobs/*.sh
+scheduled_jobs/*
+!scheduled_jobs/*.sh

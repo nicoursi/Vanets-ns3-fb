@@ -1,16 +1,27 @@
 # Working with simulation outputs
+- [Working with simulation outputs](#working-with-simulation-outputs)
+  - [Comparison Graphs](#comparison-graphs)
+  - [Network visualization tool](#network-visualization-tool)
+- [Cluster Execution](#cluster-execution)
+
 Simulation results are saved in the `simulations` folder. The folder contains multiple subfolders according to the different scenarios and parameters used for running the simulations. Each specific combination of parameters is run multiple times with progressive run numbers (id field in the csv file). As simulations are reproducible, if a simulation is run twice with the same run number (id) it should give the same results.
 
 ## Comparison Graphs
-In the folder `scripts/graphs` there are multiple scripts for generating graphs. Currently only `printProtocolComparison.py` has been tested. It needs refactoring to support parameters. At the moment it needs changing the code to change scenarios, tx-ranges and so on. [TODO]
+In the folder `scripts/graphs` there are multiple scripts for generating graphs. Currently only `print_protocol_comparison.py` has been tested and refactored. The other comparison scripts need testing and refactoring as the `print_single_graph()` function has more arguments now. [TODO]
+
+```
+usage: print_protocol_comparison.py [-h] [-p INITIAL_BASE_PATH] [-ft FILE_TYPE] [-s SCENARIOS] [-b BUILDINGS]
+                                    [-e ERROR_RATE] [-tx TX_RANGES] [--protocols PROTOCOLS] [-c CWS]
+                                    [-j JUNCTIONS] [-m METRICS] [-l] [-v]
+```
 
 ## Network visualization tool
-In order to use the network visualization script you need to run simulations with  `--printCoords=1`. You can easily generate such jobs to be submitted to the cluster by using the `generateMapsAndJobsTemplate.py` script.
+In order to use the network visualization script you need to run simulations with  `--printCoords=1`. You can easily generate such jobs to be submitted to the cluster by using the `generate_maps_and_jobs.py` script.
 
 Example:
 
 ```
-../scripts/createJobsAndMaps/generateMapsAndJobsTemplate.py -s "LA-25" --buildings "1" --jobArray "1-3" --printCoords --protocols "1,6"
+../scripts/create_maps_and_jobs/generate_maps_and_jobs.py -s "LA-25" --buildings "1" --jobArray "1-3" --printCoords --protocols "1,6"
 ```
 
 After having produced the csv files with coordinates, you can generate different visualizations:
@@ -52,19 +63,19 @@ If you need to process many CSV files, you can generate and submit jobs on the c
    Use the setup script:
 
    ```bash
-   ../build-env/setup_conda_on_cluster.sh
+   ../build_env/setup_conda_on_cluster.sh
    ```
 
 2. **Generate job scripts** for the CSV files:
 
    ```bash
-   ../scripts/createJobsAndMaps/generateDrawCoordsJobs.py
+   ../scripts/create_maps_and_jobs/generate_draw_coords_jobs.py
    ```
 
 3. **Submit all jobs** using the following script:
 
    ```bash
-   ../scheduledJobs/submitall.sh
+   ../scheduled_jobs/submitall.sh
    ```
 
 > ⚠️ These graph files can be quite large. **Do not push them to the Git repository** or leave them on the cluster’s storage. Move them to your local disk when done.

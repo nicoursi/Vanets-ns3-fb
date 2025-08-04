@@ -111,5 +111,5 @@ I maintain a cluster-specific `.bashrc` file containing useful aliases for this 
 To ensure it gets sourced automatically, run the following script on one of the cluster submit hosts:
 
 ```
-build-env/source_aliases_on_cluster.sh
+build_env/source_aliases_on_cluster.sh
 ```
