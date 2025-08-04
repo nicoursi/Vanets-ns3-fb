@@ -19,12 +19,12 @@ from pathlib import Path
 import os
 
 # Default values for all parameters
-DEFAULT_TEMPLATE = 'draw_coordsTemplate.slurm'
-DEFAULT_TIME = '5:00:00'
-DEFAULT_OUTPUT_DIR = '.'
-DEFAULT_ADDITIONAL_ARGS = ''
-DEFAULT_SCRIPTS = 'draw_coverage,draw_single_hops,drawSingleTransmission,draw_alert_paths'
-DEFAULT_SCENARIOS = 'Grid-300,Padova-25,LA-25'
+DEFAULT_TEMPLATE = "draw_coords_template.slurm"
+DEFAULT_TIME = "5:00:00"
+DEFAULT_OUTPUT_DIR = "."
+DEFAULT_ADDITIONAL_ARGS = ""
+DEFAULT_SCRIPTS = "draw_coverage,draw_single_hops,drawSingleTransmission,draw_alert_paths"
+DEFAULT_SCENARIOS = "Grid-300,Padova-25,LA-25"
 
 
 def extract_scenario_name(scenario):
@@ -39,10 +39,17 @@ def extract_scenario_name(scenario):
     Returns:
         str: Scenario name (replace slashes with hyphens)
     """
-    return scenario.replace('/', '-')
+    return scenario.replace("/", "-")
 
 
-def process_template(template_file, script, scenario, needed_time=DEFAULT_TIME, additional_args=DEFAULT_ADDITIONAL_ARGS, output_dir=DEFAULT_OUTPUT_DIR):
+def process_template(
+    template_file,
+    script,
+    scenario,
+    needed_time=DEFAULT_TIME,
+    additional_args=DEFAULT_ADDITIONAL_ARGS,
+    output_dir=DEFAULT_OUTPUT_DIR,
+):
     """
     Process the SLURM template file and create a new file for the given script/scenario combination.
 
@@ -63,7 +70,7 @@ def process_template(template_file, script, scenario, needed_time=DEFAULT_TIME, 
         if not template_path.exists():
             raise FileNotFoundError(f"Template file not found: {template_file}")
 
-        with open(template_path, 'r') as f:
+        with open(template_path, "r") as f:
             content = f.read()
 
         # Extract scenario name (replace slashes with hyphens)
@@ -75,16 +82,16 @@ def process_template(template_file, script, scenario, needed_time=DEFAULT_TIME, 
         # If additional_args is provided, append it to job name (clean up dashes)
         if additional_args.strip():
             # Remove leading dashes, replace spaces and remaining dashes with single hyphens
-            args_suffix = additional_args.strip().lstrip('-').replace(' ', '-').replace('--', '-')
+            args_suffix = additional_args.strip().lstrip("-").replace(" ", "-").replace("--", "-")
             job_name = f"{job_name}-{args_suffix}"
 
         # Perform replacements
         replacements = {
-            '{**jobName}': job_name,
-            '{**script}': script,
-            '{**scenario}': scenario,
-            '{**neededTime}': needed_time,
-            '{**Additional_args}': additional_args
+            "{**jobName}": job_name,
+            "{**script}": script,
+            "{**scenario}": scenario,
+            "{**neededTime}": needed_time,
+            "{**Additional_args}": additional_args,
         }
 
         processed_content = content
@@ -97,21 +104,24 @@ def process_template(template_file, script, scenario, needed_time=DEFAULT_TIME, 
 
         # Generate output filename (include additional args if provided)
         if additional_args.strip():
-            args_suffix = additional_args.strip().lstrip('-').replace(' ', '-').replace('--', '-')
+            args_suffix = additional_args.strip().lstrip("-").replace(" ", "-").replace("--", "-")
             output_filename = f"{script}_{scenario_name}_{args_suffix}.slurm"
         else:
             output_filename = f"{script}_{scenario_name}.slurm"
         output_file_path = output_path / output_filename
 
         # Write the processed content to the output file
-        with open(output_file_path, 'w') as f:
+        with open(output_file_path, "w") as f:
             f.write(processed_content)
 
         print(f"Generated: {output_file_path}")
         return str(output_file_path)
 
     except Exception as e:
-        print(f"Error processing template for script '{script}' and scenario '{scenario}': {e}", file=sys.stderr)
+        print(
+            f"Error processing template for script '{script}' and scenario '{scenario}': {e}",
+            file=sys.stderr,
+        )
         return None
 
 
@@ -125,16 +135,16 @@ def parse_list_string(list_str):
     Returns:
         list: List of strings with whitespace stripped
     """
-    return [item.strip() for item in list_str.split(',') if item.strip()]
+    return [item.strip() for item in list_str.split(",") if item.strip()]
 
 
 def main():
     # Get the directory where this script is located
     script_dir = Path(__file__).resolve().parent
-    default_template = script_dir / "jobsTemplates" /  DEFAULT_TEMPLATE
+    default_template = script_dir / "jobs_templates" / DEFAULT_TEMPLATE
 
     parser = argparse.ArgumentParser(
-        description='Process SLURM template file and generate multiple SLURM files for different script and scenario combinations',
+        description="Process SLURM template file and generate multiple SLURM files for different script and scenario combinations",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -142,45 +152,51 @@ Examples:
   %(prog)s --scripts "script1, script2" --scenarios "Grid-300, LA-25"
   %(prog)s --scripts "simulation" --scenarios "Grid-300/b1, LA-25/test" --template custom.slurm
   %(prog)s --scripts "analysis" --scenarios "exp1" --additional-args="--verbose --debug" --output-dir results/
-        """
+        """,
     )
 
     parser.add_argument(
-        '--template', '-t',
+        "--template",
+        "-t",
         default=str(default_template),
-        help=f'Template file to process (default: {default_template})'
+        help=f"Template file to process (default: {default_template})",
     )
 
     parser.add_argument(
-        '--scripts', '-s',
+        "--scripts",
+        "-s",
         default=DEFAULT_SCRIPTS,
-        help=f'Comma-separated list of scripts (default: "{DEFAULT_SCRIPTS}")'
+        help=f'Comma-separated list of scripts (default: "{DEFAULT_SCRIPTS}")',
     )
 
     parser.add_argument(
-        '--scenarios', '-c',
+        "--scenarios",
+        "-c",
         default=DEFAULT_SCENARIOS,
-        help=f'Comma-separated list of scenarios (default: "{DEFAULT_SCENARIOS}")'
+        help=f'Comma-separated list of scenarios (default: "{DEFAULT_SCENARIOS}")',
     )
 
     parser.add_argument(
-        '--time', '-time',
+        "--time",
+        "-time",
         default=DEFAULT_TIME,
-        help=f'Time value for replacement (default: {DEFAULT_TIME})'
+        help=f"Time value for replacement (default: {DEFAULT_TIME})",
     )
 
     parser.add_argument(
-        '--additional-args', '-a',
+        "--additional-args",
+        "-a",
         default=DEFAULT_ADDITIONAL_ARGS,
-        nargs='?',
+        nargs="?",
         const=DEFAULT_ADDITIONAL_ARGS,
-        help=f'Additional arguments for replacement (default: "{DEFAULT_ADDITIONAL_ARGS}" - empty string). Use = syntax for arguments starting with --: --additional-args="--show-nodes"'
+        help=f'Additional arguments for replacement (default: "{DEFAULT_ADDITIONAL_ARGS}" - empty string). Use = syntax for arguments starting with --: --additional-args="--show-nodes"',
     )
 
     parser.add_argument(
-        '--output-dir', '-o',
+        "--output-dir",
+        "-o",
         default=DEFAULT_OUTPUT_DIR,
-        help=f'Output directory for generated SLURM files (default: {DEFAULT_OUTPUT_DIR})'
+        help=f"Output directory for generated SLURM files (default: {DEFAULT_OUTPUT_DIR})",
     )
 
     args = parser.parse_args()
@@ -216,12 +232,7 @@ Examples:
     for script in script_list:
         for scenario in scenario_list:
             result = process_template(
-                args.template,
-                script,
-                scenario,
-                args.time,
-                args.additional_args,
-                args.output_dir
+                args.template, script, scenario, args.time, args.additional_args, args.output_dir
             )
             if result:
                 generated_files.append(result)
@@ -238,5 +249,5 @@ Examples:
         sys.exit(1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

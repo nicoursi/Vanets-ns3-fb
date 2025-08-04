@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
-@file    sensors-fixedPositions.py
+@file    sensors_fixed_positions.py
 @author  Marco Romanelli [marco.romanelli.1@studenti.unipd.it]
 @date    2017-10-12
 """

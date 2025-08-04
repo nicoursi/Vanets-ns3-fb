@@ -1,6 +1,6 @@
 #!/bin/bash
 # This script runs an NS-3 simulation from within a Singularity container.
-# It uses the precompiled simulation binary directly (not waf), 
+# It uses the precompiled simulation binary directly (not waf),
 # which is needed for cluster execution.
 
 NS3_DIR="$1"
@@ -33,17 +33,14 @@ echo "========================"
 echo ""
 
 # Change to NS-3 directory and run the simulation
-cd ${NS3_DIR}
+cd "${NS3_DIR}" || exit
 echo "Changed directory to: $(pwd)"
 echo "Running: ./build/scratch/${SIMULATION_CMD}"
 echo "Start time: $(date)"
 
 # Run the command and capture its output to the log file
-if [ -n "$LOG_FILE" ]; then
-    ./build/scratch/${SIMULATION_CMD}
-else
-    ./build/scratch/${SIMULATION_CMD}
-fi
+# shellcheck disable=SC2086
+./build/scratch/${SIMULATION_CMD}
 
 EXIT_CODE=$?
 echo "End time: $(date)"

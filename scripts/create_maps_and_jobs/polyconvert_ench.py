@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
-@file    polyconvertEnch.py
+@file    polyconvert_ench.py
 @author  Marco Romanelli [marco.romanelli.1@studenti.unipd.it]
 @date    12-11-2017
 """

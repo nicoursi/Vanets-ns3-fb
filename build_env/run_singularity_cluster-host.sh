@@ -5,7 +5,7 @@
 SIF_IMAGE="singularity-ns3-image.sif"  # Singularity image name
 
 # Default mode
-DEFAULT_MODE="debug" # default
+DEFAULT_MODE="release" # default
 
 # Environment variables (same as in your docker-compose)
 # export CXXFLAGS="-Wall -O3" #for hardware specific optimizations
@@ -18,8 +18,7 @@ export CONFIGURE_OPTIONS="" # for debug
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Then call find_project_root.sh from there
-source $SCRIPT_DIR/find_project_root.sh
-status=$?
+source "$SCRIPT_DIR"/find_project_root.sh
 echo "Project path is $PROJECT_ROOT"
 if [[ -z "$PROJECT_ROOT" ]]; then
     # find_project_root.sh already printed the error
@@ -28,7 +27,7 @@ fi
 
 
 # Setup Singularity container path
-ENV_FOLDER="build-env"
+ENV_FOLDER="build_env"
 CONTAINER_PATH="${PROJECT_ROOT}/${ENV_FOLDER}/${SIF_IMAGE}"
 NS3_DIR="${PROJECT_ROOT}/ns-3/"
 echo "ns3_dir: $NS3_DIR"
@@ -108,8 +107,8 @@ case $COMMAND in
     build)
         echo "=== Configuring and building NS-3 (clean build) ==="
        	singularity exec \
-            --bind $NS3_DIR:/mnt \
-            $CONTAINER_PATH \
+            --bind "$NS3_DIR":/mnt \
+            "$CONTAINER_PATH" \
             bash -c "cd /mnt/ && \
                 ./waf configure ${CONFIGURE_OPTIONS} && \
                 ./waf clean && \
@@ -119,8 +118,8 @@ case $COMMAND in
     dirty-build)
         echo "=== Configuring and building NS-3 (dirty build) ==="
 	singularity exec \
-        --bind $NS3_DIR:/mnt \
-        $CONTAINER_PATH \
+        --bind "$NS3_DIR":/mnt \
+        "$CONTAINER_PATH" \
             bash -c "cd /mnt/ && \
                 ./waf configure ${CONFIGURE_OPTIONS} && \
                 ./waf build"
@@ -128,28 +127,28 @@ case $COMMAND in
 
     shell)
         echo "=== Opening shell in Singularity container ==="
-        singularity shell --bind $PROJECT_ROOT:/mnt \
-        $CONTAINER_PATH \
+        singularity shell --bind "$PROJECT_ROOT":/mnt \
+        "$CONTAINER_PATH" \
         ;;
 
     run)
         # Check if simulation command file is provided
-        if [ -z "$2" ]; then
+        if [ -z "$1" ]; then
             echo "Error: Simulation command file is required for 'run'"
             show_usage
         fi
 
         # Read simulation command from the file
-        if [ ! -f "$2" ]; then
+        if [ ! -f "$1" ]; then
             echo "Error: Simulation command file '$2' does not exist"
             exit 1
         fi
 
         # Read the file content into SIMULATION_CMD
-        SIMULATION_CMD=$(cat "$2")
+        SIMULATION_CMD=$(cat "$1")
 
         # Set RngRun value (default to 1 if not provided)
-        RNG_VALUE=${3:-1}
+        RNG_VALUE=${2:-1}
         export NS_GLOBAL_VALUE="RngRun=$RNG_VALUE"
         export NS_LOG="*=warn|prefix_func|prefix_time"
 
@@ -157,11 +156,12 @@ case $COMMAND in
         echo "=== Command: $SIMULATION_CMD ==="
         echo "=== Using $RNG_RUN ==="
 
+        # Bind the actual NS-3 directory and run the simulation
         singularity exec \
-            --bind $NS3_DIR:$NS3_DIR \
-            $CONTAINER_PATH \
-            bash -c "cd $NS3_DIR && ./waf --run \"${SIMULATION_CMD}\""
-        ;;       
+            --bind "$NS3_DIR":/mnt \
+            "$CONTAINER_PATH" \
+            bash -c "cd /mnt && ./waf --run \"${SIMULATION_CMD}\""
+        ;;
 
     *)
         echo "Error: Unknown command '$COMMAND'"

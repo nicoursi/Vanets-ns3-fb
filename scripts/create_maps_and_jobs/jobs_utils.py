@@ -1,17 +1,17 @@
-# jobsUtils.py
+# jobs_utils.py
 import os
 import sys
 
+
 def find_project_root(start_path=None):
-    """
-    Walks up from `start_path` (or current working dir) looking for a directory
-    containing BOTH 'ns-3' and 'simulations' subdirectories.
+    """Find the project root by walking up from a starting path.
+
+    Walk up from `start_path` (or the current working directory) until a directory
+    containing both 'ns-3' and 'simulations' subdirectories is found.
+
     Returns the absolute path if found, otherwise raises RuntimeError.
     """
-    if start_path is None:
-        current_dir = os.getcwd()
-    else:
-        current_dir = os.path.abspath(start_path)
+    current_dir = os.getcwd() if start_path is None else os.path.abspath(start_path)
 
     while True:
         ns3_path = os.path.join(current_dir, "ns-3")
@@ -25,9 +25,11 @@ def find_project_root(start_path=None):
             break
         current_dir = parent
 
+    msg = f"Could not find project root (looking for ns-3/ and simulations/)\nSearched from: {os.getcwd()}"
     raise RuntimeError(
-        f"Could not find project root (looking for ns-3/ and simulations/)\nSearched from: {os.getcwd()}"
+        msg,
     )
+
 
 # For testing standalone:
 if __name__ == "__main__":
