@@ -1,0 +1,83 @@
+---
+# .clang-format for ns-3 style
+# Based on the original ns-3.26 formatting conventions
+Language: Cpp
+# Use GNU base style for braces indentation
+BasedOnStyle: GNU
+
+# Basic indentation
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+
+# Return type goes on separate line above function name
+AlwaysBreakAfterReturnType: TopLevel
+
+# Binary operators (&&, ||, etc.) stay at end of line
+BreakBeforeBinaryOperators: None
+
+BraceWrapping:
+  AfterControlStatement: true
+  IndentBraces: true
+
+# Space before ALL parentheses (function calls, definitions, etc.)
+SpaceBeforeParens: Always
+
+# Basic alignment and spacing
+SpaceBeforeAssignmentOperators: true
+SpacesInParentheses: false
+SpaceInEmptyParentheses: false
+SpacesInAngles: false
+SpacesInSquareBrackets: false
+
+# Method chaining indentation (for .SetParent(), .AddAttribute(), etc.)
+ContinuationIndentWidth: 2
+
+# Don't pack parameters/arguments
+BinPackParameters: false
+BinPackArguments: false
+
+# Column limit - ns-3 allows longer lines
+ColumnLimit: 90
+
+# Pointer alignment
+PointerAlignment: Left
+
+# Comments
+ReflowComments: true
+SpacesBeforeTrailingComments: 1 
+FixNamespaceComments: true  # Add namespace closing comments
+
+# Keep access modifiers indented
+AccessModifierOffset: -2
+
+# Case label indentation
+IndentCaseLabels: true
+
+# Don't allow short functions on single line
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Never
+
+# Template formatting
+AlwaysBreakTemplateDeclarations: Yes
+
+# Don't sort includes
+SortIncludes: false
+
+# Align operands
+AlignOperands: Align
+
+# Max empty lines
+MaxEmptyLinesToKeep: 2
+
+# CONSTRUCTOR INITIALIZATION LIST FORMATTING
+# Break constructor initializers before colon and commas
+BreakConstructorInitializers: AfterColon
+# Put each constructor initializer on its own line
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+# Indent constructor initializers
+ConstructorInitializerIndentWidth: 2
+# Pack constructor initializers (set to false for one per line)
+PackConstructorInitializers: Never

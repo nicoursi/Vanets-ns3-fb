@@ -1,0 +1,6 @@
+[tool.ruff]
+select = ["N", "E", "F", "W", "B", "PL", "RUF", "S"]  # N = naming, E,F,W = common errors/warnings
+#select = ["ALL"]
+line-length = 100
+ignore = ["E501","F541", "T201", "W191"]  # Ignore line-too-long, f-string without placeholder, print statements
+#per-file-ignores = { "scripts/graphs/print_multiple_graphs.py" = ["N806"] }

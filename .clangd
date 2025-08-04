@@ -1,0 +1,25 @@
+CompileFlags:
+  CompilationDatabase: ./ns-3/build
+
+  # Optional: Uncomment and adjust the lines below to match your system’s GCC version and architecture.
+  # To find the correct values, run the following commands in your terminal:
+  #   gcc --version          # To check the GCC version (e.g., 11)
+  #   gcc -dumpmachine       # To get the target triple (e.g., x86_64-linux-gnu)
+
+  # Once you know your setup, uncomment the following section and replace version/paths as needed:
+  # Add:
+  #   - --gcc-toolchain=/usr/lib/gcc/x86_64-linux-gnu/11
+  #   - -I/usr/include/c++/11
+  #   - -I/usr/include/c++/11/x86_64-linux-gnu
+  #   - -I/usr/include/x86_64-linux-gnu/c++/11
+  #   - -I/usr/include/x86_64-linux-gnu
+  #   - -I/usr/include
+  #   - -I/usr/local/include
+
+  # ⚠️ These flags are specific to your system.
+  # To avoid accidentally committing them to Git, run the following command:
+  #   git update-index --assume-unchanged .clangd
+
+
+ 
+
