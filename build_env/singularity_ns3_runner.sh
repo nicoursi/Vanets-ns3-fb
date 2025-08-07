@@ -50,7 +50,7 @@ fi
 
 # Setup Singularity container path
 ENV_FOLDER="build_env"
-CONTAINER_PATH="${PROJECT_ROOT}/${ENV_FOLDER}/${SIF_IMAGE}"
+CONTAINER_PATH="${PROJECT_ROOT}/${ENV_FOLDER}/container/${SIF_IMAGE}"
 NS3_DIR="${PROJECT_ROOT}/ns-3/"
 echo "=== ns3_dir: $NS3_DIR"
 echo "=== CONTAINER_PATH ${CONTAINER_PATH}"

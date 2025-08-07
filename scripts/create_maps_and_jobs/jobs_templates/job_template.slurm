@@ -76,7 +76,7 @@ SIMULATION_CMD="{**command}" # Update this!
 
 # Setup Singularity container path
 ENV_FOLDER="build_env"
-CONTAINER_PATH="$PROJECT_PATH/$ENV_FOLDER/${IMAGE_NAME}"
+CONTAINER_PATH="$PROJECT_PATH/$ENV_FOLDER/container/${IMAGE_NAME}"
 
 echo "=== Simulation Parameters ==="
 echo "PROJECT_PATH: ${PROJECT_PATH}"
