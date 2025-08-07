@@ -6,6 +6,7 @@
 #     ./generate_maps_and_jobs.py
 # if you want to automatically generate jobs for the scenarios and distances set in the main
 
+# cspell:words jtoc jgottard jobarray
 import sys
 import shutil
 import argparse

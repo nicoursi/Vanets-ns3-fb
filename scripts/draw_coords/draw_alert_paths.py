@@ -84,7 +84,11 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
 
     # Calculate coordinate bounds
     node_bounds = coord_utils.calculate_coord_bounds(
-        x_node_coords, y_node_coords, starting_x, starting_y, config.circ_radius,
+        x_node_coords,
+        y_node_coords,
+        starting_x,
+        starting_y,
+        config.circ_radius,
     )
     node_x_min, node_x_max, node_y_min, node_y_max = node_bounds
     margin = max(config.circ_radius * 0.05, 100)
@@ -114,7 +118,12 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
     if hasattr(config, "show_nodes") and config.show_nodes:
         #        plt.plot(x_node_coords, y_node_coords, ".", markersize=5, color="red", alpha=0.3, label="All nodes")
         plt.plot(
-            x_node_coords, y_node_coords, ".", color="red", alpha=0.6, label="Not receiving nodes",
+            x_node_coords,
+            y_node_coords,
+            ".",
+            color="red",
+            alpha=0.6,
+            label="Not receiving nodes",
         )
         plt.plot(
             x_received_coords,
@@ -208,10 +217,16 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
     if hasattr(config, "debug") and config.debug:
         # BUG DETECTION: Check if circumference data is invalid
         circumference_candidates = find_circumference_candidates(
-            x_received_coords, y_received_coords, starting_x, starting_y, node_spacing, config,
+            x_received_coords,
+            y_received_coords,
+            starting_x,
+            starting_y,
+            node_spacing,
+            config,
         )
         received_on_circ_ids_fallback = coord_utils.find_node_ids_from_coords(
-            circumference_candidates, config.mobility_file,
+            circumference_candidates,
+            config.mobility_file,
         )
         if sorted(received_on_circ_ids_fallback) == sorted(received_on_circ_ids):
             print(
@@ -242,11 +257,17 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
             received_on_circ_ids = received_on_circ_ids_fallback
         else:
             circumference_candidates = find_circumference_candidates(
-                x_received_coords, y_received_coords, starting_x, starting_y, node_spacing, config,
+                x_received_coords,
+                y_received_coords,
+                starting_x,
+                starting_y,
+                node_spacing,
+                config,
             )
 
             received_on_circ_ids = coord_utils.find_node_ids_from_coords(
-                circumference_candidates, config.mobility_file,
+                circumference_candidates,
+                config.mobility_file,
             )
 
         print(f"Found {len(received_on_circ_ids)} circumference nodes using fallback method")
@@ -256,7 +277,8 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
         for sender, receivers in transmission_map.items():
             if circ_id in receivers:
                 last_forwarder_coord = coord_utils.find_coords_from_file(
-                    sender, config.mobility_file,
+                    sender,
+                    config.mobility_file,
                 )
                 circ_coord = coord_utils.find_coords_from_file(circ_id, config.mobility_file)
                 if last_forwarder_coord is not None and circ_coord is not None:
@@ -370,7 +392,7 @@ def main():
             {
                 "name": "--debug",
                 "action": "store_true",
-                "help": "Checks and report if the nodes on circunference metric"
+                "help": "Checks and report if the nodes on circumference metric"
                 " reported in the csv file corresponds to the reported receiving nodes",
             },
         ],

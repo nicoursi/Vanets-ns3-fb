@@ -660,7 +660,7 @@ def print_grid_comparison():
     # print_single_graph_line_comparison()
 
 
-# Given a scenario path and buildings/nobuildings, prints graphs for all
+# Given a scenario path and buildings/no-buildings, prints graphs for all
 # txRanges and protocols
 # Grid-300: contentionWindows = [{"cwMin": 16, "cwMax": 128}], buildings = ["0"],
 # junctions = ["0"], txRanges = ["100", "300", "500"]

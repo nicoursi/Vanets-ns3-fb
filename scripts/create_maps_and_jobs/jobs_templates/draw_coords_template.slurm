@@ -12,7 +12,7 @@
 #SBATCH --error=./logs/%x_id_%A_run_%a.err
 #SBATCH --output=./logs/%x_id_%A_run_%a.out
 
-### queue/partition choosed
+### queue/partition chosen
 #SBATCH --partition=allgroups
 
 ### Number of tasks
@@ -27,6 +27,8 @@
 ### GPU request
 ###SBATCH --gres=gpu
 ####SBATCH --constraint=A6000
+
+### spellchecker:words gres NODELIST allgroups ntasks
 
 ### Some useful informative commands
 echo -n 'Date: '
@@ -43,19 +45,18 @@ SHELL=/bin/bash
 CURRENT_DIR="$(pwd)"
 PROJECT_PATH=""
 while [[ "$CURRENT_DIR" != "/" ]]; do
- if [[ -d "$CURRENT_DIR/ns-3" ]] && [[ -d "$CURRENT_DIR/simulations" ]]; then
-     PROJECT_PATH="$CURRENT_DIR"
-     break
- fi
- CURRENT_DIR="$(dirname "$CURRENT_DIR")"
+    if [[ -d "$CURRENT_DIR/ns-3" ]] && [[ -d "$CURRENT_DIR/simulations" ]]; then
+        PROJECT_PATH="$CURRENT_DIR"
+        break
+    fi
+    CURRENT_DIR="$(dirname "$CURRENT_DIR")"
 done
 
 if [[ -z "$PROJECT_PATH" ]]; then
- echo "ERROR: Could not find project root (looking for $IMAGE_NAME and ns-3/)"
- echo "Searched from: $(pwd)"
- exit 1
+    echo "ERROR: Could not find project root (looking for $IMAGE_NAME and ns-3/)"
+    echo "Searched from: $(pwd)"
+    exit 1
 fi
-
 
 ### Jobs execution commands
 conda info --envs

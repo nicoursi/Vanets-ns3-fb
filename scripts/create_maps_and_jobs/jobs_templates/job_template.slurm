@@ -6,7 +6,7 @@
 ###SBATCH --mail-user=youremailaddress@email.com
 ###SBATCH --mail-type=FAIL
 
-### Job array specification %5 means maximum 5 jobs cuncurrently
+### Job array specification %5 means maximum 5 jobs concurrently
 #SBATCH --array={**jobarray}
 
 ### Standard output and error redirection
@@ -25,6 +25,8 @@
 
 ### Node constraint (if needed)
 ### SBATCH --constraint=debug02
+
+### spellchecker:words NODELIST allgroups jobarray localtime ntasks zoneinfo
 
 ### Find the actual project root
 IMAGE_NAME="singularity-ns3-image.sif"
