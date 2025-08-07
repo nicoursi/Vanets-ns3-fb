@@ -16,6 +16,7 @@
   - [5.1. Reproducibility](#51-reproducibility)
   - [5.2. Legacy Information](#52-legacy-information)
 
+<!--- cSpell:words fakeroot,dumpmachine, libboost, submitall,-->
 ## 1. Repository Setup
 
 ### 1.1. Clone the Repository
@@ -70,7 +71,7 @@ git push
 **Build the image locally:**
 
 ```bash
-cd build_env
+cd build_env/container
 singularity build --fakeroot singularity-ns3-image.sif singularity-ns3.def
 ```
 Once you created your container on your PC you can transfer the 'container.sif' file on the submit host of the cluster for execution. You can do it by using `sftp` or `sshfs`. ([More here](#4-working-on-the-cluster))
@@ -81,10 +82,10 @@ Alternatively you can use the remote build service for singularity (account requ
 
 ```bash
 # Build on cluster front-end host
-cd build_env
+cd build_env/container
 singularity-remote-build singularity-ns3-image.sif singularity-ns3.def singularity-ns3.log
 ```
-
+> **Note** Do not change the name of the **.sif** image!
 ## 3. Working Locally
 
 ### 3.1. Building and Running Simulations
@@ -181,7 +182,7 @@ To enable proper syntax highlighting and IntelliSense for the NS-3.26 project in
       sudo apt install libgtk-3-dev libxml2-dev
       ```
 
-      If you modify the `.clangd` as suggested above, please prevent git from tracking it as it contains system specific confugurations that should not be pushed:
+      If you modify the `.clangd` as suggested above, please prevent git from tracking it as it contains system specific configurations that should not be pushed:
 
       ```bash
        git update-index --assume-unchanged .clangd

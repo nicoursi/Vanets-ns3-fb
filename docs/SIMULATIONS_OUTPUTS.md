@@ -1,12 +1,13 @@
+<!-- omit in toc -->
 # Working with simulation outputs
-- [Working with simulation outputs](#working-with-simulation-outputs)
-  - [Comparison Graphs](#comparison-graphs)
-  - [Network visualization tool](#network-visualization-tool)
-- [Cluster Execution](#cluster-execution)
+- [1. Comparison Graphs](#1-comparison-graphs)
+- [2. Network visualization tool](#2-network-visualization-tool)
+  - [2.1. Cluster Execution](#21-cluster-execution)
 
-Simulation results are saved in the `simulations` folder. The folder contains multiple subfolders according to the different scenarios and parameters used for running the simulations. Each specific combination of parameters is run multiple times with progressive run numbers (id field in the csv file). As simulations are reproducible, if a simulation is run twice with the same run number (id) it should give the same results.
+Simulation results are saved in the `simulations` folder. The folder contains multiple sub-folders according to the different scenarios and parameters used for running the simulations. Each specific combination of parameters is run multiple times with progressive run numbers (id field in the csv file). As simulations are reproducible, if a simulation is run twice with the same run number (id) it should give the same results.
 
-## Comparison Graphs
+<!--- cSpell:words mapfolder,maxfiles,submitall, --->
+## 1. Comparison Graphs
 In the folder `scripts/graphs` there are multiple scripts for generating graphs. Currently only `print_protocol_comparison.py` has been tested and refactored. The other comparison scripts need testing and refactoring as the `print_single_graph()` function has more arguments now. [TODO]
 
 ```
@@ -15,7 +16,7 @@ usage: print_protocol_comparison.py [-h] [-p INITIAL_BASE_PATH] [-ft FILE_TYPE] 
                                     [-j JUNCTIONS] [-m METRICS] [-l] [-v]
 ```
 
-## Network visualization tool
+## 2. Network visualization tool
 In order to use the network visualization script you need to run simulations with  `--printCoords=1`. You can easily generate such jobs to be submitted to the cluster by using the `generate_maps_and_jobs.py` script.
 
 Example:
@@ -28,12 +29,12 @@ After having produced the csv files with coordinates, you can generate different
 
 1. **Alert Paths**: shows, starting from the source node all the path the alert message takes to reach all nodes.
 2. **Single Hops**: shows, for each hop, all the forwarders and the reached nodes
-3. **Network coverage**: Shows a map with red and green nodes. The first are nodes that never received the alert, the latter are the ones that received it.
-4. **Multiple Trasmissions**: shows for each transmission the node reached but a specific forwarder generating as many image files as the forwarders.
+3. **Network coverage**: Shows a map with red and green nodes. The former are nodes that never received the alert, the latter are the ones that received it.
+4. **Multiple transmissions**: shows for each transmission the node reached but a specific forwarder generating as many image files as the forwarders.
 
 The scripts able to produce visualizations all share the same common parameters except some exception. They can process a single csv file, or a whole folder recursively. The outputs are released by default in the `./out/` folder from the executing path using the same folder structure as the source files.
 
-The scripts able to produce the above mentioned network visualization graps are located in `scripts/draw_coords/ and are:
+The scripts able to produce the above mentioned network visualization graphs are located in `scripts/draw_coords/ and are:
 
 ```plaintext
 scripts/
@@ -55,7 +56,7 @@ cd scripts/draw_coords
 
 The command above will generate in the `.out` folder, unless specified otherwise, an Alert Path graph showing all the forwarders of an alert message for all  simulation configurations found for the LA-25 scenario. Maximum 3 simulations per configuration, unless specifically specified by the `--maxfiles` parameters.
 
-# Cluster Execution
+### 2.1. Cluster Execution
 
 If you need to process many CSV files, you can generate and submit jobs on the cluster. Here's how to do it:
 

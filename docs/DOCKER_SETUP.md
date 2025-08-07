@@ -1,7 +1,8 @@
+<!--- cSpell:words singlerun,-->
 # Docker container and related scripts (Deprecated)
 This project initially used Docker for local development and testing, but was later ported to Singularity for deployment on HPC clusters.
 
-Docker remains available but it is no longer mantained. All  docker scripts have been moved to the `build_env` folder without testing as they are deprecated. In case you need them, please test or move them back to the project's root folder. There is high chance they still work.
+Docker remains available but it is no longer maintained. All  docker scripts have been moved to the `build_env` folder without testing as they are deprecated. In case you need them, please test or move them back to the project's root folder. There is high chance they still work.
 
 ## Docker Commands 
 

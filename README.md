@@ -1,7 +1,8 @@
-# VANET Simulation Project with NS-3
+<!-- omit in toc -->
+# 1. VANETs Simulation Project with NS-3
 This repository contains my thesis project, which continues the work previously developed by Marco Barichello, Marco Simonelli and Jordan Gottardo. It focuses on VANET (Vehicular Ad‑hoc Network) simulations using NS‑3. It includes custom modifications to NS‑3 and various simulation scripts. The [ns-3](https://github.com/nicoursi/ns-3) folder is managed as a Git submodule and contains the original NS‑3.26 source code along with my modifications.
 
-## Repository Structure
+## 1. Repository Structure
 Simplified repository structure
 
 ```
@@ -25,44 +26,33 @@ Simplified repository structure
 
 ```
 
-## Getting Started
+## 2. Getting Started
 
-See the [Getting Started](docs/GETTING_STARTED.md) section for detailed setup and usage instructions.
+Start from the [Getting Started](docs/GETTING_STARTED.md) section for detailed setup and usage instructions.
 
-### Cluster Access Setup
-See the [Cluster Access Setup](docs/CLUSTER_ACCESS_SETUP.md) section for detailed instructions.
+### 2.1. Cluster Access Setup
 
-### Cluster Commands Cheat Sheet
+Some useful info about [Cluster Access Setup](docs/CLUSTER_ACCESS_SETUP.md).
 
-If you are running simulations on the cluster or need quick references for Slurm and related commands, check the [Cluster Cheat Sheet](docs/CLUSTER_CHEAT_SHEET.md).
+### 2.2. Cluster Commands Cheat Sheet
 
-## Working with simulation outputs
+Handy collection of frequently used commands: [Cluster Cheat Sheet](docs/CLUSTER_CHEAT_SHEET.md).
+
+## 3. Working with Simulation Outputs
+
 See the [Simulation Outputs](docs/SIMULATIONS_OUTPUTS.md) document for details on how to generate comparison graphs, network visualizations and general info on the simulation outputs.
 
-## Creating Maps
+## 4. Creating Maps and Jobs
 
-Generate mobility and polygon files for simulations. Generated files are placed in the `maps` folder. For detailed instructions see [Maps](docs/MAPS.md)
-****
+For instructions about generating mobility and polygon `xml` files or `.slurm` jobs for executing the NS-3 simulations, check [Creating Jobs and Maps](/docs/CREATING_MAPS_AND_JOBS.md).
 
-## NS-3 Modifications
+## 5. NS-3 Modifications
 
-To see the modifications applied the to NS-3 code refer to th dedicated NS-3 [README](https://github.com/nicoursi/ns-3) file from the NS-3 submodule.
+To see the modifications applied to the NS-3 code refer to th dedicated NS-3 [README](https://github.com/nicoursi/ns-3) file from the NS-3 submodule.
 
-## Key Features
-
-- **Submodule Management**: Clean separation between official NS-3 and custom modifications
-- **Docker Environment**: Consistent simulation environment across platforms (deprecated)
-- **Cluster Support**: Singularity container for HPC cluster deployment
-- **Automated Testing**: Scripts for running multiple simulation iterations locally
-- **Custom Protocols**: Implementation of VANET-specific protocols (ROFF, Fast Broadcast)
-
-## Contributing
+## 6. Contributing
 
 1. Always work on the appropriate branch in the NS-3 submodule
 2. Commit changes to NS-3 first, then update the main repository
-3. Test modifications using the Docker environment before pushing
+3. Test modifications before pushing
 4. Use the provided scripts for consistent simulation runs
-
-## Support
-
-For questions about NS-3 modifications or simulation setup, refer to the code documentation in the respective source files.
