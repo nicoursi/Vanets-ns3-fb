@@ -107,7 +107,7 @@ alias umount-cluster='fusermount -u ~/cluster_mount'
 ```
 
 ## 5. Sourcing aliases on the cluster submit hosts:
-I maintain a cluster-specific `.bashrc` file containing useful aliases for this project.
+I maintain a cluster-specific `**.bashrc**` file, located in the `build_env` folder, containing useful aliases for this project.
 To ensure it gets sourced automatically, run the following script on one of the cluster submit hosts:
 
 ```

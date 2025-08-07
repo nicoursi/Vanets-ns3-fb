@@ -5,20 +5,21 @@ This repository contains my thesis project, which continues the work previously 
 Simplified repository structure
 
 ```
-├── build_env               # Scripts for running and building NS-3 simulations
-│   ├── 
+├── build_env                         # Scripts for running and building NS-3 simulations
+│   ├── container/
+│   │   ├── singularity-ns3.def       # Singularity container definition
+│   │   └── singularity-ns3-image.sif # Singularity container image (to be built!)
 │   ├── batch2_simulations_with_singularity.sh
 │   ├── singularity_ns3_runner.sh
-│   ├── singularity-ns3.def # Singularity container definition
 │   └── ...
 ├── docs                    # Documentation folder
-├── maps/                   # Mobility and poly files needed to run simulations
+├── maps/                   # Mobility and polygon files needed to run simulations
 ├── ns-3/                   # NS-3 submodule (official repo + modifications)
-├── scheduled_jobs/          # Advised folder for slurm jobs to be executed
+├── scheduled_jobs/         # Advised folder for slurm jobs to be executed
 ├── scripts/
 │   ├── create_maps_and_jobs/
 │   ├── draw_coords/        # Scripts for generating Network visualization graphs
-│   ├── graphs/             # Scripts for generating comparison graphs polygon files
+│   └── graphs/             # Scripts for generating comparison graphs
 ├── simulations/            # Simulation outputs in csv format
 └── README.md               # This file
 
