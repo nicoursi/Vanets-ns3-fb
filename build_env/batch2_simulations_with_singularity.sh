@@ -36,20 +36,20 @@ B1_CORES_MAX=2
 
 for arg in "$@"; do
   case "$arg" in
-    --reverse) REVERSE_SORT=true ;;
-    --strategy=*) STRATEGY="${arg#*=}" ;;
-    --test) TEST_MODE=true ;;
-    --b1-first) B1_FIRST=true ;;
-    --bmode=*) BMODE="${arg#*=}" ;;
-    --concurrent) CONCURRENT=true ;;
-    --b1-cores=*)
-      B1_CORES_MAX="${arg#*=}"
-      # Make sure B1 cores is never more than 2 (for safety)
-      if [ "$B1_CORES_MAX" -gt 2 ]; then
-        echo -e "${YELLOW}Warning: B1 cores limited to 2 to prevent swapping issues.${RESET}"
-        B1_CORES_MAX=2
-      fi
-      ;;
+  --reverse) REVERSE_SORT=true ;;
+  --strategy=*) STRATEGY="${arg#*=}" ;;
+  --test) TEST_MODE=true ;;
+  --b1-first) B1_FIRST=true ;;
+  --bmode=*) BMODE="${arg#*=}" ;;
+  --concurrent) CONCURRENT=true ;;
+  --b1-cores=*)
+    B1_CORES_MAX="${arg#*=}"
+    # Make sure B1 cores is never more than 2 (for safety)
+    if [ "$B1_CORES_MAX" -gt 2 ]; then
+      echo -e "${YELLOW}Warning: B1 cores limited to 2 to prevent swapping issues.${RESET}"
+      B1_CORES_MAX=2
+    fi
+    ;;
   esac
 done
 
@@ -74,7 +74,7 @@ log() {
   echo -e "$@"
 
   # Strip color codes and write plain text to the log file
-  echo -e "$@" | sed 's/\x1b\[[0-9;]*m//g' >> "$LOG_FILE"
+  echo -e "$@" | sed 's/\x1b\[[0-9;]*m//g' >>"$LOG_FILE"
 }
 
 log "$(date +"%Y-%m-%d %H:%M:%S") ${BLUE}Starting batch simulation with instance ID: ${INSTANCE_ID}${RESET} PID:$$"
@@ -86,13 +86,12 @@ LAST_JOB_END_FILE="$LOG_DIR/last_job_end_${INSTANCE_ID}.txt"
 # Initialize script start time (different from first job time)
 SCRIPT_START_TIME=$(date +%s)
 
-
 # Function to display statistics
 display_stats() {
   # Count completed jobs for this instance
   completed_count=0
   if [ -f "$LOG_DIR/instance_jobs_${INSTANCE_ID}.txt" ]; then
-    completed_count=$(wc -l < "$LOG_DIR/instance_jobs_${INSTANCE_ID}.txt")
+    completed_count=$(wc -l <"$LOG_DIR/instance_jobs_${INSTANCE_ID}.txt")
   fi
 
   # If no jobs completed yet, show script runtime stats only
@@ -163,11 +162,11 @@ display_stats() {
       b1_count=0
 
       if [ -f "$LOG_DIR/instance_b0_jobs_${INSTANCE_ID}.txt" ]; then
-        b0_count=$(wc -l < "$LOG_DIR/instance_b0_jobs_${INSTANCE_ID}.txt")
+        b0_count=$(wc -l <"$LOG_DIR/instance_b0_jobs_${INSTANCE_ID}.txt")
       fi
 
       if [ -f "$LOG_DIR/instance_b1_jobs_${INSTANCE_ID}.txt" ]; then
-        b1_count=$(wc -l < "$LOG_DIR/instance_b1_jobs_${INSTANCE_ID}.txt")
+        b1_count=$(wc -l <"$LOG_DIR/instance_b1_jobs_${INSTANCE_ID}.txt")
       fi
 
       # Calculate B0/B1 jobs per hour
@@ -192,23 +191,22 @@ display_stats() {
 
 # Function to kill containers and parallel jobs
 killeverything() {
-#  log "${RED}Killing Docker containers...${RESET}"
-#  docker ps --format '{{.Names}}' | grep "i${INSTANCE_ID}_" | xargs -r docker stop
+  #  log "${RED}Killing Docker containers...${RESET}"
+  #  docker ps --format '{{.Names}}' | grep "i${INSTANCE_ID}_" | xargs -r docker stop
   log "${YELLOW}Killing parallel child jobs...${RESET}"
   pkill -P $$
 }
-
 
 # Unified trap handler
 handle_signal() {
   local signal="$1"
   case "$signal" in
-    SIGINT|SIGTERM)
-      interactive_cleanup
-      ;;
-    SIGHUP)
-      noninteractive_cleanup
-      ;;
+  SIGINT | SIGTERM)
+    interactive_cleanup
+    ;;
+  SIGHUP)
+    noninteractive_cleanup
+    ;;
   esac
 }
 
@@ -234,10 +232,8 @@ noninteractive_cleanup() {
   exit 1
 }
 
-
-
 TEMP_RUNNER=$(mktemp)
-cat > "$TEMP_RUNNER" << 'EOL'
+cat >"$TEMP_RUNNER" <<'EOL'
 #!/bin/bash
 job_file="$1"
 run_number="$2"
@@ -271,7 +267,7 @@ echo ">>> [${job_name}_run${run_number}] Started at $start_readable" >> "$LOG_DI
 fullrun_log "\n[${job_name}_run${run_number}] ${RED}Started at${RESET} $start_short"
 
 #docker compose run --rm --name "$container_tag" "$DOCKER_SERVICE" &>> "$LOG_DIR/${job_name}_run${run_number}.log"
-$SCRIPT_DIR/run_singularity_local.sh run $SIMULATION_CMD "$run_number" &>> "$LOG_DIR/${job_name}_run${run_number}.log"
+$SCRIPT_DIR/singularity_ns3_runner.sh run $SIMULATION_CMD "$run_number" &>> "$LOG_DIR/${job_name}_run${run_number}.log"
 exit_code=$?
 
 # Track job start/end times for statistics
@@ -372,50 +368,50 @@ done
 
 # Apply BMODE filtering
 case "$BMODE" in
-  b1)
-    B0_FILES=()
-    log "${BLUE}Only B1 jobs will be executed (--bmode=b1)${RESET}"
-    ;;
-  b0)
-    B1_FILES=()
-    log "${BLUE}Only B0 jobs will be executed (--bmode=b0)${RESET}"
-    ;;
-  both) ;; # default behavior
-  *)
-    log "${RED}Invalid bmode: $BMODE${RESET}"
-    exit 1
-    ;;
+b1)
+  B0_FILES=()
+  log "${BLUE}Only B1 jobs will be executed (--bmode=b1)${RESET}"
+  ;;
+b0)
+  B1_FILES=()
+  log "${BLUE}Only B0 jobs will be executed (--bmode=b0)${RESET}"
+  ;;
+both) ;; # default behavior
+*)
+  log "${RED}Invalid bmode: $BMODE${RESET}"
+  exit 1
+  ;;
 esac
 
 generate_job_list() {
   local job_list_file=$1
   local job_files=("${@:2}")
   case "$STRATEGY" in
-    batch)
-      for job_file in "${job_files[@]}"; do
-        for ((run=1; run<=NUM_RUNS; run++)); do
-          echo "$job_file $run" >> "$job_list_file"
-        done
+  batch)
+    for job_file in "${job_files[@]}"; do
+      for ((run = 1; run <= NUM_RUNS; run++)); do
+        echo "$job_file $run" >>"$job_list_file"
       done
-      ;;
-    round-robin)
-      for ((run=1; run<=NUM_RUNS; run++)); do
-        for job_file in "${job_files[@]}"; do
-          echo "$job_file $run" >> "$job_list_file"
-        done
-      done
-      ;;
-    shuffled)
+    done
+    ;;
+  round-robin)
+    for ((run = 1; run <= NUM_RUNS; run++)); do
       for job_file in "${job_files[@]}"; do
-        for ((run=1; run<=NUM_RUNS; run++)); do
-          echo "$job_file $run"
-        done
-      done | shuf >> "$job_list_file"
-      ;;
-    *)
-      log "${RED}Invalid strategy: $STRATEGY${RESET}"
-      exit 1
-      ;;
+        echo "$job_file $run" >>"$job_list_file"
+      done
+    done
+    ;;
+  shuffled)
+    for job_file in "${job_files[@]}"; do
+      for ((run = 1; run <= NUM_RUNS; run++)); do
+        echo "$job_file $run"
+      done
+    done | shuf >>"$job_list_file"
+    ;;
+  *)
+    log "${RED}Invalid strategy: $STRATEGY${RESET}"
+    exit 1
+    ;;
   esac
 }
 
@@ -427,11 +423,11 @@ generate_job_list "$B1_JOB_LIST" "${B1_FILES[@]}"
 
 COMBINED_JOB_LIST=$(mktemp)
 if $B1_FIRST; then
-  cat "$B1_JOB_LIST" > "$COMBINED_JOB_LIST"
-  cat "$B0_JOB_LIST" >> "$COMBINED_JOB_LIST"
+  cat "$B1_JOB_LIST" >"$COMBINED_JOB_LIST"
+  cat "$B0_JOB_LIST" >>"$COMBINED_JOB_LIST"
 else
-  cat "$B0_JOB_LIST" > "$COMBINED_JOB_LIST"
-  cat "$B1_JOB_LIST" >> "$COMBINED_JOB_LIST"
+  cat "$B0_JOB_LIST" >"$COMBINED_JOB_LIST"
+  cat "$B1_JOB_LIST" >>"$COMBINED_JOB_LIST"
 fi
 
 # Set B0 cores to use all available cores minus B1 cores when running concurrently
@@ -501,27 +497,27 @@ fi
 read -p "Do you want to run a dirty-build or fullbuild with cleanup before running the simulations? (d[irty]/f[ull]/n[o]): " choice
 
 case "$choice" in
-  [Dd])
-    log "Running dirty-build..."
-    $SCRIPT_DIR/run_singularity_local.sh dirty-build
-    result=$?
-    if [ $result -ne 0 ]; then
-      log "Dirty-build failed (exit code $result). Exiting."
-      exit $result
-    fi
-    ;;
-  [Ff])
-    log "Running full build..."
-    $SCRIPT_DIR/run_singularity_local.sh build
-    result=$?
-    if [ $result -ne 0 ]; then
-      log "Full build failed (exit code $result). Exiting."
-      exit $result
-    fi
-    ;;
-  *)
-    log "Skipping build."
-    ;;
+[Dd])
+  log "Running dirty-build..."
+  $SCRIPT_DIR/singularity_ns3_runner.sh dirty-build
+  result=$?
+  if [ $result -ne 0 ]; then
+    log "Dirty-build failed (exit code $result). Exiting."
+    exit $result
+  fi
+  ;;
+[Ff])
+  log "Running full build..."
+  $SCRIPT_DIR/singularity_ns3_runner.sh build
+  result=$?
+  if [ $result -ne 0 ]; then
+    log "Full build failed (exit code $result). Exiting."
+    exit $result
+  fi
+  ;;
+*)
+  log "Skipping build."
+  ;;
 esac
 echo "Scriptdir: $SCRIPT_DIR"
 export LOG_DIR
@@ -546,20 +542,26 @@ if $CONCURRENT; then
 
   # Start B0 jobs in background
   if [ ${#B0_FILES[@]} -gt 0 ]; then
-    (cat "$B0_JOB_LIST" | parallel -j "$B0_CORES" --line-buffer --colsep ' ' "$TEMP_RUNNER" {1} {2}; echo "B0_DONE" > "$B0_PIPE") &
+    (
+      cat "$B0_JOB_LIST" | parallel -j "$B0_CORES" --line-buffer --colsep ' ' "$TEMP_RUNNER" {1} {2}
+      echo "B0_DONE" >"$B0_PIPE"
+    ) &
     B0_PID=$!
     log "${GREEN}Startied B0 jobs with $B0_CORES cores$ PID: $B0_PID${RESET} "
   else
-    echo "B0_DONE" > "$B0_PIPE" &
+    echo "B0_DONE" >"$B0_PIPE" &
   fi
 
   # Start B1 jobs in background
   if [ ${#B1_FILES[@]} -gt 0 ]; then
-    (cat "$B1_JOB_LIST" | parallel -j "$B1_CORES" --line-buffer --colsep ' ' "$TEMP_RUNNER" {1} {2}; echo "B1_DONE" > "$B1_PIPE") &
+    (
+      cat "$B1_JOB_LIST" | parallel -j "$B1_CORES" --line-buffer --colsep ' ' "$TEMP_RUNNER" {1} {2}
+      echo "B1_DONE" >"$B1_PIPE"
+    ) &
     B1_PID=$!
     log "${YELLOW}Started B1 jobs with $B1_CORES cores (max $B1_CORES_MAX) PID: $B1_PID${RESET}"
   else
-    echo "B1_DONE" > "$B1_PIPE" &
+    echo "B1_DONE" >"$B1_PIPE" &
   fi
 
   # Wait for both types of jobs to complete using more efficient approach
@@ -569,7 +571,7 @@ if $CONCURRENT; then
   if [ ${#B0_FILES[@]} -gt 0 ]; then
     {
       # Read from pipe in background - blocks until data is available
-      read line < "$B0_PIPE"
+      read line <"$B0_PIPE"
       if [ "$line" = "B0_DONE" ]; then
         log "${GREEN}✅ All B0 jobs completed${RESET}"
       fi
@@ -583,7 +585,7 @@ if $CONCURRENT; then
   if [ ${#B1_FILES[@]} -gt 0 ]; then
     {
       # Read from pipe in background - blocks until data is available
-      read line < "$B1_PIPE"
+      read line <"$B1_PIPE"
       if [ "$line" = "B1_DONE" ]; then
         log "${YELLOW}✅ All B1 jobs completed${RESET}"
       fi

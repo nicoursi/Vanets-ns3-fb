@@ -6,9 +6,11 @@ Simplified repository structure
 
 ```
 ├── build_env               # Scripts for running and building NS-3 simulations
-│   ├── run_singularity_cluster-host.sh
-│   ├── run_singularity_local.sh
-│   └── singularity-ns3.def # Singularity container definition
+│   ├── 
+│   ├── batch2_simulations_with_singularity.sh
+│   ├── singularity_ns3_runner.sh
+│   ├── singularity-ns3.def # Singularity container definition
+│   └── ...
 ├── docs                    # Documentation folder
 ├── maps/                   # Mobility and poly files needed to run simulations
 ├── ns-3/                   # NS-3 submodule (official repo + modifications)

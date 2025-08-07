@@ -101,13 +101,7 @@ Submit a job:
 sbatch file.slurm
 ```
 
-Command for building the ns3 project. You can use the `run_singularity_cluster-host.sh build` instead
-
-```
-singularity exec --bind /home/nursino/storage/Vanets-ns3-fb/ns-3:/home/nursino/storage/Vanets-ns3-fb/ns-3 $SIF_IMAGE bash -c "cd $NS3_DIR &&  ./waf configure && ./waf build
-```
-
-Move a folder from the cluster. add -n for dry run (just test no transfer)
+Move a folder from the cluster to your local machine. Add -n for dry run (just test no transfer)
 
 ```
 rsync -avz --progress --partial --append-verify --remove-source-files cluster:/storage/nursino/Vanets-ns3-fb/scripts/draw_coords/out/ /media/Dati-2/tesi/network-visual/from-cluster/
