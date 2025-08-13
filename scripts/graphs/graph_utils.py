@@ -169,16 +169,14 @@ def calculate_mean_and_conf_int(data_list, static=False, cast_to_int=False):
 
 def read_csv_from_directory(path, roff=False, static=False):
     """Read CSV files from a directory and calculate statistics.
-
     Args:
         path: Directory path containing CSV files
         roff: Boolean flag (unused in current implementation)
         static: Boolean flag passed to calculate_mean_and_conf_int
-
     Returns:
         dict: Dictionary containing calculated means and confidence intervals
-
     """
+
     total_nodes = []
     nodes_on_circ = []
     total_coverage = []
@@ -199,49 +197,81 @@ def read_csv_from_directory(path, roff=False, static=False):
             continue
 
         with open(full_path) as file:
-            rows = list(csv.reader(file, delimiter=","))
-            if len(rows) <= 1:
-                print(f"Skipping empty or malformed file: {file_name}")
+            # Use DictReader to read by column headers
+            reader = csv.DictReader(file)
+
+            # Check if required columns exist
+            required_columns = [
+                "Total nodes",
+                "Nodes on circ",
+                "Total coverage",
+                "Coverage on circ",
+                "Hops",
+                "Slots",
+                "Messages sent",
+            ]
+
+            missing_columns = [col for col in required_columns if col not in reader.fieldnames]
+            if missing_columns:
+                print(f"Skipping {file_name}: Missing columns {missing_columns}")
                 continue
 
-            for i, row in enumerate(rows[1:]):
+            row_count = 0
+            for row in reader:
+                row_count += 1
                 try:
-                    # Skip if any value is invalid (None, empty, or 'nan' entries)
+                    # Skip if any required value is invalid
                     invalid_values = ("", "-nan", "nan", None)
-                    if any(value in invalid_values or value == "nan" for value in row):
-                        print(f"Skipping incomplete row in {file_name} line {i + 2}: {row}")
-                        continue  # Skip this row if it has any invalid value
+                    required_values = [
+                        row["Total nodes"],
+                        row["Nodes on circ"],
+                        row["Total coverage"],
+                        row["Coverage on circ"],
+                        row["Hops"],
+                        row["Slots"],
+                        row["Messages sent"],
+                    ]
 
-                    total_nodes.append(int(row[5]))
-                    nodes_on_circ.append(int(row[6]))
-                    total_coverage.append(int(row[7]))
-                    cov_on_circ.append(int(row[8]))
+                    if any(value in invalid_values or value == "nan" for value in required_values):
+                        print(f"Skipping incomplete row in {file_name} line {row_count + 1}: {row}")
+                        print()
+                        continue
 
-                    hops.append(float(row[10]))
-                    slots.append(float(row[11]))
-                    message_sent.append(int(row[12]))
+                    # Extract values using column names
+                    total_nodes_val = int(row["Total nodes"])
+                    nodes_on_circ_val = int(row["Nodes on circ"])
+                    total_coverage_val = int(row["Total coverage"])
+                    cov_on_circ_val = int(row["Coverage on circ"])
+                    hops_val = float(row["Hops"])
+                    slots_val = float(row["Slots"])
+                    message_sent_val = int(row["Messages sent"])
 
-                    total_coverage_percent.append(
-                        (float(total_coverage[-1]) / float(total_nodes[-1])) * 100,
-                    )
-                    cov_on_circ_percent.append(
-                        (float(cov_on_circ[-1]) / float(nodes_on_circ[-1])) * 100,
-                    )
+                    # Append to lists
+                    total_nodes.append(total_nodes_val)
+                    nodes_on_circ.append(nodes_on_circ_val)
+                    total_coverage.append(total_coverage_val)
+                    cov_on_circ.append(cov_on_circ_val)
+                    hops.append(hops_val)
+                    slots.append(slots_val)
+                    message_sent.append(message_sent_val)
+
+                    # Calculate percentages
+                    total_coverage_percent.append((total_coverage_val / total_nodes_val) * 100)
+                    cov_on_circ_percent.append((cov_on_circ_val / nodes_on_circ_val) * 100)
 
                 except Exception as e:
-                    print(f"Skipping bad row in {file_name} line {i + 2}: {row}")
+                    print(f"Skipping bad row in {file_name} line {row_count + 1}: {row}")
                     print(f" -> {e}")
                     continue
 
-    print(f"Finished reading: {path}")
+    print(f"==> Finished reading: {path}")
 
+    # Calculate statistics
     total_cov_mean, total_cov_conf_int = calculate_mean_and_conf_int(total_coverage_percent)
     cov_on_circ_mean, cov_on_circ_conf_int = calculate_mean_and_conf_int(cov_on_circ_percent)
     hops_mean, hops_conf_int = calculate_mean_and_conf_int(hops, static)
     message_sent_mean, message_sent_conf_int = calculate_mean_and_conf_int(
-        message_sent,
-        False,
-        True,
+        message_sent, False, True
     )
     slots_waited_mean, slots_waited_conf_int = calculate_mean_and_conf_int(slots, False, True)
 

@@ -387,14 +387,15 @@ def parse_transmission_vector(
     return transmission_vector
 
 
+import csv
+
+
 def parse_file(file_path, ns2_mobility_file):
     """
-    Parse simulation CSV file and extract all relevant data.
-
+    Parse simulation CSV file and extract all relevant data using column names.
     Args:
         file_path (str): Path to CSV file to parse
         ns2_mobility_file (str): Path to NS2 mobility file
-
     Returns:
         tuple: Contains all parsed simulation data including:
             - tx_range, starting coordinates, vehicle info
@@ -415,22 +416,30 @@ def parse_file(file_path, ns2_mobility_file):
     starting_y = 0
 
     with open(file_path, "r") as file:
-        csv_file = csv.reader(file, delimiter=",")
-        next(csv_file)
-        line = next(csv_file)
-        tx_range = int(line[2])
-        starting_x = float(line[14])
-        starting_y = float(line[15])
-        starting_vehicle = int(line[16])
-        vehicle_distance = int(line[17])
-        received_ids = line[18]
-        raw_node_ids = line[19]
-        node_ids = [x for x in raw_node_ids.split("_") if x]  # Python 3 compatible
+        csv_reader = csv.DictReader(file)
+
+        # Get the first (and presumably only) data row
+        raw_row = next(csv_reader)
+
+        # Strip whitespace from column names
+        row = {key.strip(): value for key, value in raw_row.items()}
+
+        # Extract values using column names
+        tx_range = int(row["Actual Range"])
+        starting_x = float(row["Starting x"])
+        starting_y = float(row["Starting y"])
+        starting_vehicle = int(row["Starting node"])
+        vehicle_distance = int(row["Vehicle distance"])
+        received_ids = row["Received node ids"]
+        raw_node_ids = row["Node ids"]
+        raw_transmission_map = row["Transmission map"]
+        received_on_circ_ids = row["Received on circ nodes"]
+        raw_transmission_vector = row["Transmission vector"]
+
+        # Process the extracted data
+        node_ids = [x for x in raw_node_ids.split("_") if x]
         x_received_coords, y_received_coords = retrieve_coords(received_ids, ns2_mobility_file)
         x_node_coords, y_node_coords = retrieve_coords(raw_node_ids, ns2_mobility_file)
-        raw_transmission_map = line[20]
-        received_on_circ_ids = line[21]
-        raw_transmission_vector = line[22]
         received_coords_on_circ = retrieve_coords_as_vector(
             received_on_circ_ids,
             ns2_mobility_file,
@@ -455,6 +464,93 @@ def parse_file(file_path, ns2_mobility_file):
         transmission_vector,
         node_ids,
     )
+
+
+def parse_file(file_path, ns2_mobility_file):
+    """
+    Parse simulation CSV file and extract all relevant data using column names.
+    Args:
+        file_path (str): Path to CSV file to parse
+        ns2_mobility_file (str): Path to NS2 mobility file
+    Returns:
+        tuple: Contains all parsed simulation data including:
+            - tx_range, starting coordinates, vehicle info
+            - coordinate lists, transmission maps and vectors
+            - node IDs and received coordinates
+    """
+    starting_vehicle = 0
+    vehicle_distance = 0
+    tx_range = 0
+    x_received_coords = []
+    y_received_coords = []
+    x_node_coords = []
+    y_node_coords = []
+    raw_node_ids = []
+    received_ids = []
+    received_coords_on_circ = []
+    starting_x = 0
+    starting_y = 0
+
+    with open(file_path, "r") as file:
+        csv_reader = csv.DictReader(file)
+
+        # Get the first (and presumably only) data row
+        raw_row = next(csv_reader)
+
+        # Strip quotes from column names
+        row = {key.strip().strip('"'): value for key, value in raw_row.items()}
+
+        # Extract values using column names
+        tx_range = int(row["Actual Range"])
+        starting_x = float(row["Starting x"])
+        starting_y = float(row["Starting y"])
+        starting_vehicle = int(row["Starting node"])
+        vehicle_distance = int(row["Vehicle distance"])
+        received_ids = row["Received node ids"]
+        raw_node_ids = row["Node ids"]
+        raw_transmission_map = row["Transmission map"]
+        received_on_circ_ids = row["Received on circ nodes"]
+        raw_transmission_vector = row["Transmission vector"]
+
+        # Process the extracted data
+        node_ids = [x for x in raw_node_ids.split("_") if x]
+        x_received_coords, y_received_coords = retrieve_coords(received_ids, ns2_mobility_file)
+        x_node_coords, y_node_coords = retrieve_coords(raw_node_ids, ns2_mobility_file)
+        received_coords_on_circ = retrieve_coords_as_vector(
+            received_on_circ_ids,
+            ns2_mobility_file,
+        )
+        received_on_circ_ids = [x for x in received_on_circ_ids.split("_") if x]
+        transmission_map = parse_transmission_map(raw_transmission_map)
+        transmission_vector = parse_transmission_vector(raw_transmission_vector)
+
+    return (
+        tx_range,
+        starting_x,
+        starting_y,
+        starting_vehicle,
+        vehicle_distance,
+        x_received_coords,
+        y_received_coords,
+        x_node_coords,
+        y_node_coords,
+        transmission_map,
+        received_coords_on_circ,
+        received_on_circ_ids,
+        transmission_vector,
+        node_ids,
+    )
+
+
+# Usage example:
+# Method 1: Using the tuple return (same as before but with column names)
+# result = parse_file("data.csv", "mobility.txt")
+# tx_range, starting_x, starting_y, ... = result
+
+# Method 2: Using the dictionary return (more readable)
+# data = parse_file_dict("data.csv", "mobility.txt")
+# print(f"TX Range: {data['tx_range']}")
+# print(f"Starting position: ({data['starting_x']}, {data['starting_y']})")
 
 
 def plot_shape(shape, p_color="red", p_alpha=0.15):
