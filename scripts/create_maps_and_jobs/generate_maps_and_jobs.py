@@ -32,6 +32,7 @@ def parse_arguments():
     default_junctions = ["0"]
     default_protocols = ["1", "2", "3", "4", "5", "6"]
     default_tx_ranges = ["100", "300", "500", "700"]
+    default_tx_powers = ""
     default_job_template = "job_template.slurm"
     default_job_template_only_command = "job_template_only_command.job"
     project_root = find_project_root()
@@ -196,7 +197,13 @@ Examples:
         default=",".join(default_tx_ranges),
         help=f"Comma-separated list of transmission ranges (default: {','.join(default_tx_ranges)})",
     )
-
+    parser.add_argument(
+        "--txPowers",
+        "-tp",
+        type=str,
+        default=",".join(default_tx_powers),
+        help=f"Comma-separated list of transmission powers per transfer ranges (format: (tx_range:tx_power) default: {','.join(default_tx_powers)})",
+    )
     parser.add_argument(
         "--neededTime",
         "-nt",
@@ -324,6 +331,7 @@ def run_scenario(
     junctions = config["junctions"]
     protocols = config["protocols"]
     tx_ranges = config["txRanges"]
+    tx_powers = config["txPowers"]
     jobs_path = Path(config["jobsPath"])
     gen_loss_file = config["genLossFile"]
     only_command = config["onlyCommand"]
@@ -459,7 +467,8 @@ def run_scenario(
                                         f"\n  --distanceRange=1 \\"
                                         f"\n  --forgedCoordTest=0 \\"
                                         f"\n  --forgedCoordRate=0 \\"
-                                        f"\n  --maxRun=1"
+                                        f"\n  --maxRun=1 \\"
+                                        f"\n  {f'--txPower={tx_powers[int(tx_range)]}' if int(tx_range) in tx_powers else ''}"
                                     )
                                 else:
                                     command = (
@@ -486,7 +495,8 @@ def run_scenario(
                                         f"\n  --useObstacleShadowingLossFile={use_obstacle_shadowing_loss_file} \\"
                                         f"\n  --forgedCoordTest=0 \\"
                                         f"\n  --forgedCoordRate=0 \\"
-                                        f"\n  --maxRun=1"
+                                        f"\n  --maxRun=1 \\"
+                                        f"\n  {f'--txPower={tx_powers[int(tx_range)]}' if int(tx_range) in tx_powers else ''}"
                                     )
 
                                 new_job_name = (
@@ -502,6 +512,7 @@ def run_scenario(
                                     f"-{protocols_map[protocol]}"
                                     f"-{tx_range}"
                                     f"{'-with-coords' if print_coords == 1 else ''}"
+                                    f"{f'-txPower={tx_powers[int(tx_range)]}' if int(tx_range) in tx_powers else ''}"
                                 )
 
                                 create_job_file(
@@ -529,6 +540,34 @@ def run_scenario(
                             """
 
     print("\n")
+
+
+def parse_tx_power_string(tx_power_str=""):
+    """
+    Parse a transmission power string into a dictionary.
+
+    Args:
+        tx_power_str (str): String in format "range1:power1,range2:power2,..." or empty string
+
+    Returns:
+        dict: Dictionary with transmission ranges as keys and dB values as values
+    """
+    tx_power_dict = {}
+
+    if not tx_power_str:  # Handle empty string default
+        return tx_power_dict
+
+    # Split by comma to get individual range:power pairs
+    pairs = tx_power_str.split(",")
+
+    for pair in pairs:
+        # Split each pair by colon to get range and power
+        range_str, power_str = pair.split(":")
+        tx_range = int(range_str.strip())
+        tx_power = float(power_str.strip())
+        tx_power_dict[tx_range] = tx_power
+
+    return tx_power_dict
 
 
 def main():
@@ -559,7 +598,8 @@ def main():
     junctions = [s.strip() for s in args.junctions.split(",") if s.strip()]
     protocols = [s.strip() for s in args.protocols.split(",") if s.strip()]
     tx_ranges = [s.strip() for s in args.txRanges.split(",") if s.strip()]
-
+    tx_powers = parse_tx_power_string(args.txPowers)
+    print(f"tx_powers chosen:  {tx_powers}")
     # Create configuration dictionary
     config = {
         "highBuildings": high_buildings,
@@ -570,6 +610,7 @@ def main():
         "junctions": junctions,
         "protocols": protocols,
         "txRanges": tx_ranges,
+        "txPowers": tx_powers,
         "neededTime": args.neededTime,
         "ram": args.ram,
         "jobsPath": args.jobsPath,
