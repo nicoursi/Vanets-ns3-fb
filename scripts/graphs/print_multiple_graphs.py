@@ -390,6 +390,7 @@ def print_single_graph(
             yerr=metric_conf_int_list,
             capsize=4,
             hatch=hatch,
+            error_kw={"alpha": 0.45},  # makes error bars semi-transparent
         )
 
         rects.append(bars)
@@ -417,6 +418,13 @@ def print_single_graph(
     if show_legend:
         ax.legend(loc="center left", bbox_to_anchor=(1, 0.5), fontsize=12)
 
+    def format_height(height):
+        if "." in str(height):
+            integer_part, decimal_part = str(height).split(".")
+            return f"{integer_part}$_{{.{decimal_part}}}$"  # subscript decimal
+        else:
+            return str(height)
+
     def autolabel(rects_group, xpos="center"):
         """Add value labels on top of bars."""
         ha = {"center": "center", "right": "left", "left": "right"}
@@ -428,7 +436,8 @@ def print_single_graph(
             ax.text(
                 rect.get_x() + rect.get_width() * offset[xpos],
                 height,
-                f"{height}",
+                # f"{height} # switch with next line for no difference between decimal and integers
+                format_height(height),
                 ha=ha[xpos],
                 va="bottom",
                 fontsize=autolabel_fontsize,
@@ -707,12 +716,8 @@ def print_protocol_comparison(
     additional_title["1"]["0"] = " (with buildings)"
     additional_title["1"]["1"] = " (with buildings, with junctions)"
 
-    max_metric_values = {}
-    for metric in metrics:
-        max_metric_values[metric] = -1
-
     colors = {}
-    colors["0"] = {}
+    colors["0"] = {}  # no buildings
     colors["0"]["0"] = ["#B5B7FF", "#5155D5", "#00034D", "#DCE0FF"]  # comparison for palazzi
     colors["0"]["1"] = ["#EDD1ED", "#B46CB4", "#662066", "#1E001F"]
 
@@ -725,14 +730,29 @@ def print_protocol_comparison(
     ]  # comparison with gottardo for palazzi
     colors["1"]["1"] = ["#FFE0BF", "#E49453", "#A5521A", "#3B1A00"]
 
+    # Store all compound data and calculate max values in a single pass
+    all_compound_data = {}
+    scenario_max_values = {}
+
     for scenario in scenarios:
         if "Platoon" in scenario:
             current_buildings = ["0"]
         else:
             current_buildings = buildings
 
+        scenario_max_values[scenario] = {}
+        for metric in metrics:
+            scenario_max_values[scenario][metric] = -1
+
+        all_compound_data[scenario] = {}
+
+        # Read data once and store it, while calculating max values
         for building in current_buildings:
+            all_compound_data[scenario][building] = {}
+
             for cw in cws:
+                all_compound_data[scenario][building][cw] = {}
+
                 for junction in junctions:
                     base_path = os.path.join(initial_base_path, scenario, "b" + building)
                     compound_data = init_compound_data(tx_ranges, protocols, metrics)
@@ -746,21 +766,25 @@ def print_protocol_comparison(
                         compound_data,
                         metrics,
                     )
-                    graph_out_folder = os.path.join(scenario, "b" + building, "j" + junction)
+
+                    # Store the compound data for later use
+                    all_compound_data[scenario][building][cw][junction] = compound_data
+
+                    # Calculate max values from this compound data
                     for metric in metrics:
-                        y_label = metric_y_labels[metric]
                         if metric in {"totCoverage", "covOnCirc"}:
-                            max_metric_values[metric] = 100
+                            scenario_max_values[scenario][metric] = 100
                         else:
                             for tx_range in tx_ranges:
                                 for protocol in protocols:
                                     metric_mean = metric + "Mean"
                                     value = compound_data[tx_range][protocol][metric_mean]
-                                    max_metric_values[metric] = max(
-                                        max_metric_values[metric],
+                                    scenario_max_values[scenario][metric] = max(
+                                        scenario_max_values[scenario][metric],
                                         value,
                                     )
 
+    # Generate graphs using the stored compound data and calculated max values
     for scenario in scenarios:
         if "Platoon" in scenario:
             current_buildings = ["0"]
@@ -770,19 +794,10 @@ def print_protocol_comparison(
         for building in current_buildings:
             for cw in cws:
                 for junction in junctions:
-                    base_path = os.path.join(initial_base_path, scenario, "b" + building)
-                    compound_data = init_compound_data(tx_ranges, protocols, metrics)
-                    append_compound_data(
-                        base_path,
-                        tx_ranges,
-                        protocols,
-                        cw,
-                        junction,
-                        error_rate,
-                        compound_data,
-                        metrics,
-                    )
+                    # Use the stored compound data instead of reading again
+                    compound_data = all_compound_data[scenario][building][cw][junction]
                     graph_out_folder = os.path.join(scenario, "b" + building, "j" + junction)
+
                     for metric in metrics:
                         y_label = metric_y_labels[metric]
                         additional_title_str = additional_title[building][junction]
@@ -798,7 +813,7 @@ def print_protocol_comparison(
                             metric,
                             y_label,
                             0,
-                            max_metric_values[metric],
+                            scenario_max_values[scenario][metric],
                             show_legend,
                             file_type,
                             root_out_folder,

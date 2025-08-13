@@ -49,7 +49,7 @@ Examples:
     )
 
     parser.add_argument(
-        "-p",
+        "-i",
         "--initial-base-path",
         type=str,
         default=DEFAULT_INITIAL_BASE_PATH,
@@ -105,6 +105,7 @@ Examples:
     )
 
     parser.add_argument(
+        "-p",
         "--protocols",
         type=parse_list_argument,
         default=DEFAULT_PROTOCOLS,
