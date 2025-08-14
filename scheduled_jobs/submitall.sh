@@ -1,8 +1,8 @@
 #!/bin/bash
-
 # Submit all .slurm files in the current directory
 mkdir -p completed
 mkdir -p logs
+
 for job in *.slurm; do
     if [[ -f "$job" ]]; then
         if [[ "$job" == *losses* ]]; then
@@ -14,9 +14,13 @@ for job in *.slurm; do
         fi
 
         echo "Submitting $job..."
-        sbatch "$job"
-        echo "Moving $job into the folder completed"
-        mv "$job" completed/
+        if sbatch "$job"; then
+            echo "Successfully submitted $job. Moving to completed folder."
+            mv "$job" completed/
+        else
+            echo "Failed to submit $job. Keeping file in current directory."
+        fi
+
         sleep 1
     fi
 done
