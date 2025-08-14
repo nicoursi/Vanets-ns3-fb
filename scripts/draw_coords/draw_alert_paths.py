@@ -117,23 +117,23 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
 
     if hasattr(config, "show_nodes") and config.show_nodes:
         #        plt.plot(x_node_coords, y_node_coords, ".", markersize=5, color="red", alpha=0.3, label="All nodes")
+
         plt.plot(
             x_node_coords,
             y_node_coords,
             ".",
             color="red",
-            alpha=0.6,
-            label="Not receiving nodes",
+            markersize=4,
+            label="Not reached nodes",
         )
         plt.plot(
             x_received_coords,
             y_received_coords,
             ".",
-            color="green",
-            alpha=0.5,
-            label="Receiving nodes",
+            color="#32DC32",  # lighter green
+            markersize=4,
+            label="Reached nodes",
         )
-
     # plot source
     plt.plot(
         starting_x,
@@ -238,7 +238,9 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
     # Check if ns3-simulation script has a bug not reporting conference nodes
     if not received_on_circ_ids or received_on_circ_ids in (["0"], [0]):
         simulation_bug_detected = True
-        bug_warning = "⚠️  SIMULATION BUG: 'Nodes on circ' field is empty/zero! Used fallback"
+        no_cov_on_circ_msg = "No coverage on the circumference!"
+        bug_warning = "⚠️  SIMULATION BUG: 'Coverage on circ' field is empty/zero! Used fallback"
+
         print(f"WARNING: {bug_warning}")
         print(
             "\nThis indicates the NS-3 simulation isn't properly calculating circumference nodes.",
@@ -294,7 +296,7 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
                         circ_coord.x,
                         circ_coord.y,
                         ".",
-                        color="green",
+                        color="#32DC32",  # lighter green
                         markersize=5,
                         alpha=0.5,
                         zorder=9,
@@ -339,13 +341,11 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
         f"{config.scenario} (Transmission range: {tx_range}m) - Alert Message Propagation Paths"
     )
     if simulation_bug_detected:
-        title_color = "red"
-        plt.title(base_title, fontsize=14, color=title_color)
         # Add warning text
         plt.text(
             0.02,
             0.02,
-            bug_warning,
+            no_cov_on_circ_msg,
             transform=plt.gca().transAxes,
             fontsize=10,
             color="red",
@@ -353,8 +353,7 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
             verticalalignment="bottom",  # align text above this point
             bbox={"boxstyle": "round", "facecolor": "yellow", "alpha": 0.7},
         )
-    else:
-        plt.title(base_title, fontsize=13)
+    plt.title(base_title, fontsize=13)
 
     plt.grid(True, alpha=0.3)
 

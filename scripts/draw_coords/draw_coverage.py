@@ -89,7 +89,11 @@ def plot_coverage(csv_file_path, output_file_path, config) -> bool:
 
     # Calculate coordinate bounds for proper scaling
     coord_bounds = coord_utils.calculate_coord_bounds(
-        x_node_coords, y_node_coords, starting_x, starting_y, config.circ_radius,
+        x_node_coords,
+        y_node_coords,
+        starting_x,
+        starting_y,
+        config.circ_radius,
     )
 
     # Create the plot

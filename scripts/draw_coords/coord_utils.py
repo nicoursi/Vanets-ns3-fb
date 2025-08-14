@@ -1502,19 +1502,20 @@ def validate_folder_structure_from_scenario_enhanced(scenario_path, target_path)
         return False
 
 
-def generate_output_path(path_info, output_base, suffix):
+def generate_output_path(path_info, output_base, suffix, output_subfolder):
     """
     Generate output file path based on CSV path structure.
     Enhanced to handle optional cw level.
 
     Creates structure:
-    - Standard: scenario/building/error_rate/txRange/junction/cw/protocol/filename/filename.ext
-    - No CW: scenario/building/error_rate/txRange/junction/protocol/filename/filename.ext
+    - Standard: scenario/building/error_rate/txRange/junction/cw/protocol/output_subfolder/filename.ext
+    - No CW: scenario/building/error_rate/txRange/junction/protocol/output_subfolder/filename.ext
 
     Args:
         path_info (dict): Path information from parse_csv_path_structure
         output_base (str): Base output directory
         suffix (str): File suffix (default: ".png")
+        output_subfolder (str): Dynamic subfolder name (e.g., "plots", "heatmaps", etc.)
 
     Returns:
         str: Generated output path
@@ -1536,11 +1537,12 @@ def generate_output_path(path_info, output_base, suffix):
     if path_info["cw"] != "none":
         path_components.append(path_info["cw"])
 
-    # Add protocol, filename directory, and final filename
+    # Add protocol, filename directory, then dynamic subfolder, then final filename
     path_components.extend(
         [
             path_info["protocol"],
-            filename_no_ext,  # Add filename as directory
+            filename_no_ext,  # Add filename as directory (like before)
+            output_subfolder,  # Dynamic subfolder name passed as parameter
             output_filename,
         ]
     )
@@ -1847,12 +1849,7 @@ def generic_process_single_file(
     # Try to parse path structure for organized output
     elif path_info:
         output_path = generate_output_path(
-            path_info,
-            os.path.join(
-                config.output_base,
-                output_subfolder,
-            ),
-            show_nodes,
+            path_info, config.output_base, show_nodes, output_subfolder
         )
     else:
         # Fallback to simple output
@@ -2114,12 +2111,7 @@ def generic_process_batch(
         file_info_copy = file_info.copy()
         file_info_copy["scenario"] = scenario_name
         output_path = generate_output_path(
-            file_info_copy,
-            os.path.join(
-                config.output_base,
-                output_subfolder,
-            ),
-            show_nodes,
+            file_info_copy, config.output_base, show_nodes, output_subfolder
         )
 
         if verbose_mode:
