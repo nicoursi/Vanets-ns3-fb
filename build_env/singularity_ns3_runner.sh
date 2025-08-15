@@ -85,7 +85,7 @@ fb_components=(
     FBNode
 )
 roff_components=(
-    NBTEntry
+    # NBTEntry
     NeighborTable
     PositionRankingKey
     PositionRankingMap
