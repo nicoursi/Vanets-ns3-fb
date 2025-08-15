@@ -23,8 +23,8 @@ DEFAULT_TEMPLATE = "draw_coords_template.slurm"
 DEFAULT_TIME = "5:00:00"
 DEFAULT_OUTPUT_DIR = "."
 DEFAULT_ADDITIONAL_ARGS = ""
-DEFAULT_SCRIPTS = "draw_coverage,draw_single_hops,drawSingleTransmission,draw_alert_paths"
-DEFAULT_SCENARIOS = "Grid-300,Padova-25,LA-25"
+DEFAULT_SCRIPTS = "draw_coverage,draw_single_hops,draw_multiple_transmissions,draw_alert_paths"
+DEFAULT_SCENARIOS = "Grid-300,Grid-300-node+-5,Padova-25,LA-25"
 
 
 def extract_scenario_name(scenario):
@@ -149,9 +149,9 @@ def main():
         epilog="""
 Examples:
   %(prog)s  # Uses all default values
-  %(prog)s --scripts "script1, script2" --scenarios "Grid-300, LA-25"
-  %(prog)s --scripts "simulation" --scenarios "Grid-300/b1, LA-25/test" --template custom.slurm
-  %(prog)s --scripts "analysis" --scenarios "exp1" --additional-args="--verbose --debug" --output-dir results/
+  %(prog)s --scripts "draw_multiple_transmissions,draw_alert_paths" --scenarios "Grid-300, LA-25"
+  %(prog)s --scenarios "Grid-300/b1, LA-25/b0" --template custom.slurm
+  %(prog)s --scripts "draw_alert_paths" --scenarios "Padova-25" --additional-args="--show-nodes --debug"
         """,
     )
 
