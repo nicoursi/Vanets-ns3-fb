@@ -573,10 +573,10 @@ def parse_tx_power_string(tx_power_str=""):
 def main():
     """Main function to parse arguments and execute scenario generation."""
     args = parse_arguments()
-
-    # Convert string arguments to appropriate data types
-    print_coords = 1 if args.printCoords or args.genLossFile else 0
-    job_array = args.jobArray
+    # You only need one job for a loss file
+    job_array = "1" if args.genLossFile else args.jobArray
+    # Always print coords for losses files
+    print_coords = int(args.genLossFile or args.printCoords)
     only_command = getattr(args, "only_command", False)
 
     # Parse scenarios
@@ -592,12 +592,20 @@ def main():
     # Parse comma-separated lists
     high_buildings = [s.strip() for s in args.highBuildings.split(",") if s.strip()]
     drones = [s.strip() for s in args.drones.split(",") if s.strip()]
-    buildings = [s.strip() for s in args.buildings.split(",") if s.strip()]
+    # if generating a loss file use only buildings
+    if args.genLossFile:
+        buildings = ["1"]
+        tx_ranges = ["500"]
+        protocols = ["1"]
+    else:
+        buildings = [s.strip() for s in args.buildings.split(",") if s.strip()]
+        tx_ranges = [s.strip() for s in args.txRanges.split(",") if s.strip()]
+        protocols = [s.strip() for s in args.protocols.split(",") if s.strip()]
+
     error_rates = [s.strip() for s in args.errorRates.split(",") if s.strip()]
     forged_coord_rates = [s.strip() for s in args.forgedCoordRates.split(",") if s.strip()]
     junctions = [s.strip() for s in args.junctions.split(",") if s.strip()]
-    protocols = [s.strip() for s in args.protocols.split(",") if s.strip()]
-    tx_ranges = [s.strip() for s in args.txRanges.split(",") if s.strip()]
+
     tx_powers = parse_tx_power_string(args.txPowers)
     print(f"tx_powers chosen:  {tx_powers}")
     # Create configuration dictionary
