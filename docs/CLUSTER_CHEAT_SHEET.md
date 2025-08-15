@@ -6,6 +6,7 @@
   - [1.3. Execute the command later on the cluster (not slurm!](#13-execute-the-command-later-on-the-cluster-not-slurm)
   - [1.4. Search just for the line and print it (to see how much time a simulation took):](#14-search-just-for-the-line-and-print-it-to-see-how-much-time-a-simulation-took)
   - [1.5. Print on screen all lines of csv files in current directory](#15-print-on-screen-all-lines-of-csv-files-in-current-directory)
+  - [1.6. Git clean recursively just one folder](#16-git-clean-recursively-just-one-folder)
 - [2. Slurm commands](#2-slurm-commands)
   - [2.1. Show queue status:](#21-show-queue-status)
   - [2.2. Show cluster queues and status:](#22-show-cluster-queues-and-status)
@@ -78,6 +79,16 @@ grep '^Whole simulation Elapsed wall-clock time:' *.out
 head -n 1 $(ls *.csv | head -n 1) && tail -n +2 -q *.csv # with header
 
 ```
+### 1.6. Git clean recursively just one folder
+
+```bash
+# Remove the --dry-run if it is the expected result
+find . -type d -name "ROFF" -exec git clean -fd --dry-run {} \;
+
+# with escaping characters
+find . -type d -name "cw\[16-128\]" -exec git clean -fd --dry-run {} \;
+```
+
 ## 2. Slurm commands
 
 ### 2.1. Show queue status:

@@ -74,7 +74,7 @@ git push
 cd build_env/container
 singularity build --fakeroot singularity-ns3-image.sif singularity-ns3.def
 ```
-Once you created your container on your PC you can transfer the 'container.sif' file on the submit host of the cluster for execution. You can do it by using `sftp` or `sshfs`. ([More here](#4-working-on-the-cluster))
+Once you created your container on your PC you can transfer the `singularity-ns3-image.sif` file on the submit host of the cluster for execution (make sure you copy it in the `build_env/container` folder). You can do it by using `sftp` or `sshfs`. (More in the [Working on the Cluster](#4-working-on-the-cluster) section below.)
 
 **Build the image on the cluster front-end host:**
 
@@ -133,7 +133,7 @@ LOG_LEVEL=[error|warn|info|debug|function|logic] ../build_env/singularity_ns3_ru
 Locally you can also run multiple simulations concurrently by processing all `.jobs` files from inside a folder:
 
 ```bash
-build_env/batch2_simulations_with_singularity.sh --help
+build_env/batch2_simulations_with_singularity.sh # for help
 ```
 
 ### 3.3. Development Environment Setup (VSCodium)
@@ -198,13 +198,14 @@ In order to run simulations you need to build the NS-3 project first, then creat
 ### 4.1. Building the Project
 
 On the cluster you need to build the NS3 project every time you apply modifications to the code (NS-3 folder).
-The first time you build, or if you have created new files or modules (make sure you already build the container image):
+The first time you build, or if you have changed the build profile (make sure you have already built the container image — see [Container Setup](#2-container-setup)):
 
 ```bash
+# Builds NS-3 project in debug mode (local) or release mode (cluster)
 singularity_ns3_runner.sh build
 ```
 
-If you applied small modification to the code:
+For subsequent modifications to the code:
 
 ```bash
 singularity_ns3_runner.sh dirty-build
@@ -234,7 +235,8 @@ The `--jobArray "1-3"` option means that each simulation will be executed with r
 **Submitting slurm jobs**
 
 You can submit the jobs on the cluster by using the command `sbatch` from inside the folder where the jobs are saved. Keep in mind the jobs will fail if there is not a `logs` folder next to the files that are going to be submitted.
-To make things easier you can use the `scheduled_jobs/submitall.sh` script that will take care of that and it will submit all jobs from the folder it is executed from.  
+To make things easier you can use the `scheduled_jobs/submitall.sh` script that will take care of that and it will submit all jobs from the folder it is executed from. 
+You can also schedule job submissions, to be queued later, by using the `scheduled_jobs/schedule_slurm_jobs.sh` script.
 
 For every scenario with buildings you need a `*.losses` file that will be saved in the `maps\scenario\` folder. The losses file for each scenario needs to be generated only once, regardless of the transmission range used.
 
@@ -244,7 +246,8 @@ Example:
 
 ```bash
 cd scheduled_jobs
-../scripts/create_maps_and_jobs/generate_maps_and_jobs.py -s "Grid-300" -p "1"  --txRanges "300" --genLossFile --jobArray "1-1"
+# create a loss file for the Grid-300 scenario
+../scripts/create_maps_and_jobs/generate_maps_and_jobs.py -s "Grid-300" --genLossFile
 ```
 
 ## 5. Important Notes
