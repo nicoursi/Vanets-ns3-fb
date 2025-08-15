@@ -2,7 +2,6 @@
 
 import csv
 import os
-
 import numpy as np
 import scipy.stats as st
 
@@ -196,47 +195,34 @@ def read_csv_from_directory(path, roff=False, static=False):
         ):
             continue
 
-        with open(full_path) as file:
-            # Use DictReader to read by column headers
+        required_columns = [
+            "Total nodes",
+            "Nodes on circ",
+            "Total coverage",
+            "Coverage on circ",
+            "Hops",
+            "Slots",
+            "Messages sent",
+        ]
+
+        with open(full_path, newline="") as file:
             reader = csv.DictReader(file)
 
-            # Check if required columns exist
-            required_columns = [
-                "Total nodes",
-                "Nodes on circ",
-                "Total coverage",
-                "Coverage on circ",
-                "Hops",
-                "Slots",
-                "Messages sent",
-            ]
+            # Case: file is empty or missing headers entirely
+            if not reader.fieldnames:
+                print(f"Skipping {file_name}: No headers found")
+                continue
 
+            # Check that all required columns exist
             missing_columns = [col for col in required_columns if col not in reader.fieldnames]
             if missing_columns:
-                print(f"Skipping {file_name}: Missing columns {missing_columns}")
+                print(f"Skipping {file_name}: Missing columns: {missing_columns}")
                 continue
 
             row_count = 0
             for row in reader:
                 row_count += 1
                 try:
-                    # Skip if any required value is invalid
-                    invalid_values = ("", "-nan", "nan", None)
-                    required_values = [
-                        row["Total nodes"],
-                        row["Nodes on circ"],
-                        row["Total coverage"],
-                        row["Coverage on circ"],
-                        row["Hops"],
-                        row["Slots"],
-                        row["Messages sent"],
-                    ]
-
-                    if any(value in invalid_values or value == "nan" for value in required_values):
-                        print(f"Skipping incomplete row in {file_name} line {row_count + 1}: {row}")
-                        print()
-                        continue
-
                     # Extract values using column names
                     total_nodes_val = int(row["Total nodes"])
                     nodes_on_circ_val = int(row["Nodes on circ"])
@@ -251,9 +237,12 @@ def read_csv_from_directory(path, roff=False, static=False):
                     nodes_on_circ.append(nodes_on_circ_val)
                     total_coverage.append(total_coverage_val)
                     cov_on_circ.append(cov_on_circ_val)
-                    hops.append(hops_val)
-                    slots.append(slots_val)
-                    message_sent.append(message_sent_val)
+                    # if cov_on_circ_val=0 we skip hops, slots and messages_sent as the alert
+                    # did not reach the circumference
+                    if cov_on_circ_val > 0:
+                        hops.append(hops_val)
+                        slots.append(slots_val)
+                        message_sent.append(message_sent_val)
 
                     # Calculate percentages
                     total_coverage_percent.append((total_coverage_val / total_nodes_val) * 100)
@@ -274,6 +263,10 @@ def read_csv_from_directory(path, roff=False, static=False):
         message_sent, False, True
     )
     slots_waited_mean, slots_waited_conf_int = calculate_mean_and_conf_int(slots, False, True)
+
+    # Not clear why this was done in the original code
+    # if roff is True:
+    #     slots_waited_mean = round(slots_waited_mean - hops_mean)
 
     return {
         "totCoverageMean": total_cov_mean,
