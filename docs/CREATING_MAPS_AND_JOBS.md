@@ -33,7 +33,7 @@ scripts/
 
 ## 2. Generating jobs
 ### 2.1. *generate_maps_and_jobs.py*
-This script generates `.slurm` jobs for different simulation configurations to be submitted on the cluster or `.job` files containing just the command with all the parameters to be executed locally. See also the Getting Started [Generating and Submitting Jobs](/docs/GETTING_STARTED.md#42-generating-and-submitting-jobs) section for more.
+This script generates `.slurm` jobs for different simulation configurations to be submitted on the cluster or `.job` files containing just the command with all the parameters to be executed locally. See also the Getting Started [Generating slurm or job files](/docs/GETTING_STARTED.md#3-generating-slurm-or-job-files) section for more.
 
 **Usage**:
 <!--- cSpell:disable --->
