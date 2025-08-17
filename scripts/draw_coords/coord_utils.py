@@ -1662,7 +1662,8 @@ def detect_scenario_from_basepath(base_folder):
 
     # Structure patterns for validation
     structure_patterns = {
-        "scenario": r"^[A-Za-z]+-\d+$",  # e.g., "Padova-25", "Grid-100"
+        # "scenario": r"^[A-Za-z]+-\d+$",  # e.g., "Padova-25", "Grid-100"
+        "scenario": r"^[A-Za-z]+-\d+(-[a-zA-Z0-9+-]+)*$",  # e.g., "Padova-25", "Grid-100", "Grid-300-node+-5"
         "building": r"^b[01]$",  # "b0" or "b1"
         "error_rate": r"^e\d+$",  # e.g., "e0"
         "txRange": r"^r\d+$",  # e.g., "r300"
