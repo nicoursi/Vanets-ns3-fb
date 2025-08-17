@@ -873,6 +873,7 @@ class SimulationConfig:
         self.poly_file = None
         self.original_poly_file = None  # Store original poly file path
         self.circ_radius = 1000
+        self.figsize = (10, 10)
         self.output_base = "./out"
         self.dpi = 150
         self.bbox_inches = "tight"
@@ -1394,7 +1395,8 @@ def process_common_arguments(args, additional_args=None):
         config.circ_radius = args.radius
     else:
         config.circ_radius = determine_default_radius(scenario_name)
-
+    # only two radius possible: 1000 and 2000
+    config.figsize = (20, 20) if config.circ_radius == 2000 else (10, 10)
     # Set basic parameters
     config.base_folder = args.basefolder
     config.folder = args.folder
@@ -2177,6 +2179,7 @@ def generic_main(script_config):
 
     print(script_config["tool_name"])
     print(f"Transmission radius: {config.circ_radius}m")
+    print(f"Figure size: {config.figsize}inches")
     print(f"Force buildings: {'Yes' if config.force_buildings else 'No'}")
 
     if args.verbose:

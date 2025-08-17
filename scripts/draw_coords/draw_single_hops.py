@@ -39,12 +39,6 @@ matplotlib.use("Agg")  # Use non-interactive backend
 import coord_utils
 import matplotlib.pyplot as plt
 
-# Set high DPI for better quality figures
-plt.rcParams["figure.figsize"] = [10, 10]
-plt.rcParams["figure.dpi"] = 300
-plt.rcParams["savefig.dpi"] = 300
-plt.rcParams["savefig.bbox"] = "tight"
-
 # Default values
 DEFAULT_BASE_MAP_FOLDER = "../../../maps"  # If you execute the script in its folder
 
@@ -97,7 +91,11 @@ def plot_single_hops(csv_file_path, output_file_path, config):
 
     # Calculate coordinate bounds for proper scaling
     coord_bounds = coord_utils.calculate_coord_bounds(
-        x_node_coords, y_node_coords, starting_x, starting_y, config.circ_radius,
+        x_node_coords,
+        y_node_coords,
+        starting_x,
+        starting_y,
+        config.circ_radius,
     )
 
     # Find maximum hop count
@@ -111,7 +109,7 @@ def plot_single_hops(csv_file_path, output_file_path, config):
             print(f"Processing hop {hop + 1}")
 
         # Create new figure for this hop
-        plt.figure(figsize=(10, 10))
+        plt.figure(figsize=config.figsize)
 
         # Plot nodes not reached by alert message (red dots)
         plt.plot(
@@ -150,11 +148,13 @@ def plot_single_hops(csv_file_path, output_file_path, config):
             # Get coordinates with caching
             if source not in node_coords_map:
                 node_coords_map[source] = coord_utils.find_coords_from_file(
-                    edge.source, config.mobility_file,
+                    edge.source,
+                    config.mobility_file,
                 )
             if destination not in node_coords_map:
                 node_coords_map[destination] = coord_utils.find_coords_from_file(
-                    edge.destination, config.mobility_file,
+                    edge.destination,
+                    config.mobility_file,
                 )
 
             source_coord = node_coords_map[source]
@@ -245,12 +245,13 @@ def plot_single_hops(csv_file_path, output_file_path, config):
         plt.xlabel("X Coordinate (m)", fontsize=12)
         plt.ylabel("Y Coordinate (m)", fontsize=12)
         plt.title(
-            f"Alert Message Propagation - Hop {hop + 1} (Radius: {config.circ_radius}m)",
+            f"{config.scenario} (Transmission range: {tx_range}m) - Alert Message Propagation - Hop {hop + 1}",
             fontsize=14,
         )
 
         # Generate output file path for this hop
-        hop_output_path = f"{output_file_path}-hop{hop + 1}.png"
+        output_base = os.path.splitext(output_file_path)[0]
+        hop_output_path = f"{output_base}-hop{hop + 1}.png"
 
         # Ensure output directory exists
         if not coord_utils.ensure_output_directory(hop_output_path):
@@ -293,8 +294,13 @@ def main():
         #        ]
     }
 
-    # Use coord_utils generic main function
-    coord_utils.generic_main(script_config)
+    try:
+        # Use coord_utils generic main function
+        coord_utils.generic_main(script_config)
+
+    except KeyboardInterrupt:
+        print("\nOperation cancelled by user.")
+        return 1
 
 
 if __name__ == "__main__":

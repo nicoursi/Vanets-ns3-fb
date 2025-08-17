@@ -16,10 +16,6 @@ matplotlib.use("Agg")
 import coord_utils
 import matplotlib.pyplot as plt
 
-plt.rcParams["figure.figsize"] = [10, 10]
-plt.rcParams["figure.dpi"] = 300
-plt.rcParams["savefig.dpi"] = 300
-plt.rcParams["savefig.bbox"] = "tight"
 
 DEFAULT_BASE_MAP_FOLDER = "../../../maps"
 
@@ -113,7 +109,8 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
 
     coord_bounds = (x_min, x_max, y_min, y_max)
 
-    plt.figure(figsize=(10, 10))
+    # Create the plot
+    plt.figure(figsize=config.figsize)
 
     if hasattr(config, "show_nodes") and config.show_nodes:
         #        plt.plot(x_node_coords, y_node_coords, ".", markersize=5, color="red", alpha=0.3, label="All nodes")
@@ -396,7 +393,12 @@ def main():
             },
         ],
     }
-    coord_utils.generic_main(script_config)
+    try:
+        coord_utils.generic_main(script_config)
+
+    except KeyboardInterrupt:
+        print("\nOperation cancelled by user.")
+        return 1
 
 
 if __name__ == "__main__":

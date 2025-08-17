@@ -39,12 +39,6 @@ matplotlib.use("Agg")  # Use non-interactive backend
 import coord_utils
 import matplotlib.pyplot as plt
 
-# Set high DPI for better quality figures
-plt.rcParams["figure.figsize"] = [10, 10]
-plt.rcParams["figure.dpi"] = 300
-plt.rcParams["savefig.dpi"] = 300
-plt.rcParams["savefig.bbox"] = "tight"
-
 # Default values
 DEFAULT_BASE_MAP_FOLDER = "../../../maps"  # If you execute the script in its folder
 
@@ -97,7 +91,7 @@ def plot_coverage(csv_file_path, output_file_path, config) -> bool:
     )
 
     # Create the plot
-    plt.figure(figsize=(10, 10))
+    plt.figure(figsize=config.figsize)
 
     # Plot nodes not reached by alert message
     plt.plot(
@@ -160,7 +154,10 @@ def plot_coverage(csv_file_path, output_file_path, config) -> bool:
     plt.grid(True, alpha=0.3)
     plt.xlabel("X Coordinate (m)", fontsize=12)
     plt.ylabel("Y Coordinate (m)", fontsize=12)
-    plt.title(f"Alert Message Coverage (Radius: {config.circ_radius}m)", fontsize=14)
+    plt.title(
+        f"{config.scenario} (Transmission range: {tx_range}m) - Alert Message Coverage",
+        fontsize=14,
+    )
 
     # Ensure output directory exists
     if not coord_utils.ensure_output_directory(output_file_path):
@@ -197,8 +194,13 @@ def main():
         #        ]
     }
 
-    # Use coord_utils generic main function
-    coord_utils.generic_main(script_config)
+    try:
+        # Use coord_utils generic main function
+        coord_utils.generic_main(script_config)
+
+    except KeyboardInterrupt:
+        print("\nOperation cancelled by user.")
+        return 1
 
 
 if __name__ == "__main__":

@@ -446,7 +446,7 @@ def print_single_graph(
     for group in rects:
         autolabel(group)
 
-    scenario_name = out_folder.split(os.sep)[0]
+    scenario_name = out_folder.split(os.sep)[0] + "-" + cw
     metric = scenario_name + "_" + metric
     out_path_directory = os.path.join(root_out_folder, out_folder + "-" + cw)
     # out_path_directory = os.path.join("out-gottardo", out_folder + "-" + cw)

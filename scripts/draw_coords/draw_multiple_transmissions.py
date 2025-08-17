@@ -40,12 +40,6 @@ matplotlib.use("Agg")  # Use non-interactive backend
 import coord_utils
 import matplotlib.pyplot as plt
 
-# Set high DPI for better quality figures
-plt.rcParams["figure.figsize"] = [10, 10]
-plt.rcParams["figure.dpi"] = 300
-plt.rcParams["savefig.dpi"] = 300
-plt.rcParams["savefig.bbox"] = "tight"
-
 # Default values
 DEFAULT_BASE_MAP_FOLDER = "../../../maps"  # If you execute the script in its folder
 
@@ -100,7 +94,11 @@ def plot_multiple_transmissions(csv_file_path, output_file_path, config):
 
     # Calculate coordinate bounds
     coord_bounds = coord_utils.calculate_coord_bounds(
-        x_node_coords, y_node_coords, starting_x, starting_y, config.circ_radius,
+        x_node_coords,
+        y_node_coords,
+        starting_x,
+        starting_y,
+        config.circ_radius,
     )
 
     node_coords_map = {}
@@ -118,7 +116,7 @@ def plot_multiple_transmissions(csv_file_path, output_file_path, config):
         print(f"Processing transmission phase {count}/{len(ordered_sources_list)}")
 
         # Create new figure for each transmission phase
-        fig, ax = plt.subplots(figsize=(10, 10))
+        fig, ax = plt.subplots(figsize=config.figsize)
 
         # Set equal aspect ratio to keep circles circular
         ax.set_aspect("equal", adjustable="box")
@@ -135,7 +133,13 @@ def plot_multiple_transmissions(csv_file_path, output_file_path, config):
 
         # Plot transmission range circle
         coord_utils.plot_tx_range(
-            config.circ_radius, starting_x, starting_y, vehicle_distance, color1, True, coord_bounds,
+            config.circ_radius,
+            starting_x,
+            starting_y,
+            vehicle_distance,
+            color1,
+            True,
+            coord_bounds,
         )
 
         # Plot transmission edges
@@ -158,11 +162,13 @@ def plot_multiple_transmissions(csv_file_path, output_file_path, config):
             # Cache coordinate lookups
             if source not in node_coords_map:
                 node_coords_map[source] = coord_utils.find_coords_from_file(
-                    source, config.mobility_file,
+                    source,
+                    config.mobility_file,
                 )
             if destination not in node_coords_map:
                 node_coords_map[destination] = coord_utils.find_coords_from_file(
-                    destination, config.mobility_file,
+                    destination,
+                    config.mobility_file,
                 )
 
             source_coord = node_coords_map[source]
@@ -211,7 +217,13 @@ def plot_multiple_transmissions(csv_file_path, output_file_path, config):
 
         # Plot transmission range again (to ensure it's on top)
         coord_utils.plot_tx_range(
-            config.circ_radius, starting_x, starting_y, vehicle_distance, color1, True, coord_bounds,
+            config.circ_radius,
+            starting_x,
+            starting_y,
+            vehicle_distance,
+            color1,
+            True,
+            coord_bounds,
         )
 
         # Plot buildings if provided
@@ -267,8 +279,13 @@ def main():
         "plot_function": plot_multiple_transmissions,
     }
 
-    # Use coord_utils generic main function
-    coord_utils.generic_main(script_config)
+    try:
+        # Use coord_utils generic main function
+        coord_utils.generic_main(script_config)
+
+    except KeyboardInterrupt:
+        print("\nOperation cancelled by user.")
+        return 1
 
 
 if __name__ == "__main__":
