@@ -6,7 +6,7 @@
   - [2.2. *generate\_draw\_coords\_jobs.py*](#22-generate_draw_coords_jobspy)
 - [3. Generating simple scenarios maps](#3-generating-simple-scenarios-maps)
 - [4. Generating city maps](#4-generating-city-maps)
-  - [4.1. Usage](#41-usage)
+  - [4.1. Scripts Usage](#41-scripts-usage)
     - [4.1.1. _fixed\_positions.py_](#411-fixed_positionspy)
     - [4.1.2. _generate-sumo-files.sh_](#412-generate-sumo-filessh)
     - [4.1.3. _generate\_maps\_and\_jobs.py_](#413-generate_maps_and_jobspy)
@@ -75,7 +75,7 @@ Various bash and python scripts, mainly for OSM data manipulation using SUMO uti
 * __polyconvert_ench.py__: generate a polygon data file with heights.
 * __generate_maps_and_jobs.py__: Other than creating NS3 simulation jobs to be submitted on the cluster, it could also generate sumo files by executing the `generate-sumo-files.sh`. This ability is currently disabled.
 
-### 4.1. Usage
+### 4.1. Scripts Usage
 #### 4.1.1. _fixed_positions.py_
 This script takes as input a netfile and (optionally) a distance and produces a trace file.
 
