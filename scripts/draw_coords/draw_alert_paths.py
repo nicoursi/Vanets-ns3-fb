@@ -5,6 +5,7 @@
 - Nodes that only receive but never forward are not considered forwarders
 - All receivers from the same sender share the same arrow color
 - The last sender(s) that lead to circumference nodes still connect with rays as before.
+- Added --only-circ parameter to show only paths that reach circumference nodes
 """
 
 import os
@@ -49,6 +50,62 @@ def find_circumference_candidates(x_coords, y_coords, starting_x, starting_y, no
             circumference_candidates.append((node_x, node_y))
 
     return circumference_candidates
+
+
+def find_nodes_in_circ_paths(transmission_map, received_on_circ_ids):
+    """Find all nodes that are part of paths leading to circumference nodes.
+
+    Args:
+        transmission_map (dict): Mapping of sender -> list of receivers
+        received_on_circ_ids (list): List of node IDs on circumference
+
+    Returns:
+        set: All node IDs that are part of paths to circumference
+    """
+    # Convert to string for consistency
+    circ_nodes = set(str(node_id) for node_id in received_on_circ_ids)
+    nodes_in_circ_paths = set()
+
+    # Work backwards from circumference nodes
+    def trace_back_to_source(node_id):
+        """Recursively find all nodes that can reach this node"""
+        node_id_str = str(node_id)
+        nodes_in_circ_paths.add(node_id_str)
+
+        # Find all senders that have this node as a receiver
+        for sender, receivers in transmission_map.items():
+            receiver_strs = [str(r) for r in receivers]
+            if node_id_str in receiver_strs:
+                trace_back_to_source(sender)
+
+    # Trace back from all circumference nodes
+    for circ_node in circ_nodes:
+        trace_back_to_source(circ_node)
+
+    return nodes_in_circ_paths
+
+
+def filter_transmission_map_for_circ(transmission_map, nodes_in_circ_paths):
+    """Filter transmission map to only include nodes that are part of circumference paths.
+
+    Args:
+        transmission_map (dict): Original transmission map
+        nodes_in_circ_paths (set): Set of node IDs in circumference paths
+
+    Returns:
+        dict: Filtered transmission map
+    """
+    filtered_map = {}
+
+    for sender, receivers in transmission_map.items():
+        sender_str = str(sender)
+        if sender_str in nodes_in_circ_paths:
+            # Only include receivers that are also in circumference paths
+            filtered_receivers = [r for r in receivers if str(r) in nodes_in_circ_paths]
+            if filtered_receivers:
+                filtered_map[sender] = filtered_receivers
+
+    return filtered_map
 
 
 def plot_alert_paths(csv_file_path, output_file_path, config):
@@ -112,9 +169,87 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
     # Create the plot
     plt.figure(figsize=config.figsize)
 
-    if hasattr(config, "show_nodes") and config.show_nodes:
-        #        plt.plot(x_node_coords, y_node_coords, ".", markersize=5, color="red", alpha=0.3, label="All nodes")
+    simulation_bug_detected = False
+    received_on_circ_ids_fallback = []
+    bug_warning = ""
+    node_spacing = 25  # TODO: Hard-coded node spacing in meters, add parameter
 
+    if hasattr(config, "debug") and config.debug:
+        # BUG DETECTION: Check if circumference data is invalid
+        circumference_candidates = find_circumference_candidates(
+            x_received_coords,
+            y_received_coords,
+            starting_x,
+            starting_y,
+            node_spacing,
+            config,
+        )
+        received_on_circ_ids_fallback = coord_utils.find_node_ids_from_coords(
+            circumference_candidates,
+            config.mobility_file,
+        )
+        if sorted(received_on_circ_ids_fallback) == sorted(received_on_circ_ids):
+            print(
+                "✅ The receivers on circumference from the NS-3 simulation and the fallback correspond",
+            )
+        else:
+            print("⚠️ Received_on_circ_ids DO NOT correspond with the fallback ones!")
+
+    # Check if ns3-simulation script has a bug not reporting conference nodes
+    if not received_on_circ_ids or received_on_circ_ids in (["0"], [0]):
+        simulation_bug_detected = True
+        no_cov_on_circ_msg = "No coverage on the circumference!"
+        bug_warning = "⚠️  SIMULATION BUG: 'Coverage on circ' field is empty/zero! Used fallback"
+
+        print(f"WARNING: {bug_warning}")
+        print(
+            "\nThis indicates the NS-3 simulation isn't properly calculating circumference nodes.",
+        )
+        print(
+            f"Node spacing used to calculate the circumference: {node_spacing}. Change if different!\n",
+        )
+
+        # Fallback: Calculate circumference nodes from received nodes
+        print("Fallback: Calculating circumference nodes based on distance...")
+        print(f"Source position: ({starting_x}, {starting_y})")
+        print(f"Transmission range: {tx_range}m")
+        print(f"Analysis circumference radius: {config.circ_radius}m")
+
+        if config.debug:
+            received_on_circ_ids = received_on_circ_ids_fallback
+        else:
+            circumference_candidates = find_circumference_candidates(
+                x_received_coords,
+                y_received_coords,
+                starting_x,
+                starting_y,
+                node_spacing,
+                config,
+            )
+
+            received_on_circ_ids = coord_utils.find_node_ids_from_coords(
+                circumference_candidates,
+                config.mobility_file,
+            )
+
+        print(f"Found {len(received_on_circ_ids)} circumference nodes using fallback method")
+
+    # Filter transmission map if --only-circ is specified
+    original_transmission_map = transmission_map
+    if hasattr(config, "only_circ") and config.only_circ:
+        if received_on_circ_ids and received_on_circ_ids not in (["0"], [0]):
+            print(f"Filtering to show only paths that reach circumference nodes...")
+            nodes_in_circ_paths = find_nodes_in_circ_paths(transmission_map, received_on_circ_ids)
+            transmission_map = filter_transmission_map_for_circ(
+                transmission_map, nodes_in_circ_paths
+            )
+            print(
+                f"Filtered transmission map: {len(original_transmission_map)} -> {len(transmission_map)} senders"
+            )
+        else:
+            print("Warning: No circumference nodes found, --only-circ has no effect")
+
+    if hasattr(config, "show_nodes") and config.show_nodes:
         plt.plot(
             x_node_coords,
             y_node_coords,
@@ -131,6 +266,7 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
             markersize=4,
             label="Reached nodes",
         )
+
     # plot source
     plt.plot(
         starting_x,
@@ -207,70 +343,6 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
                     zorder=5,
                 )
 
-    simulation_bug_detected = False
-    received_on_circ_ids_fallback = []
-    bug_warning = ""
-    node_spacing = 25  # TODO: Hard-coded node spacing in meters, add parameter
-    if hasattr(config, "debug") and config.debug:
-        # BUG DETECTION: Check if circumference data is invalid
-        circumference_candidates = find_circumference_candidates(
-            x_received_coords,
-            y_received_coords,
-            starting_x,
-            starting_y,
-            node_spacing,
-            config,
-        )
-        received_on_circ_ids_fallback = coord_utils.find_node_ids_from_coords(
-            circumference_candidates,
-            config.mobility_file,
-        )
-        if sorted(received_on_circ_ids_fallback) == sorted(received_on_circ_ids):
-            print(
-                "✅ The receivers on circumference from the NS-3 simulation and the fallback correspond",
-            )
-        else:
-            print("⚠️ Received_on_circ_ids DO NOT correspond with the fallback ones!")
-
-    # Check if ns3-simulation script has a bug not reporting conference nodes
-    if not received_on_circ_ids or received_on_circ_ids in (["0"], [0]):
-        simulation_bug_detected = True
-        no_cov_on_circ_msg = "No coverage on the circumference!"
-        bug_warning = "⚠️  SIMULATION BUG: 'Coverage on circ' field is empty/zero! Used fallback"
-
-        print(f"WARNING: {bug_warning}")
-        print(
-            "\nThis indicates the NS-3 simulation isn't properly calculating circumference nodes.",
-        )
-        print(
-            f"Node spacing used to calculate the circumference: {node_spacing}. Change if different!\n",
-        )
-
-        # Fallback: Calculate circumference nodes from received nodes
-        print("Fallback: Calculating circumference nodes based on distance...")
-        print(f"Source position: ({starting_x}, {starting_y})")
-        print(f"Transmission range: {tx_range}m")
-        print(f"Analysis circumference radius: {config.circ_radius}m")
-
-        if config.debug:
-            received_on_circ_ids = received_on_circ_ids_fallback
-        else:
-            circumference_candidates = find_circumference_candidates(
-                x_received_coords,
-                y_received_coords,
-                starting_x,
-                starting_y,
-                node_spacing,
-                config,
-            )
-
-            received_on_circ_ids = coord_utils.find_node_ids_from_coords(
-                circumference_candidates,
-                config.mobility_file,
-            )
-
-        print(f"Found {len(received_on_circ_ids)} circumference nodes using fallback method")
-
     # draw rays from last forwarders to circumference nodes (keep existing logic)
     for circ_id in received_on_circ_ids:
         for sender, receivers in transmission_map.items():
@@ -333,10 +405,13 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
     plt.xlabel("X Coordinate (m)", fontsize=12)
     plt.ylabel("Y Coordinate (m)", fontsize=12)
 
-    # Modify title to include warning if bug detected
+    # Modify title to include warning if bug detected and --only-circ info
     base_title = (
         f"{config.scenario} (Transmission range: {tx_range}m) - Alert Message Propagation Paths"
     )
+    if hasattr(config, "only_circ") and config.only_circ:
+        base_title += " [Circumference Paths Only]"
+
     if simulation_bug_detected:
         # Add warning text
         plt.text(
@@ -354,16 +429,23 @@ def plot_alert_paths(csv_file_path, output_file_path, config):
 
     plt.grid(True, alpha=0.3)
 
-    if not coord_utils.ensure_output_directory(output_file_path):
+    # Modify output filename if --only-circ is enabled
+    final_output_path = output_file_path
+    if hasattr(config, "only_circ") and config.only_circ:
+        # Split filename and extension
+        path_parts = os.path.splitext(output_file_path)
+        final_output_path = path_parts[0] + "-only-circ" + path_parts[1]
+
+    if not coord_utils.ensure_output_directory(final_output_path):
         return False
     try:
-        plt.savefig(output_file_path, dpi=config.dpi, bbox_inches=config.bbox_inches)
+        plt.savefig(final_output_path, dpi=config.dpi, bbox_inches=config.bbox_inches)
         if simulation_bug_detected:
-            print(f"⚠️  Alert paths plot saved with BUG WARNING to: {output_file_path}")
+            print(f"⚠️  Alert paths plot saved with BUG WARNING to: {final_output_path}")
         else:
-            print(f"Alert paths plot saved to: {output_file_path}")
+            print(f"Alert paths plot saved to: {final_output_path}")
     except Exception as e:
-        print(f"Error saving plot to {output_file_path}: {e}")
+        print(f"Error saving plot to {final_output_path}: {e}")
         return False
     finally:
         plt.close()
@@ -390,6 +472,11 @@ def main():
                 "action": "store_true",
                 "help": "Checks and report if the nodes on circumference metric"
                 " reported in the csv file corresponds to the reported receiving nodes",
+            },
+            {
+                "name": "--only-circ",
+                "action": "store_true",
+                "help": "Only plot alert paths for messages that reached circumference nodes",
             },
         ],
     }
