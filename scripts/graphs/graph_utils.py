@@ -242,8 +242,8 @@ def read_csv_from_directory(path, roff=False, static=False):
                     if cov_on_circ_val > 0:
                         hops.append(hops_val)
                         slots.append(slots_val)
-                        message_sent.append(message_sent_val)
 
+                    message_sent.append(message_sent_val)
                     # Calculate percentages
                     total_coverage_percent.append((total_coverage_val / total_nodes_val) * 100)
                     cov_on_circ_percent.append((cov_on_circ_val / nodes_on_circ_val) * 100)
