@@ -1495,7 +1495,7 @@ def validate_folder_structure_from_scenario_enhanced(scenario_path, target_path)
             "txRange": r"^r\d+$",  # e.g., "r300"
             "junction": r"^j\d+$",  # e.g., "j0"
             "cw": r"^cw\[.*\]$",  # e.g., "cw[32-1024]"
-            "protocol": r"^[A-Za-z-]+$",  # e.g., "Fast-Broadcast" or "ROFF"
+            "protocol": r"^(Fast-Broadcast|ROFF|STATIC-\d+)$",  # e.g., "Fast-Broadcast", "STATIC-100" or "ROFF"
         }
 
         return validate_structure_parts(path_parts, patterns)
@@ -1663,13 +1663,13 @@ def detect_scenario_from_basepath(base_folder):
     # Structure patterns for validation
     structure_patterns = {
         # "scenario": r"^[A-Za-z]+-\d+$",  # e.g., "Padova-25", "Grid-100"
-        "scenario": r"^[A-Za-z]+-\d+(-[a-zA-Z0-9+-]+)*$",  # e.g., "Padova-25", "Grid-100", "Grid-300-node+-5"
+        "scenario": r"^(Grid|Cube|Padova|LA)-[0-9]+(?:-[A-Za-z0-9+-]+)*$",  # e.g., "Padova-25", "Grid-100", "Grid-300-node+-5"
         "building": r"^b[01]$",  # "b0" or "b1"
         "error_rate": r"^e\d+$",  # e.g., "e0"
         "txRange": r"^r\d+$",  # e.g., "r300"
         "junction": r"^j\d+$",  # e.g., "j0"
         "cw": r"^cw\[.*\]$",  # e.g., "cw[32-1024]" (optional)
-        "protocol": r"^[A-Za-z-]+$",  # e.g., "Fast-Broadcast" or "ROFF"
+        "protocol": r"^(Fast-Broadcast|ROFF|STATIC-\d+)$",  # e.g., "Fast-Broadcast" or "ROFF or "STATIC-100"
     }
 
     # Try to find the scenario by going backwards through the path

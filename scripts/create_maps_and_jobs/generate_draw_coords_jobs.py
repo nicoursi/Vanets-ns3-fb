@@ -20,7 +20,7 @@ import os
 
 # Default values for all parameters
 DEFAULT_TEMPLATE = "draw_coords_template.slurm"
-DEFAULT_TIME = "5:00:00"
+DEFAULT_TIME = "12:00:00"
 DEFAULT_OUTPUT_DIR = "."
 DEFAULT_ADDITIONAL_ARGS = ""
 DEFAULT_SCRIPTS = "draw_coverage,draw_single_hops,draw_multiple_transmissions,draw_alert_paths"

@@ -243,7 +243,10 @@ def plot_multiple_transmissions(csv_file_path, output_file_path, config):
         ax.grid(True, alpha=0.3)
         ax.set_xlabel("X Coordinate (m)", fontsize=12)
         ax.set_ylabel("Y Coordinate (m)", fontsize=12)
-        ax.set_title(f"Transmission Phase {count} (Radius: {config.circ_radius}m)", fontsize=14)
+        ax.set_title(
+            f"{config.scenario} (Transmission range: {tx_range}m) - Transmission Phase {count}",
+            fontsize=14,
+        )
 
         # Generate output file path for this phase
         output_base = os.path.splitext(output_file_path)[0]
