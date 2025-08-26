@@ -52,7 +52,7 @@ mkdir -p "${LOG_DIR}"
 
 # shellcheck disable=SC1083,SC2125
 JOB_NAME={**jobName}
-ENV_LOG_FILE="${LOG_DIR}/${JOB_NAME}_id_${SLURM_JOB_ID}_run_${SLURM_ARRAY_TASK_ID}.env"
+# ENV_LOG_FILE="${LOG_DIR}/${JOB_NAME}_id_${SLURM_JOB_ID}_run_${SLURM_ARRAY_TASK_ID}.env"
 
 ### Print detailed job and system information
 echo "=== Job Information ==="
@@ -66,9 +66,9 @@ echo "Running on nodes: ${SLURM_NODELIST}"
 echo "SLURM_SUBMIT_DIR: ${SLURM_SUBMIT_DIR}"
 echo "========================"
 
-# Save full environment to log file (like the 'set' command did in PBS)
-env >"${ENV_LOG_FILE}"
-echo "Environment saved to: ${ENV_LOG_FILE}"
+### Save full environment to log file (like the 'set' command did in PBS)
+# env >"${ENV_LOG_FILE}"
+# echo "Environment saved to: ${ENV_LOG_FILE}"
 
 ### Define paths and parameters
 REPO_PATH="/mnt/ns-3" # Path to the ns-3 submodule
