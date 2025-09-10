@@ -1,16 +1,12 @@
 #!/usr/bin/python3
-
 # Invocation:
 # ./create_grid_scenario.py roadLength roadNumber roadDistance roadSize nodeDistance scenarioName [roadVariation] [nodeVariation]
 # e.g.
-
 # ./create_grid_scenario.py 4800 25 200 10 25 Grid-200
 #   ./create_grid_scenario.py 4800 17 300 10 25 Grid-300
 #   ./create_grid_scenario.py 4800 13 400 10 25 Grid-400
-
-#   With road distance variation (±5):
-#   ./create_grid_scenario.py 4800 17 300 10 25 Grid-300+-5 5
-
+#   With node distance variation (±5):
+#   ./create_grid_scenario.py 4800 17 300 10 25 Grid-300-node+-5 0 5
 #   With both road and node distance variation:
 #   ./create_grid_scenario.py 4800 17 300 10 25 Grid-300+-5-node+-5 5 5
 
@@ -34,7 +30,6 @@ def main():
     nodeVariation = 0
 
     print("args: " + str(len(os.sys.argv)))
-
     if len(os.sys.argv) > 7:
         roadVariation = int(os.sys.argv[7])
         print("Using road distance variation: ±" + str(roadVariation))
@@ -55,12 +50,15 @@ def main():
     initialX = 100
     initialY = 100
     nodeId = 0
+
     polyFilePath = "./grid/" + scenarioName + ".poly.xml"
+    netFilePath = "./grid/" + scenarioName + ".net.xml"
 
     with open("./grid/" + scenarioName + ".ns2mobility.xml", "w+") as f:
         # Generate road positions (with or without variation)
         if roadVariation > 0:
             print("Generating random road distances with variation ±" + str(roadVariation))
+
             # Generate random road distances for vertical roads
             verticalRoadDistances = []
             currentX = initialX
@@ -201,7 +199,7 @@ def main():
     else:
         print(f"✗ Corner node MISSING at ({corner_x}, {corner_y})")
 
-    # For the poly file, pass the actual road distances when variation is used
+    # Generate poly file
     if roadVariation > 0:
         utils.createPolyFileWithVariation(
             polyFilePath, roadNumber, verticalRoadDistances, horizontalRoadDistances, roadSize
@@ -215,6 +213,18 @@ def main():
             int(initialX),
             int(initialY),
         )
+
+    # Generate net file with junctions
+    if roadVariation > 0:
+        utils.createNetFile(
+            netFilePath, roadNumber, verticalRoadDistances, horizontalRoadDistances, roadSize
+        )
+    else:
+        utils.createNetFileRegular(
+            netFilePath, roadNumber, roadDistance, roadSize, initialX, initialY
+        )
+
+    print(f"Created {scenarioName}.net.xml with {roadNumber * roadNumber} junctions")
 
 
 if __name__ == "__main__":
