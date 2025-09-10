@@ -37,3 +37,6 @@ scripts/graphs/out-gottardo/
 # scheduled jobs and logs
 scheduled_jobs/*
 !scheduled_jobs/*.sh
+
+# simulations pulled from cluster
+simulations/from-cluster/*
