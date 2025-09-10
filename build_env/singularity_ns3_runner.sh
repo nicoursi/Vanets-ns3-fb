@@ -8,6 +8,7 @@ show_usage() {
     echo "  $0 dirty-build [debug|release|optimized]"
     echo "  $0 shell"
     echo "  LOG_LEVEL=[error|warn|info|debug|function|logic] $0 run <simulation_command_file> [rng_run_value]"
+    echo "  COMPONENTS='FBApplication fb-vanet-urban'"
     echo ""
     echo "Commands:"
     echo "  build         - Configure, clean, and build NS-3"
@@ -188,15 +189,20 @@ run)
         # Extract the first word from SIMULATION_CMD to determine which components to use
         FIRST_WORD=$(echo "$SIMULATION_CMD" | head -n 1 | awk '{print $1}')
         # Select components array based on the first word
-        if [[ "$FIRST_WORD" == "fb-vanet-urban" ]]; then
-            components=("${fb_components[@]}")
-        elif [[ "$FIRST_WORD" == "roff-test" ]]; then
-            components=("${roff_components[@]}")
+        if [[ -n "$COMPONENTS" ]]; then
+            COMPONENTS=($COMPONENTS)
+        else
+            # altrimenti, scegli in base a FIRST_WORD
+            if [[ "$FIRST_WORD" == "fb-vanet-urban" ]]; then
+                COMPONENTS=("${fb_components[@]}")
+            elif [[ "$FIRST_WORD" == "roff-test" ]]; then
+                COMPONENTS=("${roff_components[@]}")
+            fi
         fi
 
         # Build NS_LOG string by joining with colon
         NS_LOG=""
-        for comp in "${components[@]}"; do
+        for comp in "${COMPONENTS[@]}"; do
             if [[ -z "$NS_LOG" ]]; then
                 NS_LOG="${comp}=${LOG_LEVEL}${LOG_FLAGS}"
             else
