@@ -1,0 +1,2 @@
+"Run id","Seed","Tx Power","Actual Range","Buildings","Total nodes","Nodes on circ","Total coverage","Coverage on circ","Alert received mean time","Hops","Slots","Messages sent","Messages received","Collisions"
+17,12345,-7,100,1,1465,77,1401,63,4.20903e+06,19.7937,4201.75,652,1400,947678
