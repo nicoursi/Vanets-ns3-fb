@@ -22,7 +22,7 @@ def parse_arguments():
     default_gen_loss_file = False
     default_only_command = False
     default_job_array = "1-50"
-    default_scenarios = ["Padova-25"]
+    default_scenarios = ["Padova-25", "LA-25", "Grid-300", "Grid-300-node+-5"]
     default_contention_windows = [{"cwMin": 32, "cwMax": 1024}]
     default_high_buildings = ["0"]
     default_drones = ["0"]
@@ -434,6 +434,8 @@ def run_scenario(
                             needed_time = "48:30:00"
 
                         for junction in junctions:
+                            if junction == "1":
+                                needed_time = "24:00:00"
                             for error_rate in error_rates:
                                 protocol_name = protocols_map[protocol]
                                 # Skip job generation for error rates > 0 with STATIC protocols
@@ -444,60 +446,53 @@ def run_scenario(
                                 if "Cube" in scenario:
                                     propagation_loss = "0"
 
+                                # Build common parameters first
+                                common_params = [
+                                    f"--buildings={b}",
+                                    f"--actualRange={tx_range}",
+                                    f"--mapBasePath={map_path_without_extension}",
+                                    f"--vehicleDistance={distance}",
+                                    f"--startingNode={starting_node}",
+                                    f"--propagationLoss={propagation_loss}",
+                                    f"--area={area}",
+                                    f"--smartJunctionMode={junction}",
+                                    f"--errorRate={error_rate}",
+                                    f"--nVehicles={vehicles_number}",
+                                    f"--droneTest={drone}",
+                                    f"--highBuildings={high_building}",
+                                    f"--printToFile=1",
+                                    f"--printCoords={print_coords}",
+                                    f"--createObstacleShadowingLossFile={create_obstacle_shadowing_loss_file}",
+                                    f"--useObstacleShadowingLossFile={use_obstacle_shadowing_loss_file}",
+                                    f"--forgedCoordTest=0",
+                                    f"--forgedCoordRate=0",
+                                    f"--maxRun=1",
+                                ]
+
+                                # Add txPower if available
+                                if int(tx_range) in tx_powers:
+                                    common_params.append(f"--txPower={tx_powers[int(tx_range)]}")
+
                                 if protocol == "6":  # ROFF
-                                    command = (
-                                        f"roff-test \\"
-                                        f"\n  --buildings={b} \\"
-                                        f"\n  --actualRange={tx_range} \\"
-                                        f"\n  --mapBasePath={map_path_without_extension} \\"
-                                        f"\n  --vehicleDistance={distance} \\"
-                                        f"\n  --startingNode={starting_node} \\"
-                                        f"\n  --propagationLoss={propagation_loss} \\"
-                                        f"\n  --area={area} \\"
-                                        f"\n  --smartJunctionMode={junction} \\"
-                                        f"\n  --errorRate={error_rate} \\"
-                                        f"\n  --nVehicles={vehicles_number} \\"
-                                        f"\n  --droneTest={drone} \\"
-                                        f"\n  --highBuildings={high_building} \\"
-                                        f"\n  --printToFile=1 \\"
-                                        f"\n  --printCoords={print_coords} \\"
-                                        f"\n  --createObstacleShadowingLossFile={create_obstacle_shadowing_loss_file} \\"
-                                        f"\n  --useObstacleShadowingLossFile={use_obstacle_shadowing_loss_file} \\"
-                                        f"\n  --beaconInterval=100 \\"
-                                        f"\n  --distanceRange=1 \\"
-                                        f"\n  --forgedCoordTest=0 \\"
-                                        f"\n  --forgedCoordRate=0 \\"
-                                        f"\n  --maxRun=1 \\"
-                                        f"\n  {f'--txPower={tx_powers[int(tx_range)]}' if int(tx_range) in tx_powers else ''}"
-                                    )
-                                else:
-                                    command = (
-                                        f"fb-vanet-urban \\"
-                                        f"\n  --buildings={b} \\"
-                                        f"\n  --actualRange={tx_range} \\"
-                                        f"\n  --mapBasePath={map_path_without_extension} \\"
-                                        f"\n  --cwMin={cw_min} \\"
-                                        f"\n  --cwMax={cw_max} \\"
-                                        f"\n  --vehicleDistance={distance} \\"
-                                        f"\n  --startingNode={starting_node} \\"
-                                        f"\n  --propagationLoss={propagation_loss} \\"
-                                        f"\n  --protocol={protocol} \\"
-                                        f"\n  --area={area} \\"
-                                        f"\n  --smartJunctionMode={junction} \\"
-                                        f"\n  --errorRate={error_rate} \\"
-                                        f"\n  --nVehicles={vehicles_number} \\"
-                                        f"\n  --droneTest={drone} \\"
-                                        f"\n  --highBuildings={high_building} \\"
-                                        f"\n  --flooding=0 \\"
-                                        f"\n  --printToFile=1 \\"
-                                        f"\n  --printCoords={print_coords} \\"
-                                        f"\n  --createObstacleShadowingLossFile={create_obstacle_shadowing_loss_file} \\"
-                                        f"\n  --useObstacleShadowingLossFile={use_obstacle_shadowing_loss_file} \\"
-                                        f"\n  --forgedCoordTest=0 \\"
-                                        f"\n  --forgedCoordRate=0 \\"
-                                        f"\n  --maxRun=1 \\"
-                                        f"\n  {f'--txPower={tx_powers[int(tx_range)]}' if int(tx_range) in tx_powers else ''}"
-                                    )
+                                    executable = "roff-test"
+                                    specific_params = [
+                                        f"--beaconInterval=100",
+                                        f"--distanceRange=1",
+                                    ]
+                                else:  # Fast-Broadcast
+                                    executable = "fb-vanet-urban"
+                                    specific_params = [
+                                        f"--cwMin={cw_min}",
+                                        f"--cwMax={cw_max}",
+                                        f"--protocol={protocol}",
+                                        f"--flooding=0",
+                                    ]
+
+                                # Combine all parameters
+                                all_params = common_params + specific_params
+
+                                # Build the final command
+                                command = f"{executable} \\\n  " + " \\\n  ".join(all_params)
 
                                 new_job_name = (
                                     f"urban-{map_base_name}"
@@ -652,7 +647,7 @@ def main():
         "Grid-200": 2024,
         "Grid-300": 3136,
         "Grid-300+-5": 4896,
-        "Grid-300-node+-5": 3366,
+        "Grid-300-node+-5": 3264,  # 3366 old starting node
         "Grid-400": 1248,
         "Platoon": 0,
         "Platoon-15km": 0,
