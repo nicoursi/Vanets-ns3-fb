@@ -707,7 +707,7 @@ def main():
                 if "Grid" in scenario:
                     area = 2000
                 if "Cube" in scenario and scenario != "Cube-75":
-                    area = 1300
+                    area = 1200
                 if "Grid" in scenario or "Platoon" in scenario:
                     run_scenario(
                         cw,
