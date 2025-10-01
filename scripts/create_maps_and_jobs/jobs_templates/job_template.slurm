@@ -18,7 +18,10 @@
 
 ### Resource allocation
 #SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
 #SBATCH --mem={**ram}
+#SBATCH --exclude=dellcuda0,dellcuda1,dellcuda2,dellsrv1,dellsrv4,dellsrv5,vgpu0-0,vgpu1-0,vgpu2-0,vgpu3-0,vgpu4-0,vgpu5-0,vgpu0-1,vgpu1-1,vgpu2-1,vgpu3-1,vgpu4-1,vgpu5-1,vgpu6-0,vgpu7-0,vgpu8-0,vgpu9-0,vgpu10-0,debug00,debug01,debug02,debug03,debug04
+### we will use only the nodes hpblade[] except hpblade[16]
 
 ### Time limit (HH:MM:SS)
 #SBATCH --time={**neededTime}

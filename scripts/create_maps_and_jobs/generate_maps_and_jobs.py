@@ -34,6 +34,8 @@ def parse_arguments():
     default_tx_ranges = ["100", "300", "500", "700"]
     default_tx_powers = ""
     default_job_template = "job_template.slurm"
+    default_granularity = "1"
+    default_slot_length = 1000
     default_job_template_only_command = "job_template_only_command.job"
     project_root = find_project_root()
     # default_jobs_path = Path(project_root) / "scheduled_jobs"
@@ -47,6 +49,11 @@ def parse_arguments():
         "4": "STATIC-500",
         "5": "STATIC-700",
         "6": "ROFF",
+        "7": "Fast-Variant",
+        "8": "FBV-STATIC-100",
+        "9": "FBV-STATIC-300",
+        "10": "FBV-STATIC-500",
+        "11": "FBV-STATIC-700",
     }
 
     # Create protocol help string
@@ -168,6 +175,21 @@ Examples:
         type=str,
         default=",".join(default_error_rates),
         help=f"Comma-separated list of error rates (default: {','.join(default_error_rates)})",
+    )
+
+    parser.add_argument(
+        "--slotLength",
+        "-sl",
+        type=str,
+        default=default_slot_length,
+        help=f"Slot length. It is available only for FB Variants protocols (default: {default_slot_length})",
+    )
+    parser.add_argument(
+        "--granularity",
+        "-g",
+        type=str,
+        default=default_granularity,
+        help=f"Granularity for cw randomization. It is available only for FB Variants protocols (default: {default_granularity})",
     )
 
     parser.add_argument(
@@ -332,6 +354,8 @@ def run_scenario(
     protocols = config["protocols"]
     tx_ranges = config["txRanges"]
     tx_powers = config["txPowers"]
+    slot_length = config["slotLength"]
+    granularity = config["granularity"]
     jobs_path = Path(config["jobsPath"])
     gen_loss_file = config["genLossFile"]
     only_command = config["onlyCommand"]
@@ -349,6 +373,11 @@ def run_scenario(
         "4": "STATIC-500",
         "5": "STATIC-700",
         "6": "ROFF",
+        "7": "Fast-Variant",
+        "8": "FBV-STATIC-100",
+        "9": "FBV-STATIC-300",
+        "10": "FBV-STATIC-500",
+        "11": "FBV-STATIC-700",
     }
 
     cw_min = cw["cwMin"]
@@ -434,8 +463,8 @@ def run_scenario(
                             needed_time = "48:30:00"
 
                         for junction in junctions:
-                            if junction == "1":
-                                needed_time = "24:00:00"
+                            # if junction == "1":
+                            #     needed_time = "24:00:00"
                             for error_rate in error_rates:
                                 protocol_name = protocols_map[protocol]
                                 # Skip job generation for error rates > 0 with STATIC protocols
@@ -478,6 +507,14 @@ def run_scenario(
                                     specific_params = [
                                         f"--beaconInterval=100",
                                         f"--distanceRange=1",
+                                    ]
+                                elif int(protocol) > 6:  # FB Variants
+                                    executable = "fb-variant"
+                                    specific_params = [
+                                        f"--cwMax={cw_max}",
+                                        f"--protocol={protocol}",
+                                        f"--slotLength={slot_length}",
+                                        f"--rndGranularity={granularity}",
                                     ]
                                 else:  # Fast-Broadcast
                                     executable = "fb-vanet-urban"
@@ -621,6 +658,8 @@ def main():
         "onlyCommand": only_command,
         "jobTemplate": args.jobTemplate,
         "jobTemplateOnlyCommand": args.jobTemplateOnlyCommand,
+        "granularity": args.granularity,
+        "slotLength": args.slotLength,
     }
 
     # Original hardcoded values for reference (commented options preserved)
